@@ -1,0 +1,21 @@
+scan:
+  max_candidates_per_family: 1024
+  workers: 40
+  preliminary_rounds: 1
+  rounds: 3
+  timeout_seconds: 4.0
+  ports:
+  - 443
+  min_success_rate: 0.67
+  max_speed_candidates: 50
+  speed_tests: 2
+  speed_test_bytes: 1000000
+  top_n:
+  - 20
+  - 50
+  - 100
+  - 200
+  - 400
+  samples_per_network: 96
+  user_agent: Cloudflare-IP-Auto/3.1
+  custom_ipv4: []
