@@ -53,7 +53,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          # The IPv6 files may not exist when HostMonit is unavailable; stage generated changes safely.\n          git add -A
+          # The IPv6 files may not exist when HostMonit is unavailable; stage generated changes safely.
+          git add -A
           if git diff --cached --quiet; then
             echo "No result changes to commit."
             exit 0
