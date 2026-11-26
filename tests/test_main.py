@@ -189,7 +189,34 @@ def test_ipv6_source_outputs_merge_into_root_all_subscription(tmp_path, monkeypa
         "1.1.1.1:443#美国",
         "[2606:4700:4700::1111]:443#美国",
     ]
-    # The IPv4 family output remains IPv4-only.
-    assert "[2606:4700:4700::1111]" not in (
-        tmp_path / "output" / "ipv4" / "all.txt"
-    ).read_text(encoding="utf-8") if (tmp_path / "output" / "ipv4" / "all.txt").exists() else True
+
+    # Every existing client-facing IPv4 subscription list receives the IPv6
+    # source candidate, while keeping its original IPv4 entries.
+    for name in (
+        "fast.txt", "stable.txt",
+        "best-cf-ip-scanned-top20.txt", "best-cf-ip-scanned-top50.txt",
+        "best-cf-ip-scanned-top100.txt", "best-cf-ip-scanned-top200.txt",
+        "best-cf-ip-scanned-top400.txt",
+        "cf-ipv4-top20.txt", "cf-ipv4-top50.txt",
+        "cf-ipv4-top100.txt", "cf-ipv4-top200.txt", "cf-ipv4-top400.txt",
+    ):
+        path = tmp_path / name
+        path.write_text("2.2.2.2:443#美国\\n", encoding="utf-8")
+
+    family_dir = tmp_path / "output" / "ipv4"
+    family_dir.mkdir(parents=True, exist_ok=True)
+    (family_dir / "all.txt").write_text("3.3.3.3:443#美国\\n", encoding="utf-8")
+    (family_dir / "fast.txt").write_text("3.3.3.3:443#美国\\n", encoding="utf-8")
+    (family_dir / "stable.txt").write_text("3.3.3.3:443#美国\\n", encoding="utf-8")
+
+    main.write_ipv6_source_outputs(candidates, {"candidate_count": 1})
+
+    for name in (
+        "all.txt", "fast.txt", "stable.txt",
+        "best-cf-ip-scanned-top20.txt", "cf-ipv4-top400.txt",
+    ):
+        lines = (tmp_path / name).read_text(encoding="utf-8").splitlines()
+        assert "[2606:4700:4700::1111]:443#美国" in lines
+    for name in ("all.txt", "fast.txt", "stable.txt"):
+        lines = (family_dir / name).read_text(encoding="utf-8").splitlines()
+        assert "[2606:4700:4700::1111]:443#美国" in lines
