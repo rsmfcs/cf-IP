@@ -1,7 +1,7 @@
 {
   "project": "Cloudflare-IP-Auto",
   "version": "3.6",
-  "generated_at": "2026-11-26T06:41:04+00:00",
+  "generated_at": "2026-11-26T16:57:53+00:00",
   "schedule": "17 */6 * * * (UTC)",
   "ip_family": "IPv4 scan + IPv6 source sync",
   "ports": [
@@ -14,7 +14,7 @@
       "egress_check": {
         "available": true,
         "target": "1.1.1.1:443",
-        "connect_ms": 2.02
+        "connect_ms": 3.08
       },
       "network_count": 15,
       "candidate_count": 2048,
@@ -37,7 +37,7 @@
         "IAD": 105
       },
       "geoip_note": "GeoIP is approximate; colo is observed from Cloudflare /cdn-cgi/trace.",
-      "top_ip": "162.159.45.44",
+      "top_ip": "103.31.4.196",
       "failure_reasons": {},
       "output_dir": "output/ipv4/",
       "subscription_format": "IPv4:443"
