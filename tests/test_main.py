@@ -108,3 +108,58 @@ def test_probe_stages_filter_candidates_in_order(monkeypatch):
     assert ("tls", "198.51.100.3") not in calls
     assert ("http", "198.51.100.2") not in calls
     assert ("http", "198.51.100.1") in calls
+
+
+def test_ipv6_subscription_line_uses_brackets():
+    item = {"ip": "2606:4700:4700::1111", "port": 443, "country_code": "US", "city": "Los Angeles"}
+    assert main.subscription_line(item) == "[2606:4700:4700::1111]:443#美国-洛杉矶"
+
+
+def test_hostmonit_ipv6_parser_validates_deduplicates_and_filters(monkeypatch):
+    payload = {
+        "code": 200,
+        "info": {
+            "CM": [
+                {"ip": "2400:cb00::1"},
+                {"ip": "2400:cb00::1"},
+                {"ip": "not-an-ip"},
+                {"ip": "192.0.2.1"},
+                {"ip": "fe80::1"},
+            ],
+            "CU": [{"ip": "2606:4700:4700::1111"}],
+        },
+    }
+
+    class FakeResponse:
+        def __enter__(self):
+            return self
+        def __exit__(self, *args):
+            return False
+        def read(self):
+            import json
+            return json.dumps(payload).encode("utf-8")
+
+    def fake_urlopen(request, timeout):
+        assert request.full_url == main.HOSTMONIT_API_URL
+        assert request.get_method() == "POST"
+        return FakeResponse()
+
+    monkeypatch.setattr(main, "urlopen", fake_urlopen)
+    items, metadata = main.fetch_hostmonit_ipv6()
+
+    assert [item["ip"] for item in items] == ["2400:cb00::1", "2606:4700:4700::1111"]
+    assert metadata["candidate_count"] == 2
+    assert items[0]["source"] == "CM"
+    assert items[0]["quality_status"] == "source_candidate_unverified"
+
+
+def test_ipv6_source_output_preserves_previous_files_when_empty(tmp_path, monkeypatch):
+    monkeypatch.setattr(main, "ROOT", tmp_path)
+    monkeypatch.setattr(main, "OUTPUT", tmp_path / "output")
+    (tmp_path / "output" / "ipv6").mkdir(parents=True)
+    previous = "[2606:4700:4700::1111]:443#美国\\n"
+    (tmp_path / "ipv6.txt").write_text(previous, encoding="utf-8")
+
+    main.write_ipv6_source_outputs([], {"candidate_count": 0})
+
+    assert (tmp_path / "ipv6.txt").read_text(encoding="utf-8") == previous
