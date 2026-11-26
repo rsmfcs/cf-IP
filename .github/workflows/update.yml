@@ -1,4 +1,4 @@
-name: Update Cloudflare IPv4 IPs
+name: Update Cloudflare IPs (IPv4 + IPv6 sync)
 
 on:
   push:
@@ -13,7 +13,7 @@ permissions:
   actions: write
 
 concurrency:
-  group: cloudflare-ipv4-update
+  group: cloudflare-ip-update
   cancel-in-progress: false
 
 jobs:
@@ -39,7 +39,7 @@ jobs:
         id: tests
         run: pytest -q
 
-      - name: Run IPv4 scan (TCP 443 only)
+      - name: Run IPv4 scan and IPv6 source sync
         id: scan
         run: python -m src.main
         env:
@@ -53,7 +53,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add output/ipv4 output/summary.json best-cf-ip-scanned-top*.txt cf-ipv4-top*.txt all.txt fast.txt stable.txt
+          git add output/ipv4 output/ipv6 output/summary.json best-cf-ip-scanned-top*.txt cf-ipv4-top*.txt all.txt fast.txt stable.txt ipv6.txt
           if git diff --cached --quiet; then
             echo "No result changes to commit."
             exit 0
@@ -76,9 +76,9 @@ jobs:
               exit 0
             fi
 
-            git commit -m "chore: update Cloudflare IPv4 results"
+            git commit -m "chore: update Cloudflare IPv4 scan and IPv6 source data"
             if git push origin "HEAD:${TARGET_BRANCH}"; then
-              echo "IPv4 results pushed successfully."
+              echo "IPv4 scan and IPv6 source data pushed successfully."
               exit 0
             fi
 
