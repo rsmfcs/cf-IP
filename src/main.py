@@ -326,6 +326,24 @@ def write_ipv6_source_outputs(
     (output_dir / "all.txt").write_text(payload, encoding="utf-8")
     (ROOT / "ipv6.txt").write_text(payload, encoding="utf-8")
 
+    # The main root subscription combines measured IPv4 entries with
+    # HostMonit IPv6 source candidates. Keep the IPv4-only family file intact.
+    combined_path = ROOT / "all.txt"
+    ipv4_lines: list[str] = []
+    if combined_path.exists():
+        for line in combined_path.read_text(encoding="utf-8").splitlines():
+            candidate = line.split("#", 1)[0].strip()
+            if not candidate:
+                continue
+            host = candidate.rsplit(":", 1)[0]
+            try:
+                if ipaddress.ip_address(host).version == 4:
+                    ipv4_lines.append(line.strip())
+            except ValueError:
+                continue
+    combined_lines = list(dict.fromkeys(ipv4_lines + lines))
+    combined_path.write_text("\\n".join(combined_lines) + "\\n", encoding="utf-8")
+
 
 def load_config() -> dict[str, Any]:
     with CONFIG_PATH.open("r", encoding="utf-8") as handle:
