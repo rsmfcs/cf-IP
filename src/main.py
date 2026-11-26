@@ -227,6 +227,109 @@ def make_socket(ip: str, port: int, version: int, timeout: float) -> socket.sock
     return sock
 
 
+def tcp_connect_probe(ip: str, port: int, timeout: float, version: int = 4) -> bool:
+    """Stage 1: verify that the candidate accepts a TCP connection."""
+    sock = make_socket(ip, port, version, timeout)
+    try:
+        sock.connect((ip, port))
+        return True
+    except OSError:
+        return False
+    finally:
+        sock.close()
+
+
+def tls_handshake_probe(
+    ip: str, port: int, timeout: float, version: int = 4
+) -> bool:
+    """Stage 2: verify a certificate-checked TLS handshake with Cloudflare SNI."""
+    sock = make_socket(ip, port, version, timeout)
+    tls_sock: ssl.SSLSocket | None = None
+    try:
+        sock.connect((ip, port))
+        context = ssl.create_default_context()
+        tls_sock = context.wrap_socket(sock, server_hostname="www.cloudflare.com")
+        tls_sock.settimeout(timeout)
+        return tls_sock.version() is not None
+    except (OSError, ssl.SSLError):
+        return False
+    finally:
+        if tls_sock is not None:
+            tls_sock.close()
+        else:
+            sock.close()
+
+
+def http_response_probe(
+    ip: str, port: int, timeout: float, version: int, user_agent: str
+) -> bool:
+    """Stage 3: verify that the pinned IP serves a valid Cloudflare HTTP response."""
+    sock = make_socket(ip, port, version, timeout)
+    tls_sock: ssl.SSLSocket | None = None
+    response: HTTPResponse | None = None
+    try:
+        sock.connect((ip, port))
+        context = ssl.create_default_context()
+        tls_sock = context.wrap_socket(sock, server_hostname="www.cloudflare.com")
+        tls_sock.settimeout(timeout)
+        request = (
+            "GET /cdn-cgi/trace HTTP/1.1\\r\\n"
+            "Host: www.cloudflare.com\\r\\n"
+            f"User-Agent: {user_agent}\\r\\n"
+            "Accept: */*\\r\\n"
+            "Connection: close\\r\\n\\r\\n"
+        )
+        tls_sock.sendall(request.encode("ascii"))
+        response = HTTPResponse(tls_sock)
+        response.begin()
+        return 200 <= response.status < 400
+    except (OSError, ssl.SSLError, TimeoutError):
+        return False
+    finally:
+        if response is not None:
+            response.close()
+        if tls_sock is not None:
+            tls_sock.close()
+        else:
+            sock.close()
+
+
+def run_probe_stages(
+    candidates: list[str], config: dict[str, Any]
+) -> list[str]:
+    """Progressively filter candidates through TCP, TLS, and HTTP before retesting."""
+    scan = config["scan"]
+    port = 443
+    timeout = float(scan["timeout_seconds"])
+    workers = int(scan["workers"])
+    user_agent = str(scan.get("user_agent", "Cloudflare-IP-Auto/3.2"))
+    stages = (
+        ("TCP", lambda ip: tcp_connect_probe(ip, port, timeout, 4)),
+        ("TLS", lambda ip: tls_handshake_probe(ip, port, timeout, 4)),
+        ("HTTP", lambda ip: http_response_probe(ip, port, timeout, 4, user_agent)),
+    )
+    survivors = list(candidates)
+    for stage_name, probe in stages:
+        passed: list[str] = []
+        completed = 0
+        with ThreadPoolExecutor(max_workers=workers) as executor:
+            futures = {executor.submit(probe, ip): ip for ip in survivors}
+            for future in as_completed(futures):
+                completed += 1
+                try:
+                    if future.result():
+                        passed.append(futures[future])
+                except Exception as exc:
+                    print(f"IPv4 {stage_name} stage error {futures[future]}: {type(exc).__name__}: {exc}")
+                if completed % 100 == 0 or completed == len(futures):
+                    print(f"IPv4 {stage_name} stage: {completed}/{len(futures)}; passed={len(passed)}")
+        survivors = passed
+        print(f"IPv4 {stage_name} stage complete: {len(survivors)} candidates remain")
+        if not survivors:
+            break
+    return survivors
+
+
 def https_probe(
     ip: str,
     port: int,
@@ -553,7 +656,7 @@ def write_family_outputs(version: int, results: list[dict[str, Any]], top_n: lis
         (ROOT / name).write_text(payload, encoding="utf-8")
         (output_dir / name).write_text(payload, encoding="utf-8")
     write_json(OUTPUT / "summary.json", {
-        "project": "Cloudflare-IP-Auto", "version": "3.2", "generated_at": utc_now(),
+        "project": "Cloudflare-IP-Auto", "version": "3.3", "generated_at": utc_now(),
         "ip_family": "IPv4 only", "port": 443,
         "ranked_count": len(results), "all_count": len(results),
         "fast_count": len(fast_items), "fast_min_mbps": 25.0,
@@ -597,32 +700,12 @@ def run_ipv4(config: dict[str, Any]) -> dict[str, Any]:
     )
     print(f"IPv4: {len(networks)} networks, {len(candidates)} candidate addresses; TCP 443 only")
 
-    # Stage 1: one quick round to remove clearly unreachable addresses.
-    preliminary_config = {"scan": dict(scan)}
-    preliminary_config["scan"]["rounds"] = int(scan["preliminary_rounds"])
-    preliminary_config["scan"]["min_success_rate"] = 1.0
-    preliminary: list[str] = []
+    # Stages 1-3: progressively require TCP, verified TLS, and HTTP success.
     failure_reasons: dict[str, int] = {}
-    completed = 0
-    with ThreadPoolExecutor(max_workers=int(scan["workers"])) as executor:
-        futures = {executor.submit(probe_candidate, ip, 4, preliminary_config): ip for ip in candidates}
-        for future in as_completed(futures):
-            completed += 1
-            try:
-                item, reasons = future.result()
-                if item is not None:
-                    preliminary.append(item["ip"])
-                for reason, count in reasons.items():
-                    failure_reasons[reason] = failure_reasons.get(reason, 0) + count
-            except Exception as exc:
-                reason = f"preliminary_worker_{type(exc).__name__}"
-                failure_reasons[reason] = failure_reasons.get(reason, 0) + 1
-                print(f"IPv4 preliminary error {futures[future]}: {type(exc).__name__}: {exc}")
-            if completed % 100 == 0 or completed == len(futures):
-                print(f"IPv4 preliminary progress: {completed}/{len(futures)}; passed={len(preliminary)}")
+    preliminary = run_probe_stages(candidates, config)
 
-    # Stage 2: three-round stability check only for preliminary survivors.
-    print(f"IPv4: stability retest for {len(preliminary)} preliminary candidates")
+    # Stage 4: repeat the complete TLS + HTTP probe for stability scoring.
+    print(f"IPv4: stability retest for {len(preliminary)} HTTP-qualified candidates")
     results: list[dict[str, Any]] = []
     completed = 0
     with ThreadPoolExecutor(max_workers=int(scan["workers"])) as executor:
@@ -655,7 +738,7 @@ def run_ipv4(config: dict[str, Any]) -> dict[str, Any]:
         "egress_check": egress,
         "network_count": len(networks),
         "candidate_count": len(candidates),
-        "preliminary_pass_count": len(preliminary),
+        "preliminary_pass_count": len(preliminary),\n        "tcp_tls_http_pass_count": len(preliminary),
         "usable_count": len(results),
         "speed_tested_count": sum(1 for item in results if item["speed_tested"]),
         "ranked_count": len(ranked),
