@@ -1,74 +1,112 @@
 [
   {
-    "ip": "141.101.114.209",
+    "ip": "162.159.45.44",
     "version": 4,
     "port": 443,
-    "latency_ms": 81.2,
-    "median_latency_ms": 72.82,
-    "jitter_ms": 15.9,
-    "p95_latency_ms": 103.46,
+    "latency_ms": 69.98,
+    "median_latency_ms": 66.72,
+    "jitter_ms": 7.23,
+    "p95_latency_ms": 80.0,
     "success_rate": 1.0,
     "successful_rounds": 3,
     "total_rounds": 3,
-    "speed_mbps": 84.535,
+    "speed_mbps": 86.618,
     "speed_tested": true,
     "speed_samples_mbps": [
-      85.164,
-      83.906
+      86.874,
+      86.362
     ],
-    "score": 95.28,
+    "score": 96.27,
     "port_results": [
       {
         "port": 443,
         "success_rate": 1.0,
         "successful_rounds": 3,
         "total_rounds": 3,
-        "latency_ms": 81.2,
-        "median_latency_ms": 72.82,
-        "jitter_ms": 15.9,
-        "p95_latency_ms": 103.46,
+        "latency_ms": 69.98,
+        "median_latency_ms": 66.72,
+        "jitter_ms": 7.23,
+        "p95_latency_ms": 80.0,
         "errors": {}
       }
     ],
-    "tested_at": "2026-11-26T03:27:47+00:00",
+    "tested_at": "2026-11-26T06:43:55+00:00",
     "country_code": "US",
-    "city": "Washington",
-    "region_zh": "美国-华盛顿",
+    "city": "Ashburn",
+    "region_zh": "美国-阿什本",
     "colo": "IAD",
     "region_priority": 0
   },
   {
-    "ip": "103.31.4.113",
+    "ip": "162.159.244.178",
     "version": 4,
     "port": 443,
-    "latency_ms": 93.72,
-    "median_latency_ms": 86.89,
-    "jitter_ms": 16.76,
-    "p95_latency_ms": 116.8,
+    "latency_ms": 65.01,
+    "median_latency_ms": 67.49,
+    "jitter_ms": 3.93,
+    "p95_latency_ms": 68.09,
     "success_rate": 1.0,
     "successful_rounds": 3,
     "total_rounds": 3,
-    "speed_mbps": 86.184,
+    "speed_mbps": 82.037,
     "speed_tested": true,
     "speed_samples_mbps": [
-      89.632,
-      82.737
+      79.949,
+      84.125
     ],
-    "score": 94.93,
+    "score": 96.26,
     "port_results": [
       {
         "port": 443,
         "success_rate": 1.0,
         "successful_rounds": 3,
         "total_rounds": 3,
-        "latency_ms": 93.72,
-        "median_latency_ms": 86.89,
-        "jitter_ms": 16.76,
-        "p95_latency_ms": 116.8,
+        "latency_ms": 65.01,
+        "median_latency_ms": 67.49,
+        "jitter_ms": 3.93,
+        "p95_latency_ms": 68.09,
         "errors": {}
       }
     ],
-    "tested_at": "2026-11-26T03:27:47+00:00",
+    "tested_at": "2026-11-26T06:43:55+00:00",
+    "country_code": "US",
+    "city": "Newark",
+    "region_zh": "美国",
+    "colo": "IAD",
+    "region_priority": 0
+  },
+  {
+    "ip": "103.31.4.233",
+    "version": 4,
+    "port": 443,
+    "latency_ms": 76.82,
+    "median_latency_ms": 77.04,
+    "jitter_ms": 9.28,
+    "p95_latency_ms": 88.09,
+    "success_rate": 1.0,
+    "successful_rounds": 3,
+    "total_rounds": 3,
+    "speed_mbps": 88.362,
+    "speed_tested": true,
+    "speed_samples_mbps": [
+      91.523,
+      85.202
+    ],
+    "score": 96.05,
+    "port_results": [
+      {
+        "port": 443,
+        "success_rate": 1.0,
+        "successful_rounds": 3,
+        "total_rounds": 3,
+        "latency_ms": 76.82,
+        "median_latency_ms": 77.04,
+        "jitter_ms": 9.28,
+        "p95_latency_ms": 88.09,
+        "errors": {}
+      }
+    ],
+    "tested_at": "2026-11-26T06:43:55+00:00",
     "country_code": "US",
     "city": "Newark",
     "region_zh": "美国",
@@ -79,34 +117,34 @@
     "ip": "141.101.115.73",
     "version": 4,
     "port": 443,
-    "latency_ms": 82.36,
-    "median_latency_ms": 81.43,
-    "jitter_ms": 11.97,
-    "p95_latency_ms": 97.47,
+    "latency_ms": 66.45,
+    "median_latency_ms": 66.76,
+    "jitter_ms": 0.72,
+    "p95_latency_ms": 67.12,
     "success_rate": 1.0,
     "successful_rounds": 3,
     "total_rounds": 3,
-    "speed_mbps": 76.395,
+    "speed_mbps": 76.927,
     "speed_tested": true,
     "speed_samples_mbps": [
-      82.118,
-      70.673
+      75.533,
+      78.32
     ],
-    "score": 94.79,
+    "score": 95.95,
     "port_results": [
       {
         "port": 443,
         "success_rate": 1.0,
         "successful_rounds": 3,
         "total_rounds": 3,
-        "latency_ms": 82.36,
-        "median_latency_ms": 81.43,
-        "jitter_ms": 11.97,
-        "p95_latency_ms": 97.47,
+        "latency_ms": 66.45,
+        "median_latency_ms": 66.76,
+        "jitter_ms": 0.72,
+        "p95_latency_ms": 67.12,
         "errors": {}
       }
     ],
-    "tested_at": "2026-11-26T03:27:48+00:00",
+    "tested_at": "2026-11-26T06:43:55+00:00",
     "country_code": "US",
     "city": "Washington",
     "region_zh": "美国-华盛顿",
@@ -114,607 +152,37 @@
     "region_priority": 0
   },
   {
-    "ip": "103.31.4.1",
+    "ip": "103.31.4.76",
     "version": 4,
     "port": 443,
-    "latency_ms": 110.69,
-    "median_latency_ms": 110.35,
-    "jitter_ms": 3.28,
-    "p95_latency_ms": 114.87,
+    "latency_ms": 72.73,
+    "median_latency_ms": 73.27,
+    "jitter_ms": 0.89,
+    "p95_latency_ms": 73.44,
     "success_rate": 1.0,
     "successful_rounds": 3,
     "total_rounds": 3,
-    "speed_mbps": 82.835,
+    "speed_mbps": 79.093,
     "speed_tested": true,
     "speed_samples_mbps": [
-      79.175,
-      86.496
+      97.582,
+      60.604
     ],
-    "score": 94.75,
+    "score": 95.9,
     "port_results": [
       {
         "port": 443,
         "success_rate": 1.0,
         "successful_rounds": 3,
         "total_rounds": 3,
-        "latency_ms": 110.69,
-        "median_latency_ms": 110.35,
-        "jitter_ms": 3.28,
-        "p95_latency_ms": 114.87,
+        "latency_ms": 72.73,
+        "median_latency_ms": 73.27,
+        "jitter_ms": 0.89,
+        "p95_latency_ms": 73.44,
         "errors": {}
       }
     ],
-    "tested_at": "2026-11-26T03:27:47+00:00",
-    "country_code": "US",
-    "city": "Newark",
-    "region_zh": "美国",
-    "colo": "IAD",
-    "region_priority": 0
-  },
-  {
-    "ip": "162.159.45.44",
-    "version": 4,
-    "port": 443,
-    "latency_ms": 83.22,
-    "median_latency_ms": 89.79,
-    "jitter_ms": 13.09,
-    "p95_latency_ms": 94.93,
-    "success_rate": 1.0,
-    "successful_rounds": 3,
-    "total_rounds": 3,
-    "speed_mbps": 75.729,
-    "speed_tested": true,
-    "speed_samples_mbps": [
-      75.592,
-      75.866
-    ],
-    "score": 94.65,
-    "port_results": [
-      {
-        "port": 443,
-        "success_rate": 1.0,
-        "successful_rounds": 3,
-        "total_rounds": 3,
-        "latency_ms": 83.22,
-        "median_latency_ms": 89.79,
-        "jitter_ms": 13.09,
-        "p95_latency_ms": 94.93,
-        "errors": {}
-      }
-    ],
-    "tested_at": "2026-11-26T03:27:48+00:00",
-    "country_code": "US",
-    "city": "Ashburn",
-    "region_zh": "美国-阿什本",
-    "colo": "IAD",
-    "region_priority": 0
-  },
-  {
-    "ip": "103.31.4.241",
-    "version": 4,
-    "port": 443,
-    "latency_ms": 100.42,
-    "median_latency_ms": 98.57,
-    "jitter_ms": 2.99,
-    "p95_latency_ms": 104.64,
-    "success_rate": 1.0,
-    "successful_rounds": 3,
-    "total_rounds": 3,
-    "speed_mbps": 74.977,
-    "speed_tested": true,
-    "speed_samples_mbps": [
-      85.231,
-      64.724
-    ],
-    "score": 94.49,
-    "port_results": [
-      {
-        "port": 443,
-        "success_rate": 1.0,
-        "successful_rounds": 3,
-        "total_rounds": 3,
-        "latency_ms": 100.42,
-        "median_latency_ms": 98.57,
-        "jitter_ms": 2.99,
-        "p95_latency_ms": 104.64,
-        "errors": {}
-      }
-    ],
-    "tested_at": "2026-11-26T03:27:47+00:00",
-    "country_code": "US",
-    "city": "Newark",
-    "region_zh": "美国",
-    "colo": "IAD",
-    "region_priority": 0
-  },
-  {
-    "ip": "108.162.198.151",
-    "version": 4,
-    "port": 443,
-    "latency_ms": 83.73,
-    "median_latency_ms": 68.42,
-    "jitter_ms": 23.02,
-    "p95_latency_ms": 116.27,
-    "success_rate": 1.0,
-    "successful_rounds": 3,
-    "total_rounds": 3,
-    "speed_mbps": 79.007,
-    "speed_tested": true,
-    "speed_samples_mbps": [
-      78.347,
-      79.668
-    ],
-    "score": 94.4,
-    "port_results": [
-      {
-        "port": 443,
-        "success_rate": 1.0,
-        "successful_rounds": 3,
-        "total_rounds": 3,
-        "latency_ms": 83.73,
-        "median_latency_ms": 68.42,
-        "jitter_ms": 23.02,
-        "p95_latency_ms": 116.27,
-        "errors": {}
-      }
-    ],
-    "tested_at": "2026-11-26T03:27:47+00:00",
-    "country_code": "US",
-    "city": "Ashburn",
-    "region_zh": "美国-阿什本",
-    "colo": "IAD",
-    "region_priority": 0
-  },
-  {
-    "ip": "141.101.113.224",
-    "version": 4,
-    "port": 443,
-    "latency_ms": 88.74,
-    "median_latency_ms": 76.91,
-    "jitter_ms": 27.21,
-    "p95_latency_ms": 126.37,
-    "success_rate": 1.0,
-    "successful_rounds": 3,
-    "total_rounds": 3,
-    "speed_mbps": 82.241,
-    "speed_tested": true,
-    "speed_samples_mbps": [
-      80.96,
-      83.522
-    ],
-    "score": 94.28,
-    "port_results": [
-      {
-        "port": 443,
-        "success_rate": 1.0,
-        "successful_rounds": 3,
-        "total_rounds": 3,
-        "latency_ms": 88.74,
-        "median_latency_ms": 76.91,
-        "jitter_ms": 27.21,
-        "p95_latency_ms": 126.37,
-        "errors": {}
-      }
-    ],
-    "tested_at": "2026-11-26T03:27:48+00:00",
-    "country_code": "US",
-    "city": "Washington",
-    "region_zh": "美国-华盛顿",
-    "colo": "IAD",
-    "region_priority": 0
-  },
-  {
-    "ip": "103.31.4.68",
-    "version": 4,
-    "port": 443,
-    "latency_ms": 88.43,
-    "median_latency_ms": 76.42,
-    "jitter_ms": 23.79,
-    "p95_latency_ms": 121.65,
-    "success_rate": 1.0,
-    "successful_rounds": 3,
-    "total_rounds": 3,
-    "speed_mbps": 77.573,
-    "speed_tested": true,
-    "speed_samples_mbps": [
-      66.599,
-      88.548
-    ],
-    "score": 94.08,
-    "port_results": [
-      {
-        "port": 443,
-        "success_rate": 1.0,
-        "successful_rounds": 3,
-        "total_rounds": 3,
-        "latency_ms": 88.43,
-        "median_latency_ms": 76.42,
-        "jitter_ms": 23.79,
-        "p95_latency_ms": 121.65,
-        "errors": {}
-      }
-    ],
-    "tested_at": "2026-11-26T03:27:47+00:00",
-    "country_code": "US",
-    "city": "Newark",
-    "region_zh": "美国",
-    "colo": "IAD",
-    "region_priority": 0
-  },
-  {
-    "ip": "103.31.4.211",
-    "version": 4,
-    "port": 443,
-    "latency_ms": 119.19,
-    "median_latency_ms": 116.73,
-    "jitter_ms": 8.68,
-    "p95_latency_ms": 130.84,
-    "success_rate": 1.0,
-    "successful_rounds": 3,
-    "total_rounds": 3,
-    "speed_mbps": 78.689,
-    "speed_tested": true,
-    "speed_samples_mbps": [
-      84.862,
-      72.515
-    ],
-    "score": 93.85,
-    "port_results": [
-      {
-        "port": 443,
-        "success_rate": 1.0,
-        "successful_rounds": 3,
-        "total_rounds": 3,
-        "latency_ms": 119.19,
-        "median_latency_ms": 116.73,
-        "jitter_ms": 8.68,
-        "p95_latency_ms": 130.84,
-        "errors": {}
-      }
-    ],
-    "tested_at": "2026-11-26T03:27:47+00:00",
-    "country_code": "US",
-    "city": "Newark",
-    "region_zh": "美国",
-    "colo": "IAD",
-    "region_priority": 0
-  },
-  {
-    "ip": "103.31.4.46",
-    "version": 4,
-    "port": 443,
-    "latency_ms": 120.99,
-    "median_latency_ms": 120.11,
-    "jitter_ms": 7.14,
-    "p95_latency_ms": 130.14,
-    "success_rate": 1.0,
-    "successful_rounds": 3,
-    "total_rounds": 3,
-    "speed_mbps": 78.249,
-    "speed_tested": true,
-    "speed_samples_mbps": [
-      80.744,
-      75.753
-    ],
-    "score": 93.83,
-    "port_results": [
-      {
-        "port": 443,
-        "success_rate": 1.0,
-        "successful_rounds": 3,
-        "total_rounds": 3,
-        "latency_ms": 120.99,
-        "median_latency_ms": 120.11,
-        "jitter_ms": 7.14,
-        "p95_latency_ms": 130.14,
-        "errors": {}
-      }
-    ],
-    "tested_at": "2026-11-26T03:27:47+00:00",
-    "country_code": "US",
-    "city": "Newark",
-    "region_zh": "美国",
-    "colo": "IAD",
-    "region_priority": 0
-  },
-  {
-    "ip": "103.31.4.8",
-    "version": 4,
-    "port": 443,
-    "latency_ms": 108.28,
-    "median_latency_ms": 102.28,
-    "jitter_ms": 11.59,
-    "p95_latency_ms": 124.49,
-    "success_rate": 1.0,
-    "successful_rounds": 3,
-    "total_rounds": 3,
-    "speed_mbps": 74.622,
-    "speed_tested": true,
-    "speed_samples_mbps": [
-      80.29,
-      68.954
-    ],
-    "score": 93.75,
-    "port_results": [
-      {
-        "port": 443,
-        "success_rate": 1.0,
-        "successful_rounds": 3,
-        "total_rounds": 3,
-        "latency_ms": 108.28,
-        "median_latency_ms": 102.28,
-        "jitter_ms": 11.59,
-        "p95_latency_ms": 124.49,
-        "errors": {}
-      }
-    ],
-    "tested_at": "2026-11-26T03:27:48+00:00",
-    "country_code": "US",
-    "city": "Newark",
-    "region_zh": "美国",
-    "colo": "IAD",
-    "region_priority": 0
-  },
-  {
-    "ip": "103.31.4.53",
-    "version": 4,
-    "port": 443,
-    "latency_ms": 100.96,
-    "median_latency_ms": 89.2,
-    "jitter_ms": 18.71,
-    "p95_latency_ms": 127.37,
-    "success_rate": 1.0,
-    "successful_rounds": 3,
-    "total_rounds": 3,
-    "speed_mbps": 75.316,
-    "speed_tested": true,
-    "speed_samples_mbps": [
-      75.801,
-      74.83
-    ],
-    "score": 93.71,
-    "port_results": [
-      {
-        "port": 443,
-        "success_rate": 1.0,
-        "successful_rounds": 3,
-        "total_rounds": 3,
-        "latency_ms": 100.96,
-        "median_latency_ms": 89.2,
-        "jitter_ms": 18.71,
-        "p95_latency_ms": 127.37,
-        "errors": {}
-      }
-    ],
-    "tested_at": "2026-11-26T03:27:48+00:00",
-    "country_code": "US",
-    "city": "Newark",
-    "region_zh": "美国",
-    "colo": "IAD",
-    "region_priority": 0
-  },
-  {
-    "ip": "162.159.244.178",
-    "version": 4,
-    "port": 443,
-    "latency_ms": 87.87,
-    "median_latency_ms": 84.86,
-    "jitter_ms": 19.81,
-    "p95_latency_ms": 113.49,
-    "success_rate": 1.0,
-    "successful_rounds": 3,
-    "total_rounds": 3,
-    "speed_mbps": 68.797,
-    "speed_tested": true,
-    "speed_samples_mbps": [
-      51.795,
-      85.798
-    ],
-    "score": 93.53,
-    "port_results": [
-      {
-        "port": 443,
-        "success_rate": 1.0,
-        "successful_rounds": 3,
-        "total_rounds": 3,
-        "latency_ms": 87.87,
-        "median_latency_ms": 84.86,
-        "jitter_ms": 19.81,
-        "p95_latency_ms": 113.49,
-        "errors": {}
-      }
-    ],
-    "tested_at": "2026-11-26T03:27:48+00:00",
-    "country_code": "US",
-    "city": "Newark",
-    "region_zh": "美国",
-    "colo": "IAD",
-    "region_priority": 0
-  },
-  {
-    "ip": "103.31.4.61",
-    "version": 4,
-    "port": 443,
-    "latency_ms": 107.19,
-    "median_latency_ms": 120.97,
-    "jitter_ms": 19.98,
-    "p95_latency_ms": 121.65,
-    "success_rate": 1.0,
-    "successful_rounds": 3,
-    "total_rounds": 3,
-    "speed_mbps": 76.565,
-    "speed_tested": true,
-    "speed_samples_mbps": [
-      72.966,
-      80.164
-    ],
-    "score": 93.53,
-    "port_results": [
-      {
-        "port": 443,
-        "success_rate": 1.0,
-        "successful_rounds": 3,
-        "total_rounds": 3,
-        "latency_ms": 107.19,
-        "median_latency_ms": 120.97,
-        "jitter_ms": 19.98,
-        "p95_latency_ms": 121.65,
-        "errors": {}
-      }
-    ],
-    "tested_at": "2026-11-26T03:27:47+00:00",
-    "country_code": "US",
-    "city": "Newark",
-    "region_zh": "美国",
-    "colo": "IAD",
-    "region_priority": 0
-  },
-  {
-    "ip": "103.31.4.38",
-    "version": 4,
-    "port": 443,
-    "latency_ms": 82.08,
-    "median_latency_ms": 77.58,
-    "jitter_ms": 7.51,
-    "p95_latency_ms": 92.66,
-    "success_rate": 1.0,
-    "successful_rounds": 3,
-    "total_rounds": 3,
-    "speed_mbps": 59.9,
-    "speed_tested": true,
-    "speed_samples_mbps": [
-      30.825,
-      88.974
-    ],
-    "score": 93.46,
-    "port_results": [
-      {
-        "port": 443,
-        "success_rate": 1.0,
-        "successful_rounds": 3,
-        "total_rounds": 3,
-        "latency_ms": 82.08,
-        "median_latency_ms": 77.58,
-        "jitter_ms": 7.51,
-        "p95_latency_ms": 92.66,
-        "errors": {}
-      }
-    ],
-    "tested_at": "2026-11-26T03:27:47+00:00",
-    "country_code": "US",
-    "city": "Newark",
-    "region_zh": "美国",
-    "colo": "IAD",
-    "region_priority": 0
-  },
-  {
-    "ip": "103.31.4.181",
-    "version": 4,
-    "port": 443,
-    "latency_ms": 86.3,
-    "median_latency_ms": 74.87,
-    "jitter_ms": 16.34,
-    "p95_latency_ms": 109.41,
-    "success_rate": 1.0,
-    "successful_rounds": 3,
-    "total_rounds": 3,
-    "speed_mbps": 63.787,
-    "speed_tested": true,
-    "speed_samples_mbps": [
-      36.028,
-      91.547
-    ],
-    "score": 93.28,
-    "port_results": [
-      {
-        "port": 443,
-        "success_rate": 1.0,
-        "successful_rounds": 3,
-        "total_rounds": 3,
-        "latency_ms": 86.3,
-        "median_latency_ms": 74.87,
-        "jitter_ms": 16.34,
-        "p95_latency_ms": 109.41,
-        "errors": {}
-      }
-    ],
-    "tested_at": "2026-11-26T03:27:47+00:00",
-    "country_code": "US",
-    "city": "Newark",
-    "region_zh": "美国",
-    "colo": "IAD",
-    "region_priority": 0
-  },
-  {
-    "ip": "162.159.255.254",
-    "version": 4,
-    "port": 443,
-    "latency_ms": 76.77,
-    "median_latency_ms": 75.25,
-    "jitter_ms": 5.64,
-    "p95_latency_ms": 84.31,
-    "success_rate": 1.0,
-    "successful_rounds": 3,
-    "total_rounds": 3,
-    "speed_mbps": 48.971,
-    "speed_tested": true,
-    "speed_samples_mbps": [
-      74.603,
-      23.34
-    ],
-    "score": 92.46,
-    "port_results": [
-      {
-        "port": 443,
-        "success_rate": 1.0,
-        "successful_rounds": 3,
-        "total_rounds": 3,
-        "latency_ms": 76.77,
-        "median_latency_ms": 75.25,
-        "jitter_ms": 5.64,
-        "p95_latency_ms": 84.31,
-        "errors": {}
-      }
-    ],
-    "tested_at": "2026-11-26T03:27:48+00:00",
-    "country_code": "US",
-    "city": "Newark",
-    "region_zh": "美国",
-    "colo": "IAD",
-    "region_priority": 0
-  },
-  {
-    "ip": "103.31.4.106",
-    "version": 4,
-    "port": 443,
-    "latency_ms": 112.05,
-    "median_latency_ms": 108.16,
-    "jitter_ms": 6.45,
-    "p95_latency_ms": 121.14,
-    "success_rate": 1.0,
-    "successful_rounds": 3,
-    "total_rounds": 3,
-    "speed_mbps": 57.326,
-    "speed_tested": true,
-    "speed_samples_mbps": [
-      29.644,
-      85.007
-    ],
-    "score": 92.19,
-    "port_results": [
-      {
-        "port": 443,
-        "success_rate": 1.0,
-        "successful_rounds": 3,
-        "total_rounds": 3,
-        "latency_ms": 112.05,
-        "median_latency_ms": 108.16,
-        "jitter_ms": 6.45,
-        "p95_latency_ms": 121.14,
-        "errors": {}
-      }
-    ],
-    "tested_at": "2026-11-26T03:27:47+00:00",
+    "tested_at": "2026-11-26T06:43:54+00:00",
     "country_code": "US",
     "city": "Newark",
     "region_zh": "美国",
@@ -725,37 +193,566 @@
     "ip": "162.159.240.239",
     "version": 4,
     "port": 443,
-    "latency_ms": 80.29,
-    "median_latency_ms": 80.11,
-    "jitter_ms": 13.59,
-    "p95_latency_ms": 97.03,
+    "latency_ms": 67.27,
+    "median_latency_ms": 68.69,
+    "jitter_ms": 6.19,
+    "p95_latency_ms": 74.03,
     "success_rate": 1.0,
     "successful_rounds": 3,
     "total_rounds": 3,
-    "speed_mbps": 49.106,
+    "speed_mbps": 79.868,
     "speed_tested": true,
     "speed_samples_mbps": [
-      25.18,
-      73.033
+      90.125,
+      69.612
     ],
-    "score": 91.95,
+    "score": 95.89,
     "port_results": [
       {
         "port": 443,
         "success_rate": 1.0,
         "successful_rounds": 3,
         "total_rounds": 3,
-        "latency_ms": 80.29,
-        "median_latency_ms": 80.11,
-        "jitter_ms": 13.59,
-        "p95_latency_ms": 97.03,
+        "latency_ms": 67.27,
+        "median_latency_ms": 68.69,
+        "jitter_ms": 6.19,
+        "p95_latency_ms": 74.03,
         "errors": {}
       }
     ],
-    "tested_at": "2026-11-26T03:27:48+00:00",
+    "tested_at": "2026-11-26T06:43:55+00:00",
     "country_code": "US",
     "city": "New York",
     "region_zh": "美国-纽约",
+    "colo": "IAD",
+    "region_priority": 0
+  },
+  {
+    "ip": "162.159.248.118",
+    "version": 4,
+    "port": 443,
+    "latency_ms": 66.51,
+    "median_latency_ms": 67.05,
+    "jitter_ms": 4.49,
+    "p95_latency_ms": 71.72,
+    "success_rate": 1.0,
+    "successful_rounds": 3,
+    "total_rounds": 3,
+    "speed_mbps": 77.85,
+    "speed_tested": true,
+    "speed_samples_mbps": [
+      79.978,
+      75.723
+    ],
+    "score": 95.84,
+    "port_results": [
+      {
+        "port": 443,
+        "success_rate": 1.0,
+        "successful_rounds": 3,
+        "total_rounds": 3,
+        "latency_ms": 66.51,
+        "median_latency_ms": 67.05,
+        "jitter_ms": 4.49,
+        "p95_latency_ms": 71.72,
+        "errors": {}
+      }
+    ],
+    "tested_at": "2026-11-26T06:43:55+00:00",
+    "country_code": "US",
+    "city": "Newark",
+    "region_zh": "美国",
+    "colo": "IAD",
+    "region_priority": 0
+  },
+  {
+    "ip": "141.101.114.88",
+    "version": 4,
+    "port": 443,
+    "latency_ms": 68.57,
+    "median_latency_ms": 64.73,
+    "jitter_ms": 6.56,
+    "p95_latency_ms": 77.8,
+    "success_rate": 1.0,
+    "successful_rounds": 3,
+    "total_rounds": 3,
+    "speed_mbps": 79.886,
+    "speed_tested": true,
+    "speed_samples_mbps": [
+      83.02,
+      76.753
+    ],
+    "score": 95.83,
+    "port_results": [
+      {
+        "port": 443,
+        "success_rate": 1.0,
+        "successful_rounds": 3,
+        "total_rounds": 3,
+        "latency_ms": 68.57,
+        "median_latency_ms": 64.73,
+        "jitter_ms": 6.56,
+        "p95_latency_ms": 77.8,
+        "errors": {}
+      }
+    ],
+    "tested_at": "2026-11-26T06:43:55+00:00",
+    "country_code": "US",
+    "city": "Washington",
+    "region_zh": "美国-华盛顿",
+    "colo": "IAD",
+    "region_priority": 0
+  },
+  {
+    "ip": "141.101.115.194",
+    "version": 4,
+    "port": 443,
+    "latency_ms": 68.98,
+    "median_latency_ms": 63.85,
+    "jitter_ms": 9.7,
+    "p95_latency_ms": 82.57,
+    "success_rate": 1.0,
+    "successful_rounds": 3,
+    "total_rounds": 3,
+    "speed_mbps": 81.994,
+    "speed_tested": true,
+    "speed_samples_mbps": [
+      81.101,
+      82.887
+    ],
+    "score": 95.82,
+    "port_results": [
+      {
+        "port": 443,
+        "success_rate": 1.0,
+        "successful_rounds": 3,
+        "total_rounds": 3,
+        "latency_ms": 68.98,
+        "median_latency_ms": 63.85,
+        "jitter_ms": 9.7,
+        "p95_latency_ms": 82.57,
+        "errors": {}
+      }
+    ],
+    "tested_at": "2026-11-26T06:43:55+00:00",
+    "country_code": "US",
+    "city": "Washington",
+    "region_zh": "美国-华盛顿",
+    "colo": "IAD",
+    "region_priority": 0
+  },
+  {
+    "ip": "103.31.4.166",
+    "version": 4,
+    "port": 443,
+    "latency_ms": 80.79,
+    "median_latency_ms": 83.01,
+    "jitter_ms": 4.9,
+    "p95_latency_ms": 85.38,
+    "success_rate": 1.0,
+    "successful_rounds": 3,
+    "total_rounds": 3,
+    "speed_mbps": 83.687,
+    "speed_tested": true,
+    "speed_samples_mbps": [
+      89.596,
+      77.778
+    ],
+    "score": 95.78,
+    "port_results": [
+      {
+        "port": 443,
+        "success_rate": 1.0,
+        "successful_rounds": 3,
+        "total_rounds": 3,
+        "latency_ms": 80.79,
+        "median_latency_ms": 83.01,
+        "jitter_ms": 4.9,
+        "p95_latency_ms": 85.38,
+        "errors": {}
+      }
+    ],
+    "tested_at": "2026-11-26T06:43:55+00:00",
+    "country_code": "US",
+    "city": "Newark",
+    "region_zh": "美国",
+    "colo": "IAD",
+    "region_priority": 0
+  },
+  {
+    "ip": "141.101.113.104",
+    "version": 4,
+    "port": 443,
+    "latency_ms": 71.43,
+    "median_latency_ms": 69.48,
+    "jitter_ms": 11.33,
+    "p95_latency_ms": 86.18,
+    "success_rate": 1.0,
+    "successful_rounds": 3,
+    "total_rounds": 3,
+    "speed_mbps": 81.468,
+    "speed_tested": true,
+    "speed_samples_mbps": [
+      93.251,
+      69.685
+    ],
+    "score": 95.62,
+    "port_results": [
+      {
+        "port": 443,
+        "success_rate": 1.0,
+        "successful_rounds": 3,
+        "total_rounds": 3,
+        "latency_ms": 71.43,
+        "median_latency_ms": 69.48,
+        "jitter_ms": 11.33,
+        "p95_latency_ms": 86.18,
+        "errors": {}
+      }
+    ],
+    "tested_at": "2026-11-26T06:43:55+00:00",
+    "country_code": "US",
+    "city": "Washington",
+    "region_zh": "美国-华盛顿",
+    "colo": "IAD",
+    "region_priority": 0
+  },
+  {
+    "ip": "141.101.114.209",
+    "version": 4,
+    "port": 443,
+    "latency_ms": 68.61,
+    "median_latency_ms": 63.27,
+    "jitter_ms": 7.58,
+    "p95_latency_ms": 79.33,
+    "success_rate": 1.0,
+    "successful_rounds": 3,
+    "total_rounds": 3,
+    "speed_mbps": 61.917,
+    "speed_tested": true,
+    "speed_samples_mbps": [
+      76.878,
+      46.956
+    ],
+    "score": 94.14,
+    "port_results": [
+      {
+        "port": 443,
+        "success_rate": 1.0,
+        "successful_rounds": 3,
+        "total_rounds": 3,
+        "latency_ms": 68.61,
+        "median_latency_ms": 63.27,
+        "jitter_ms": 7.58,
+        "p95_latency_ms": 79.33,
+        "errors": {}
+      }
+    ],
+    "tested_at": "2026-11-26T06:43:55+00:00",
+    "country_code": "US",
+    "city": "Washington",
+    "region_zh": "美国-华盛顿",
+    "colo": "IAD",
+    "region_priority": 0
+  },
+  {
+    "ip": "103.31.4.53",
+    "version": 4,
+    "port": 443,
+    "latency_ms": 79.57,
+    "median_latency_ms": 80.18,
+    "jitter_ms": 3.55,
+    "p95_latency_ms": 83.59,
+    "success_rate": 1.0,
+    "successful_rounds": 3,
+    "total_rounds": 3,
+    "speed_mbps": 54.974,
+    "speed_tested": true,
+    "speed_samples_mbps": [
+      92.819,
+      17.129
+    ],
+    "score": 93.2,
+    "port_results": [
+      {
+        "port": 443,
+        "success_rate": 1.0,
+        "successful_rounds": 3,
+        "total_rounds": 3,
+        "latency_ms": 79.57,
+        "median_latency_ms": 80.18,
+        "jitter_ms": 3.55,
+        "p95_latency_ms": 83.59,
+        "errors": {}
+      }
+    ],
+    "tested_at": "2026-11-26T06:43:55+00:00",
+    "country_code": "US",
+    "city": "Newark",
+    "region_zh": "美国",
+    "colo": "IAD",
+    "region_priority": 0
+  },
+  {
+    "ip": "108.162.198.30",
+    "version": 4,
+    "port": 443,
+    "latency_ms": 66.98,
+    "median_latency_ms": 61.76,
+    "jitter_ms": 11.29,
+    "p95_latency_ms": 82.66,
+    "success_rate": 1.0,
+    "successful_rounds": 3,
+    "total_rounds": 3,
+    "speed_mbps": 52.371,
+    "speed_tested": true,
+    "speed_samples_mbps": [
+      27.291,
+      77.451
+    ],
+    "score": 92.94,
+    "port_results": [
+      {
+        "port": 443,
+        "success_rate": 1.0,
+        "successful_rounds": 3,
+        "total_rounds": 3,
+        "latency_ms": 66.98,
+        "median_latency_ms": 61.76,
+        "jitter_ms": 11.29,
+        "p95_latency_ms": 82.66,
+        "errors": {}
+      }
+    ],
+    "tested_at": "2026-11-26T06:43:55+00:00",
+    "country_code": "US",
+    "city": "Ashburn",
+    "region_zh": "美国-阿什本",
+    "colo": "IAD",
+    "region_priority": 0
+  },
+  {
+    "ip": "103.31.4.1",
+    "version": 4,
+    "port": 443,
+    "latency_ms": 75.77,
+    "median_latency_ms": 75.22,
+    "jitter_ms": 11.39,
+    "p95_latency_ms": 89.99,
+    "success_rate": 1.0,
+    "successful_rounds": 3,
+    "total_rounds": 3,
+    "speed_mbps": 49.596,
+    "speed_tested": true,
+    "speed_samples_mbps": [
+      20.918,
+      78.274
+    ],
+    "score": 92.29,
+    "port_results": [
+      {
+        "port": 443,
+        "success_rate": 1.0,
+        "successful_rounds": 3,
+        "total_rounds": 3,
+        "latency_ms": 75.77,
+        "median_latency_ms": 75.22,
+        "jitter_ms": 11.39,
+        "p95_latency_ms": 89.99,
+        "errors": {}
+      }
+    ],
+    "tested_at": "2026-11-26T06:43:54+00:00",
+    "country_code": "US",
+    "city": "Newark",
+    "region_zh": "美国",
+    "colo": "IAD",
+    "region_priority": 0
+  },
+  {
+    "ip": "141.101.113.224",
+    "version": 4,
+    "port": 443,
+    "latency_ms": 70.66,
+    "median_latency_ms": 64.08,
+    "jitter_ms": 10.13,
+    "p95_latency_ms": 84.97,
+    "success_rate": 1.0,
+    "successful_rounds": 3,
+    "total_rounds": 3,
+    "speed_mbps": 45.166,
+    "speed_tested": true,
+    "speed_samples_mbps": [
+      4.485,
+      85.846
+    ],
+    "score": 91.93,
+    "port_results": [
+      {
+        "port": 443,
+        "success_rate": 1.0,
+        "successful_rounds": 3,
+        "total_rounds": 3,
+        "latency_ms": 70.66,
+        "median_latency_ms": 64.08,
+        "jitter_ms": 10.13,
+        "p95_latency_ms": 84.97,
+        "errors": {}
+      }
+    ],
+    "tested_at": "2026-11-26T06:43:55+00:00",
+    "country_code": "US",
+    "city": "Washington",
+    "region_zh": "美国-华盛顿",
+    "colo": "IAD",
+    "region_priority": 0
+  },
+  {
+    "ip": "103.31.4.16",
+    "version": 4,
+    "port": 443,
+    "latency_ms": 77.1,
+    "median_latency_ms": 75.64,
+    "jitter_ms": 4.08,
+    "p95_latency_ms": 82.66,
+    "success_rate": 1.0,
+    "successful_rounds": 3,
+    "total_rounds": 3,
+    "speed_mbps": 43.784,
+    "speed_tested": true,
+    "speed_samples_mbps": [
+      71.606,
+      15.963
+    ],
+    "score": 91.81,
+    "port_results": [
+      {
+        "port": 443,
+        "success_rate": 1.0,
+        "successful_rounds": 3,
+        "total_rounds": 3,
+        "latency_ms": 77.1,
+        "median_latency_ms": 75.64,
+        "jitter_ms": 4.08,
+        "p95_latency_ms": 82.66,
+        "errors": {}
+      }
+    ],
+    "tested_at": "2026-11-26T06:43:54+00:00",
+    "country_code": "US",
+    "city": "Newark",
+    "region_zh": "美国",
+    "colo": "IAD",
+    "region_priority": 0
+  },
+  {
+    "ip": "108.162.198.151",
+    "version": 4,
+    "port": 443,
+    "latency_ms": 72.6,
+    "median_latency_ms": 69.46,
+    "jitter_ms": 11.78,
+    "p95_latency_ms": 88.34,
+    "success_rate": 1.0,
+    "successful_rounds": 3,
+    "total_rounds": 3,
+    "speed_mbps": 44.987,
+    "speed_tested": true,
+    "speed_samples_mbps": [
+      3.158,
+      86.817
+    ],
+    "score": 91.76,
+    "port_results": [
+      {
+        "port": 443,
+        "success_rate": 1.0,
+        "successful_rounds": 3,
+        "total_rounds": 3,
+        "latency_ms": 72.6,
+        "median_latency_ms": 69.46,
+        "jitter_ms": 11.78,
+        "p95_latency_ms": 88.34,
+        "errors": {}
+      }
+    ],
+    "tested_at": "2026-11-26T06:43:55+00:00",
+    "country_code": "US",
+    "city": "Ashburn",
+    "region_zh": "美国-阿什本",
+    "colo": "IAD",
+    "region_priority": 0
+  },
+  {
+    "ip": "103.31.4.136",
+    "version": 4,
+    "port": 443,
+    "latency_ms": 75.89,
+    "median_latency_ms": 76.23,
+    "jitter_ms": 3.31,
+    "p95_latency_ms": 79.76,
+    "success_rate": 1.0,
+    "successful_rounds": 3,
+    "total_rounds": 3,
+    "speed_mbps": 20.136,
+    "speed_tested": true,
+    "speed_samples_mbps": [
+      18.812,
+      21.461
+    ],
+    "score": 87.01,
+    "port_results": [
+      {
+        "port": 443,
+        "success_rate": 1.0,
+        "successful_rounds": 3,
+        "total_rounds": 3,
+        "latency_ms": 75.89,
+        "median_latency_ms": 76.23,
+        "jitter_ms": 3.31,
+        "p95_latency_ms": 79.76,
+        "errors": {}
+      }
+    ],
+    "tested_at": "2026-11-26T06:43:54+00:00",
+    "country_code": "US",
+    "city": "Newark",
+    "region_zh": "美国",
+    "colo": "IAD",
+    "region_priority": 0
+  },
+  {
+    "ip": "103.31.4.46",
+    "version": 4,
+    "port": 443,
+    "latency_ms": 84.24,
+    "median_latency_ms": 82.97,
+    "jitter_ms": 9.05,
+    "p95_latency_ms": 95.91,
+    "success_rate": 1.0,
+    "successful_rounds": 3,
+    "total_rounds": 3,
+    "speed_mbps": null,
+    "speed_tested": false,
+    "speed_samples_mbps": [],
+    "score": 66.6,
+    "port_results": [
+      {
+        "port": 443,
+        "success_rate": 1.0,
+        "successful_rounds": 3,
+        "total_rounds": 3,
+        "latency_ms": 84.24,
+        "median_latency_ms": 82.97,
+        "jitter_ms": 9.05,
+        "p95_latency_ms": 95.91,
+        "errors": {}
+      }
+    ],
+    "tested_at": "2026-11-26T06:43:54+00:00",
+    "country_code": "US",
+    "city": "Newark",
+    "region_zh": "美国",
     "colo": "IAD",
     "region_priority": 0
   }
