@@ -30,7 +30,7 @@ EGRESS_TEST_IPS = {
 }
 
 
-COUNTRY_API_URL = "http://ip-api.com/batch?fields=status,countryCode,query"
+COUNTRY_API_URL = "http://ip-api.com/batch?fields=status,countryCode,country,city,query"
 
 
 def country_flag(country_code: str | None) -> str:
@@ -41,11 +41,57 @@ def country_flag(country_code: str | None) -> str:
     return "".join(chr(0x1F1E6 + ord(char) - ord("A")) for char in code)
 
 
+
+COUNTRY_NAMES_ZH = {
+    "US": "美国", "CA": "加拿大", "MX": "墨西哥", "BR": "巴西", "AR": "阿根廷",
+    "CL": "智利", "CO": "哥伦比亚", "PE": "秘鲁", "GB": "英国", "IE": "爱尔兰",
+    "FR": "法国", "DE": "德国", "NL": "荷兰", "BE": "比利时", "LU": "卢森堡",
+    "CH": "瑞士", "AT": "奥地利", "ES": "西班牙", "PT": "葡萄牙", "IT": "意大利",
+    "SE": "瑞典", "NO": "挪威", "DK": "丹麦", "FI": "芬兰", "IS": "冰岛",
+    "PL": "波兰", "CZ": "捷克", "SK": "斯洛伐克", "HU": "匈牙利", "RO": "罗马尼亚",
+    "BG": "保加利亚", "GR": "希腊", "UA": "乌克兰", "RU": "俄罗斯", "TR": "土耳其",
+    "IL": "以色列", "AE": "阿联酋", "SA": "沙特阿拉伯", "QA": "卡塔尔", "BH": "巴林",
+    "IN": "印度", "PK": "巴基斯坦", "BD": "孟加拉国", "LK": "斯里兰卡", "NP": "尼泊尔",
+    "CN": "中国", "HK": "中国香港", "MO": "中国澳门", "TW": "中国台湾", "JP": "日本",
+    "KR": "韩国", "SG": "新加坡", "MY": "马来西亚", "TH": "泰国", "VN": "越南",
+    "ID": "印度尼西亚", "PH": "菲律宾", "KH": "柬埔寨", "AU": "澳大利亚", "NZ": "新西兰",
+    "ZA": "南非", "EG": "埃及", "NG": "尼日利亚", "KE": "肯尼亚", "MA": "摩洛哥",
+    "GH": "加纳", "ET": "埃塞俄比亚", "KZ": "哈萨克斯坦", "UZ": "乌兹别克斯坦",
+    "GE": "格鲁吉亚", "AM": "亚美尼亚", "AZ": "阿塞拜疆", "CY": "塞浦路斯",
+    "HR": "克罗地亚", "SI": "斯洛文尼亚", "RS": "塞尔维亚", "LT": "立陶宛",
+    "LV": "拉脱维亚", "EE": "爱沙尼亚", "MT": "马耳他", "AL": "阿尔巴尼亚",
+    "MK": "北马其顿", "ME": "黑山", "BA": "波斯尼亚和黑塞哥维那",
+}
+CITY_NAMES_ZH = {
+    "Los Angeles": "洛杉矶", "San Francisco": "旧金山", "San Jose": "圣何塞",
+    "Seattle": "西雅图", "New York": "纽约", "Chicago": "芝加哥",
+    "Dallas": "达拉斯", "Miami": "迈阿密", "Washington": "华盛顿",
+    "Ashburn": "阿什本", "Atlanta": "亚特兰大", "Boston": "波士顿",
+    "London": "伦敦", "Manchester": "曼彻斯特", "Frankfurt": "法兰克福",
+    "Berlin": "柏林", "Paris": "巴黎", "Amsterdam": "阿姆斯特丹",
+    "Tokyo": "东京", "Osaka": "大阪", "Singapore": "新加坡",
+    "Hong Kong": "香港", "Taipei": "台北", "Seoul": "首尔",
+    "Sydney": "悉尼", "Melbourne": "墨尔本", "Toronto": "多伦多",
+    "Vancouver": "温哥华", "Montreal": "蒙特利尔", "Mumbai": "孟买",
+    "Delhi": "新德里", "Bangalore": "班加罗尔", "Dubai": "迪拜",
+    "Sao Paulo": "圣保罗", "Mexico City": "墨西哥城",
+}
+
+
+def region_label(item: dict[str, Any]) -> str:
+    """Build a concise Chinese GeoIP label, with city when available."""
+    code = str(item.get("country_code") or "").upper()
+    country = COUNTRY_NAMES_ZH.get(code, "未知地区")
+    city = str(item.get("city") or "").strip()
+    city_zh = CITY_NAMES_ZH.get(city, city)
+    return f"{country}-{city_zh}" if city_zh else country
+
+
 def enrich_country_info(results: list[dict[str, Any]]) -> None:
     """Add approximate country codes in batches; never fail a scan on GeoIP errors."""
     if not results:
         return
-    ip_to_country: dict[str, str] = {}
+    ip_to_country: dict[str, dict[str, str]] = {}
     addresses = list(dict.fromkeys(str(item["ip"]) for item in results))
     for offset in range(0, len(addresses), 100):
         batch = addresses[offset:offset + 100]
@@ -65,20 +111,23 @@ def enrich_country_info(results: list[dict[str, Any]]) -> None:
             if isinstance(payload, list):
                 for entry in payload:
                     if entry.get("status") == "success":
-                        ip_to_country[str(entry.get("query", ""))] = str(entry.get("countryCode", "")).upper()
+                        ip_to_country[str(entry.get("query", ""))] = {
+                            "country_code": str(entry.get("countryCode", "")).upper(),
+                            "city": str(entry.get("city", "") or "").strip(),
+                        }
         except Exception as exc:
             print(f"GeoIP lookup batch {offset // 100 + 1} failed: {type(exc).__name__}: {exc}")
 
     for item in results:
-        code = ip_to_country.get(str(item["ip"]), "")
-        item["country_code"] = code or "ZZ"
-        item["country_flag"] = country_flag(code)
+        geo = ip_to_country.get(str(item["ip"]), {})
+        item["country_code"] = geo.get("country_code", "") or "ZZ"
+        item["city"] = geo.get("city", "")
+        item["region_zh"] = region_label(item)
         
 
 def subscription_line(item: dict[str, Any]) -> str:
-    code = str(item.get("country_code") or "ZZ").upper()
-    flag = str(item.get("country_flag") or "🌐")
-    return f"{item['ip']}:{int(item.get('port', 443))}#{code} {flag}"
+    region = str(item.get("region_zh") or region_label(item))
+    return f"{item['ip']}:{int(item.get('port', 443))}#{region}"
 
 
 def utc_now() -> str:
@@ -665,7 +714,7 @@ def write_family_outputs(version: int, results: list[dict[str, Any]], top_n: lis
         (ROOT / name).write_text(payload, encoding="utf-8")
         (output_dir / name).write_text(payload, encoding="utf-8")
     write_json(OUTPUT / "summary.json", {
-        "project": "Cloudflare-IP-Auto", "version": "3.3", "generated_at": utc_now(),
+        "project": "Cloudflare-IP-Auto", "version": "3.4", "generated_at": utc_now(),
         "ip_family": "IPv4 only", "port": 443,
         "ranked_count": len(results), "all_count": len(results),
         "fast_count": len(fast_items), "fast_min_mbps": 25.0,
@@ -764,7 +813,7 @@ def main() -> None:
     OUTPUT.mkdir(parents=True, exist_ok=True)
     summary: dict[str, Any] = {
         "project": "Cloudflare-IP-Auto",
-        "version": "3.2",
+        "version": "3.4",
         "generated_at": utc_now(),
         "schedule": "17 */6 * * * (UTC)",
         "ip_family": "IPv4 only",
