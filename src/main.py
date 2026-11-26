@@ -30,6 +30,57 @@ EGRESS_TEST_IPS = {
 }
 
 
+COUNTRY_API_URL = "http://ip-api.com/batch?fields=status,countryCode,query"
+
+
+def country_flag(country_code: str | None) -> str:
+    """Convert an ISO 3166-1 alpha-2 code to its flag emoji."""
+    code = (country_code or "").strip().upper()
+    if len(code) != 2 or not code.isalpha() or not code.isascii():
+        return "🌐"
+    return "".join(chr(0x1F1E6 + ord(char) - ord("A")) for char in code)
+
+
+def enrich_country_info(results: list[dict[str, Any]]) -> None:
+    """Add approximate country codes in batches; never fail a scan on GeoIP errors."""
+    if not results:
+        return
+    ip_to_country: dict[str, str] = {}
+    addresses = list(dict.fromkeys(str(item["ip"]) for item in results))
+    for offset in range(0, len(addresses), 100):
+        batch = addresses[offset:offset + 100]
+        try:
+            body = json.dumps(batch).encode("utf-8")
+            request = Request(
+                COUNTRY_API_URL,
+                data=body,
+                headers={
+                    "Content-Type": "application/json",
+                    "User-Agent": "Cloudflare-IP-Auto/3.2",
+                },
+                method="POST",
+            )
+            with urlopen(request, timeout=20.0) as response:
+                payload = json.loads(response.read().decode("utf-8"))
+            if isinstance(payload, list):
+                for entry in payload:
+                    if entry.get("status") == "success":
+                        ip_to_country[str(entry.get("query", ""))] = str(entry.get("countryCode", "")).upper()
+        except Exception as exc:
+            print(f"GeoIP lookup batch {offset // 100 + 1} failed: {type(exc).__name__}: {exc}")
+
+    for item in results:
+        code = ip_to_country.get(str(item["ip"]), "")
+        item["country_code"] = code or "ZZ"
+        item["country_flag"] = country_flag(code)
+        
+
+def subscription_line(item: dict[str, Any]) -> str:
+    code = str(item.get("country_code") or "ZZ").upper()
+    flag = str(item.get("country_flag") or "🌐")
+    return f"{item['ip']}:{int(item.get('port', 443))}#{code} {flag}"
+
+
 def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
@@ -453,6 +504,9 @@ def write_json(path: Path, payload: Any) -> None:
 def write_family_outputs(version: int, results: list[dict[str, Any]], top_n: list[int]) -> None:
     family = "ipv4" if version == 4 else "ipv6"
     output_dir = OUTPUT / family
+    if not results:
+        print(f"IPv{version}: no usable IPs; preserving previous valid result and subscription files")
+        return
     output_dir.mkdir(parents=True, exist_ok=True)
 
     write_json(output_dir / "all.json", results)
@@ -484,23 +538,22 @@ def write_family_outputs(version: int, results: list[dict[str, Any]], top_n: lis
     # Both naming conventions are published for convenient client integration.
     for count in top_n:
         top = results[:int(count)]
-        endpoints = "\n".join(f"{item['ip']}:443" for item in top)
-        payload = (endpoints + "\n") if endpoints else ""
+        endpoints = "\n".join(subscription_line(item) for item in top)
+        payload = endpoints + "\n"
         (ROOT / f"best-cf-ip-scanned-top{count}.txt").write_text(payload, encoding="utf-8")
         (ROOT / f"cf-ipv4-top{count}.txt").write_text(payload, encoding="utf-8")
 
 
     # Convenience root-level lists for downstream subscription aggregators.
-    all_lines = [f"{item['ip']}:443" for item in results]
     fast_items = [item for item in results if item.get("speed_mbps") is not None and item["speed_mbps"] >= 25.0]
     stable_items = [item for item in results if item.get("success_rate", 0) >= 1.0 and item.get("jitter_ms", 9999) <= 50.0]
     for name, items in (("all.txt", results), ("fast.txt", fast_items), ("stable.txt", stable_items)):
-        lines = [f"{item['ip']}:443" for item in items]
-        payload = "\n".join(lines) + ("\n" if lines else "")
+        lines = [subscription_line(item) for item in items]
+        payload = "\n".join(lines) + "\n"
         (ROOT / name).write_text(payload, encoding="utf-8")
         (output_dir / name).write_text(payload, encoding="utf-8")
     write_json(OUTPUT / "summary.json", {
-        "project": "Cloudflare-IP-Auto", "version": "3.1", "generated_at": utc_now(),
+        "project": "Cloudflare-IP-Auto", "version": "3.2", "generated_at": utc_now(),
         "ip_family": "IPv4 only", "port": 443,
         "ranked_count": len(results), "all_count": len(results),
         "fast_count": len(fast_items), "fast_min_mbps": 25.0,
@@ -591,6 +644,7 @@ def run_ipv4(config: dict[str, Any]) -> dict[str, Any]:
 
     print(f"IPv4 failure reasons: {json.dumps(failure_reasons, ensure_ascii=False, sort_keys=True)}")
     run_speed_tests(results, 4, config)
+    enrich_country_info(results)
     ranked = sort_and_score(results)
     top_n = [int(value) for value in scan["top_n"]]
     write_family_outputs(4, ranked, top_n)
@@ -617,9 +671,9 @@ def main() -> None:
     OUTPUT.mkdir(parents=True, exist_ok=True)
     summary: dict[str, Any] = {
         "project": "Cloudflare-IP-Auto",
-        "version": "3.1",
+        "version": "3.2",
         "generated_at": utc_now(),
-        "schedule": "0 */6 * * * (UTC)",
+        "schedule": "17 */6 * * * (UTC)",
         "ip_family": "IPv4 only",
         "ports": [443],
         "families": {},
