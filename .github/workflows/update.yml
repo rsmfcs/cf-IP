@@ -1,6 +1,9 @@
 name: Update Cloudflare IPv4 IPs
 
 on:
+  push:
+    branches:
+      - main
   schedule:
     - cron: "17 */6 * * *"
   workflow_dispatch:
