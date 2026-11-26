@@ -31,6 +31,8 @@ EGRESS_TEST_IPS = {
 
 
 COUNTRY_API_URL = "http://ip-api.com/batch?fields=status,countryCode,country,city,query"
+HOSTMONIT_API_URL = "https://api.hostmonit.com/get_optimization_ip"
+HOSTMONIT_API_KEY = "o1zrmHAF"
 
 
 def country_flag(country_code: str | None) -> str:
@@ -224,7 +226,9 @@ def enrich_colo_info(results: list[dict[str, Any]], config: dict[str, Any]) -> N
 
 def subscription_line(item: dict[str, Any]) -> str:
     region = str(item.get("region_zh") or region_label(item))
-    return f"{item['ip']}:{int(item.get('port', 443))}#{region}"
+    address = str(item["ip"])
+    endpoint = f"[{address}]" if ipaddress.ip_address(address).version == 6 else address
+    return f"{endpoint}:{int(item.get('port', 443))}#{region}"
 
 
 def utc_now() -> str:
@@ -235,6 +239,92 @@ def fetch_text(url: str, timeout: float = 20.0) -> str:
     request = Request(url, headers={"User-Agent": "Cloudflare-IP-Auto/3.1"})
     with urlopen(request, timeout=timeout) as response:
         return response.read().decode("utf-8")
+
+
+def fetch_hostmonit_ipv6(timeout: float = 25.0) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    """Fetch HostMonit IPv6 candidates; this does not require IPv6 network egress."""
+    request = Request(
+        HOSTMONIT_API_URL,
+        data=json.dumps({"key": HOSTMONIT_API_KEY, "type": "v6"}).encode("utf-8"),
+        headers={
+            "Content-Type": "application/json",
+            "User-Agent": "Cloudflare-IP-Auto/3.6",
+        },
+        method="POST",
+    )
+    with urlopen(request, timeout=timeout) as response:
+        payload = json.loads(response.read().decode("utf-8"))
+
+    if not isinstance(payload, dict) or payload.get("code") != 200:
+        raise ValueError(f"HostMonit returned an unexpected response: {str(payload)[:300]}")
+
+    info = payload.get("info")
+    if not isinstance(info, dict):
+        raise ValueError("HostMonit response is missing the info object")
+
+    candidates: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    source_counts: dict[str, int] = {}
+    for carrier, entries in info.items():
+        if not isinstance(entries, list):
+            continue
+        accepted = 0
+        for entry in entries:
+            raw_ip = entry.get("ip") if isinstance(entry, dict) else entry
+            if not isinstance(raw_ip, str):
+                continue
+            try:
+                address = ipaddress.ip_address(raw_ip.strip())
+            except ValueError:
+                continue
+            if address.version != 6 or not address.is_global:
+                continue
+            normalized = address.compressed
+            if normalized in seen:
+                continue
+            seen.add(normalized)
+            candidates.append({
+                "ip": normalized,
+                "version": 6,
+                "port": 443,
+                "source": str(carrier),
+                "country_code": "ZZ",
+                "city": "",
+                "region_zh": "未知地区",
+                "quality_status": "source_candidate_unverified",
+            })
+            accepted += 1
+        source_counts[str(carrier)] = accepted
+
+    metadata = {
+        "source": "HostMonit",
+        "api": HOSTMONIT_API_URL,
+        "fetched_at": utc_now(),
+        "source_counts": source_counts,
+        "candidate_count": len(candidates),
+        "quality_status": "source_candidate_unverified",
+        "note": "Collected and validated from HostMonit; not connectivity-tested by this GitHub Actions runner.",
+    }
+    return candidates, metadata
+
+
+def write_ipv6_source_outputs(
+    candidates: list[dict[str, Any]], metadata: dict[str, Any]
+) -> None:
+    """Publish HostMonit IPv6 candidates separately; preserve prior files on empty data."""
+    if not candidates:
+        print("IPv6: no valid HostMonit candidates; preserving previous IPv6 subscriptions")
+        return
+
+    output_dir = OUTPUT / "ipv6"
+    output_dir.mkdir(parents=True, exist_ok=True)
+    write_json(output_dir / "source.json", {"metadata": metadata, "items": candidates})
+    write_json(output_dir / "all.json", candidates)
+    lines = [subscription_line(item) for item in candidates]
+    payload = "\n".join(lines) + "\n"
+    (output_dir / "source.txt").write_text(payload, encoding="utf-8")
+    (output_dir / "all.txt").write_text(payload, encoding="utf-8")
+    (ROOT / "ipv6.txt").write_text(payload, encoding="utf-8")
 
 
 def load_config() -> dict[str, Any]:
@@ -256,7 +346,7 @@ def load_config() -> dict[str, Any]:
         if raw:
             scan[key] = converter(raw)
 
-    # V3.1 is IPv4-only and probes TCP 443 exclusively.
+    # The measured IPv4 pipeline remains TCP 443 only. IPv6 is source-sync only.
     scan["ports"] = [443]
     validate_config(config)
     return config
@@ -973,10 +1063,10 @@ def main() -> None:
     OUTPUT.mkdir(parents=True, exist_ok=True)
     summary: dict[str, Any] = {
         "project": "Cloudflare-IP-Auto",
-        "version": "3.5",
+        "version": "3.6",
         "generated_at": utc_now(),
         "schedule": "17 */6 * * * (UTC)",
-        "ip_family": "IPv4 only",
+        "ip_family": "IPv4 scan + IPv6 source sync",
         "ports": [443],
         "families": {},
     }
@@ -988,6 +1078,41 @@ def main() -> None:
         summary["families"]["ipv4"] = {"family": "ipv4", "status": "scan_failed", "error": message}
         write_json(OUTPUT / "summary.json", summary)
         raise
+
+    try:
+        ipv6_candidates, ipv6_metadata = fetch_hostmonit_ipv6()
+        if ipv6_candidates:
+            enrich_country_info(ipv6_candidates)
+            write_ipv6_source_outputs(ipv6_candidates, ipv6_metadata)
+            summary["families"]["ipv6"] = {
+                "family": "ipv6",
+                "status": "source_synced_unverified",
+                "source": "HostMonit",
+                "candidate_count": len(ipv6_candidates),
+                "source_counts": ipv6_metadata["source_counts"],
+                "output_dir": "output/ipv6/",
+                "subscription_file": "ipv6.txt",
+                "subscription_format": "[IPv6]:443",
+                "quality_note": ipv6_metadata["note"],
+            }
+        else:
+            summary["families"]["ipv6"] = {
+                "family": "ipv6",
+                "status": "no_valid_source_data",
+                "source": "HostMonit",
+                "candidate_count": 0,
+                "note": "Previous IPv6 subscription files were preserved.",
+            }
+    except Exception as exc:
+        message = f"{type(exc).__name__}: {exc}"
+        print(f"IPv6 HostMonit sync failed: {message}")
+        summary["families"]["ipv6"] = {
+            "family": "ipv6",
+            "status": "source_sync_failed",
+            "source": "HostMonit",
+            "error": message,
+            "note": "IPv4 scan is independent; previous IPv6 subscription files were preserved.",
+        }
 
     write_json(OUTPUT / "summary.json", summary)
     print(json.dumps(summary, ensure_ascii=False, indent=2))
