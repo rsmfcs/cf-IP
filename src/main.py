@@ -83,7 +83,7 @@ def region_label(item: dict[str, Any]) -> str:
     code = str(item.get("country_code") or "").upper()
     country = COUNTRY_NAMES_ZH.get(code, "未知地区")
     city = str(item.get("city") or "").strip()
-    city_zh = CITY_NAMES_ZH.get(city, city)
+    city_zh = CITY_NAMES_ZH.get(city, "")
     return f"{country}-{city_zh}" if city_zh else country
 
 
