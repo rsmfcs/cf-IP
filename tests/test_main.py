@@ -41,11 +41,11 @@ def test_preferred_regions_rank_before_other_regions():
 
 def test_select_region_candidates_applies_region_quotas_and_fallback():
     candidates = []
+    next_ip = 1
     for code, count in (("HK", 10), ("US", 10), ("SG", 6), ("JP", 6), ("CA", 20)):
-        candidates.extend(
-            {"ip": f"198.51.0.{len(candidates) + index + 1}", "country_code": code}
-            for index in range(count)
-        )
+        for _ in range(count):
+            candidates.append({"ip": f"198.51.0.{next_ip}", "country_code": code})
+            next_ip += 1
 
     selected = main.select_region_candidates(
         candidates,
