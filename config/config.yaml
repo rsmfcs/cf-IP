@@ -19,3 +19,8 @@ scan:
   samples_per_network: 96
   user_agent: Cloudflare-IP-Auto/3.2
   custom_ipv4: []
+  preferred_country_codes:
+  - HK
+  - US
+  - SG
+  - JP
