@@ -10,6 +10,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: cloudflare-ipv4-update
@@ -83,3 +84,27 @@ jobs:
 
           echo "Failed to push IPv4 results after 3 attempts."
           exit 1
+
+      - name: Clean up old workflow run records
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          RUNS_JSON="$(gh api --paginate "repos/${GITHUB_REPOSITORY}/actions/workflows/update.yml/runs?per_page=100" | jq -s '[.[].workflow_runs[]]')"
+          LATEST_SUCCESS_ID="$(jq -r '[.[] | select(.status == "completed" and .conclusion == "success")] | sort_by(.created_at) | last | .id // empty' <<< "$RUNS_JSON")"
+
+          if [[ -z "$LATEST_SUCCESS_ID" ]]; then
+            echo "No successful run exists yet; keeping completed records for diagnosis."
+            exit 0
+          fi
+
+          echo "Keeping latest successful run: $LATEST_SUCCESS_ID"
+          while IFS= read -r run_id; do
+            [[ -z "$run_id" ]] && continue
+            [[ "$run_id" == "$LATEST_SUCCESS_ID" ]] && continue
+            echo "Deleting old completed run: $run_id"
+            gh api --method DELETE "repos/${GITHUB_REPOSITORY}/actions/runs/$run_id"
+          done < <(jq -r '.[] | select(.status == "completed") | .id' <<< "$RUNS_JSON")
