@@ -1,16 +1,6 @@
 [
   {
-    "ip": "2606:4700:3034:384b:a875:1ae7:b5e8:e837",
-    "version": 6,
-    "port": 443,
-    "source": "CM",
-    "country_code": "CA",
-    "city": "Toronto",
-    "region_zh": "加拿大-多伦多",
-    "quality_status": "source_candidate_unverified"
-  },
-  {
-    "ip": "2606:4700:9:61c6:e296:e3e4:8fdc:aa6",
+    "ip": "2606:4700:4409:3838:fd87:75cd:6d08:c218",
     "version": 6,
     "port": 443,
     "source": "CM",
@@ -20,7 +10,7 @@
     "quality_status": "source_candidate_unverified"
   },
   {
-    "ip": "2606:4700:8d7f:7f55:65e7:4903:a297:c8bc",
+    "ip": "2606:4700:9643:adbf:c93b:ce1:d9cf:3e33",
     "version": 6,
     "port": 443,
     "source": "CM",
@@ -30,7 +20,7 @@
     "quality_status": "source_candidate_unverified"
   },
   {
-    "ip": "2606:4700:3034:e5c9:9166:6e35:101:81ca",
+    "ip": "2606:4700:3017:122b:d75f:2f0f:b918:ca3e",
     "version": 6,
     "port": 443,
     "source": "CM",
@@ -40,13 +30,23 @@
     "quality_status": "source_candidate_unverified"
   },
   {
-    "ip": "2606:4700:13e:1aba:80ff:cf91:7815:85b9",
+    "ip": "2606:4700:1:d8f5:34ae:49b1:b876:9ad1",
     "version": 6,
     "port": 443,
     "source": "CM",
     "country_code": "CA",
     "city": "Montreal",
     "region_zh": "加拿大-蒙特利尔",
+    "quality_status": "source_candidate_unverified"
+  },
+  {
+    "ip": "2606:4700:9a63:5e67:ef1:cf49:d051:dc77",
+    "version": 6,
+    "port": 443,
+    "source": "CM",
+    "country_code": "FR",
+    "city": "Paris",
+    "region_zh": "法国-巴黎",
     "quality_status": "source_candidate_unverified"
   }
 ]
