@@ -6,7 +6,7 @@ def test_config_is_ipv4_443_only():
     config = yaml.safe_load((root / "config/config.yaml").read_text(encoding="utf-8"))
     scan = config["scan"]
     assert scan["ports"] == [443]
-    assert scan["max_candidates_per_family"] == 1024
+    assert scan["max_candidates_per_family"] == 2048
     assert scan["preliminary_rounds"] == 1
     assert scan["rounds"] == 3
     assert scan["workers"] == 40
