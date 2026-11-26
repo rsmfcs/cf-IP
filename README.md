@@ -16,7 +16,8 @@ IPv4 继续扫描 Cloudflare 官方 IPv4 网段并检测 TCP 443；IPv6 从 Host
 - 两阶段检测：1 轮初筛，再对通过者进行 3 轮稳定性复测。
 - 并发 40，连接超时 4 秒；最多对 50 个候选进行 2 次下载测速。
 - 综合延迟、下载速度、成功率和抖动评分。
-- IPv4 使用 TCP 443 进行连通性、TLS、HTTP、稳定性和速度检测。\n- IPv6 每 6 小时从 HostMonit API 同步，校验 IPv6 格式、过滤非全球单播地址并去重；当前 GitHub Runner 不具备可用 IPv6 出站网络，因此 IPv6 数据标记为来源候选，**未经本项目连通性和速度实测**。
+- IPv4 使用 TCP 443 进行连通性、TLS、HTTP、稳定性和速度检测。
+- IPv6 每 6 小时从 HostMonit API 同步，校验 IPv6 格式、过滤非全球单播地址并去重；当前 GitHub Runner 不具备可用 IPv6 出站网络，因此 IPv6 数据标记为来源候选，**未经本项目连通性和速度实测**。
 - 国家/地区代码通过 GeoIP 查询补充，订阅行显示为 `IP:443#US 🇺🇸`。
 - GeoIP 仅用于显示参考；Cloudflare Anycast 地址的归属地不代表每位用户实际连接到的边缘机房。GeoIP 查询失败时仍会保留节点，地区显示为 `ZZ 🌐`。
 
@@ -31,7 +32,8 @@ IPv4 继续扫描 Cloudflare 官方 IPv4 网段并检测 TCP 443；IPv6 从 Host
 | TOP 100 | [best-cf-ip-scanned-top100.txt](https://raw.githubusercontent.com/rsmfcs/cf-IP/main/best-cf-ip-scanned-top100.txt) |
 | TOP 200 | [best-cf-ip-scanned-top200.txt](https://raw.githubusercontent.com/rsmfcs/cf-IP/main/best-cf-ip-scanned-top200.txt) |
 | TOP 400 | [best-cf-ip-scanned-top400.txt](https://raw.githubusercontent.com/rsmfcs/cf-IP/main/best-cf-ip-scanned-top400.txt) |
-| 全部 IPv4 节点 | [all.txt](https://raw.githubusercontent.com/rsmfcs/cf-IP/main/all.txt) |\n| HostMonit IPv6 候选 | [ipv6.txt](https://raw.githubusercontent.com/rsmfcs/cf-IP/main/ipv6.txt) |
+| IPv4 + IPv6 综合订阅 | [all.txt](https://raw.githubusercontent.com/rsmfcs/cf-IP/main/all.txt) |
+| HostMonit IPv6 独立订阅 | [ipv6.txt](https://raw.githubusercontent.com/rsmfcs/cf-IP/main/ipv6.txt) |
 | 高速节点（≥25 Mbps） | [fast.txt](https://raw.githubusercontent.com/rsmfcs/cf-IP/main/fast.txt) |
 | 稳定节点（成功率 100%、抖动 ≤50 ms） | [stable.txt](https://raw.githubusercontent.com/rsmfcs/cf-IP/main/stable.txt) |
 
@@ -40,7 +42,10 @@ IPv4 继续扫描 Cloudflare 官方 IPv4 网段并检测 TCP 443；IPv6 从 Host
 ## 数据文件
 
 - `output/summary.json`：最近一次扫描时间、候选数量、可用数量及失败原因。
-- `output/ipv4/all.json` / `all.csv`：完整 IPv4 检测数据。\n- `output/ipv6/source.json`：HostMonit IPv6 来源信息、更新时间及候选地址。\n- `output/ipv6/source.txt` / `all.txt`：IPv6 独立订阅。
+- `output/ipv4/all.json` / `all.csv`：完整 IPv4 检测数据。
+- 根目录 `all.txt`：IPv4 实测节点 + HostMonit IPv6 来源候选的综合订阅；IPv6 未经过本项目连通性和速度实测。
+- `output/ipv6/source.json`：HostMonit IPv6 来源信息、更新时间及候选地址。
+- `output/ipv6/source.txt` / `all.txt`：IPv6 独立订阅。
 - `output/ipv4/topN.json` / `topN.txt`：各排名的详细数据。
 - 根目录 `*.txt`：适合客户端直接订阅的节点列表。
 
