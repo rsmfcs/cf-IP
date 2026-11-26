@@ -53,7 +53,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add output/ipv4 output/ipv6 output/summary.json best-cf-ip-scanned-top*.txt cf-ipv4-top*.txt all.txt fast.txt stable.txt ipv6.txt
+          # The IPv6 files may not exist when HostMonit is unavailable; stage generated changes safely.\n          git add -A
           if git diff --cached --quiet; then
             echo "No result changes to commit."
             exit 0
