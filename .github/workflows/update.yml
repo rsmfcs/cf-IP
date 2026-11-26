@@ -37,80 +37,49 @@ jobs:
       - name: Run tests
         run: pytest -q
 
-      - name: Diagnose IPv6 outbound connectivity (non-blocking)
-        run: |
-          python - <<'PY'
-          import socket
-          import ssl
-
-          print("IPv6 supported by Python:", socket.has_ipv6)
-
-          try:
-              records = socket.getaddrinfo(
-                  "cloudflare.com", 443, socket.AF_INET6, socket.SOCK_STREAM
-              )
-              addresses = list(dict.fromkeys(item[4][0] for item in records))
-              print("IPv6 DNS: PASS")
-              print("Resolved IPv6 addresses:", ", ".join(addresses[:5]))
-          except Exception as exc:
-              addresses = []
-              print(f"IPv6 DNS: FAIL ({type(exc).__name__}: {exc})")
-
-          website_ok = False
-          for address in addresses[:3]:
-              raw = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
-              raw.settimeout(6)
-              try:
-                  raw.connect((address, 443, 0, 0))
-                  context = ssl.create_default_context()
-                  with context.wrap_socket(raw, server_hostname="cloudflare.com") as tls:
-                      tls.settimeout(6)
-                      tls.sendall(
-                          b"HEAD /cdn-cgi/trace HTTP/1.1\r\n"
-                          b"Host: cloudflare.com\r\n"
-                          b"Connection: close\r\n\r\n"
-                      )
-                      response = tls.recv(256).split(b"\r\n", 1)[0]
-                      print(f"IPv6 TCP/TLS/HTTPS to {address}: PASS ({response.decode(errors='replace')})")
-                      website_ok = True
-                      break
-              except Exception as exc:
-                  print(f"IPv6 connection to {address}: FAIL ({type(exc).__name__}: {exc})")
-              finally:
-                  try:
-                      raw.close()
-                  except Exception:
-                      pass
-
-          resolver = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
-          resolver.settimeout(6)
-          try:
-              resolver.connect(("2606:4700:4700::1111", 443, 0, 0))
-              print("IPv6 TCP to Cloudflare public resolver (2606:4700:4700::1111:443): PASS")
-          except Exception as exc:
-              print(f"IPv6 TCP to Cloudflare public resolver: FAIL ({type(exc).__name__}: {exc})")
-          finally:
-              resolver.close()
-
-          print("FINAL IPv6 EGRESS RESULT:", "PASS" if website_ok else "FAIL")
-          print("This diagnostic is informational and does not stop the existing IPv4 scan.")
-          PY
-
       - name: Run IPv4 scan (TCP 443 only)
         run: python -m src.main
         env:
           PYTHONUNBUFFERED: "1"
 
-      - name: Commit and push results
+      - name: Commit and push results (retry safely)
+        shell: bash
         run: |
+          set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
           git add output/ipv4 output/summary.json best-cf-ip-scanned-top*.txt cf-ipv4-top*.txt all.txt fast.txt stable.txt
           if git diff --cached --quiet; then
             echo "No result changes to commit."
             exit 0
           fi
-          git commit -m "chore: update Cloudflare IPv4 results"
+
+          # Back up only generated result files before syncing with the latest main.
+          git diff --cached --name-only -z > /tmp/result-files.list
+          tar --null --files-from=/tmp/result-files.list -czf /tmp/ipv4-results.tar.gz
           TARGET_BRANCH="${GITHUB_REF_NAME}"
-          git pull --rebase origin "$TARGET_BRANCH"
-          git push origin "HEAD:$TARGET_BRANCH"
+
+          for attempt in 1 2 3; do
+            echo "Push attempt ${attempt}/3"
+            git fetch origin "${TARGET_BRANCH}"
+            git reset --hard "origin/${TARGET_BRANCH}"
+            tar -xzf /tmp/ipv4-results.tar.gz
+            git add -A
+
+            if git diff --cached --quiet; then
+              echo "The latest remote branch already contains these results."
+              exit 0
+            fi
+
+            git commit -m "chore: update Cloudflare IPv4 results"
+            if git push origin "HEAD:${TARGET_BRANCH}"; then
+              echo "IPv4 results pushed successfully."
+              exit 0
+            fi
+
+            echo "Push rejected because the remote branch moved; retrying."
+          done
+
+          echo "Failed to push IPv4 results after 3 attempts."
+          exit 1
