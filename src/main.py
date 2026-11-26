@@ -273,11 +273,11 @@ def http_response_probe(
         tls_sock = context.wrap_socket(sock, server_hostname="www.cloudflare.com")
         tls_sock.settimeout(timeout)
         request = (
-            "GET /cdn-cgi/trace HTTP/1.1\\r\\n"
-            "Host: www.cloudflare.com\\r\\n"
-            f"User-Agent: {user_agent}\\r\\n"
-            "Accept: */*\\r\\n"
-            "Connection: close\\r\\n\\r\\n"
+            "GET /cdn-cgi/trace HTTP/1.1\r\n"
+            "Host: www.cloudflare.com\r\n"
+            f"User-Agent: {user_agent}\r\n"
+            "Accept: */*\r\n"
+            "Connection: close\r\n\r\n"
         )
         tls_sock.sendall(request.encode("ascii"))
         response = HTTPResponse(tls_sock)
@@ -287,11 +287,20 @@ def http_response_probe(
         return False
     finally:
         if response is not None:
-            response.close()
+            try:
+                response.close()
+            except OSError:
+                pass
         if tls_sock is not None:
-            tls_sock.close()
+            try:
+                tls_sock.close()
+            except OSError:
+                pass
         else:
-            sock.close()
+            try:
+                sock.close()
+            except OSError:
+                pass
 
 
 def run_probe_stages(
