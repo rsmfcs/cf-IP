@@ -89,35 +89,23 @@ jobs:
           echo "Failed to push IPv4 results after 3 attempts."
           exit 1
 
-      - name: Clean up old workflow run records
+      - name: Keep latest 5 workflow run records
         if: always()
         continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
-          TEST_OUTCOME: ${{ steps.tests.outcome }}
-          SCAN_OUTCOME: ${{ steps.scan.outcome }}
-          PUBLISH_OUTCOME: ${{ steps.publish.outcome }}
         shell: bash
         run: |
           set -euo pipefail
 
           RUNS_JSON="$(gh api --paginate "repos/${GITHUB_REPOSITORY}/actions/workflows/update.yml/runs?per_page=100" | jq -s '[.[].workflow_runs[]]')"
 
-          if [[ "$TEST_OUTCOME" != "success" || "$SCAN_OUTCOME" != "success" || "$PUBLISH_OUTCOME" != "success" ]]; then
-            LATEST_SUCCESS_ID="$(jq -r '[.[] | select(.status == "completed" and .conclusion == "success")] | sort_by(.created_at) | last | .id // empty' <<< "$RUNS_JSON")"
-            if [[ -z "$LATEST_SUCCESS_ID" ]]; then
-              echo "No successful run exists yet; keeping completed records for diagnosis."
-              exit 0
-            fi
-            echo "Previous steps failed; preserving latest successful run: $LATEST_SUCCESS_ID"
-            RUN_IDS="$(jq -r --arg keep "$LATEST_SUCCESS_ID" '.[] | select(.status == "completed" and (.id | tostring) != $keep) | .id' <<< "$RUNS_JSON")"
-          else
-            echo "Current scan and publish steps succeeded; removing all older completed run records."
-            RUN_IDS="$(jq -r '.[] | select(.status == "completed") | .id' <<< "$RUNS_JSON")"
-          fi
+          # Keep the five newest completed runs (successes and failures).
+          # Never delete queued or in-progress runs.
+          RUN_IDS="$(jq -r '[.[] | select(.status == "completed")] | sort_by(.created_at) | reverse | .[5:][] | .id' <<< "$RUNS_JSON")"
 
           while IFS= read -r run_id; do
             [[ -z "$run_id" ]] && continue
-            echo "Deleting old completed run: $run_id"
+            echo "Deleting completed workflow run outside the latest five: $run_id"
             gh api --method DELETE "repos/${GITHUB_REPOSITORY}/actions/runs/$run_id" || echo "Could not delete run $run_id; continuing."
           done <<< "$RUN_IDS"
