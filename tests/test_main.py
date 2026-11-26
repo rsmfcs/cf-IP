@@ -22,6 +22,23 @@ def test_subscription_line_falls_back_to_chinese_country_only():
     assert main.subscription_line(item) == "198.41.199.134:443#日本"
 
 
+def test_preferred_regions_rank_before_other_regions():
+    base = {
+        "port": 443, "latency_ms": 50.0, "jitter_ms": 5.0,
+        "success_rate": 1.0, "speed_mbps": 100.0,
+    }
+    results = [
+        {**base, "ip": "192.0.2.1", "country_code": "CA"},
+        {**base, "ip": "192.0.2.2", "country_code": "JP"},
+        {**base, "ip": "192.0.2.3", "country_code": "HK"},
+        {**base, "ip": "192.0.2.4", "country_code": "US"},
+        {**base, "ip": "192.0.2.5", "country_code": "SG"},
+    ]
+
+    ranked = main.sort_and_score(results, ["HK", "US", "SG", "JP"])
+
+    assert [item["country_code"] for item in ranked] == ["JP", "HK", "US", "SG", "CA"]
+
 def test_empty_scan_preserves_previous_subscriptions(tmp_path, monkeypatch):
     monkeypatch.setattr(main, "ROOT", tmp_path)
     monkeypatch.setattr(main, "OUTPUT", tmp_path / "output")
