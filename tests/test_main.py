@@ -39,6 +39,33 @@ def test_preferred_regions_rank_before_other_regions():
 
     assert [item["country_code"] for item in ranked] == ["JP", "HK", "US", "SG", "CA"]
 
+def test_select_region_candidates_applies_region_quotas_and_fallback():
+    candidates = []
+    for code, count in (("HK", 10), ("US", 10), ("SG", 6), ("JP", 6), ("CA", 20)):
+        candidates.extend(
+            {"ip": f"198.51.{len(candidates) // 250}.{index + 1}", "country_code": code}
+            for index in range(count)
+        )
+
+    selected = main.select_region_candidates(
+        candidates,
+        {"HK": 2, "US": 2, "SG": 1, "JP": 1},
+        multiplier=2,
+        fallback_count=3,
+    )
+    counts = {}
+    for item in selected:
+        counts[item["country_code"]] = counts.get(item["country_code"], 0) + 1
+
+    assert counts == {"HK": 4, "US": 4, "SG": 2, "JP": 2, "CA": 3}
+
+
+def test_parse_colo_code_from_cloudflare_trace():
+    assert main.parse_colo_code("fl=abc\nh=www.cloudflare.com\ncolo=HKG\n") == "HKG"
+    assert main.parse_colo_code("fl=abc\ncolo=\n") is None
+    assert main.parse_colo_code("colo=HongKong\n") is None
+
+
 def test_empty_scan_preserves_previous_subscriptions(tmp_path, monkeypatch):
     monkeypatch.setattr(main, "ROOT", tmp_path)
     monkeypatch.setattr(main, "OUTPUT", tmp_path / "output")
