@@ -641,12 +641,22 @@ def run_speed_tests(results: list[dict[str, Any]], version: int, config: dict[st
         print(f"IPv{version} speed {index}/{len(candidates)}: {item['ip']} -> {item['speed_mbps']} Mbps")
 
 
-def sort_and_score(results: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def sort_and_score(
+    results: list[dict[str, Any]],
+    preferred_country_codes: list[str] | None = None,
+) -> list[dict[str, Any]]:
+    """Rank preferred GeoIP regions first, then rank by measured quality."""
+    preferred = {
+        str(code).strip().upper()
+        for code in (preferred_country_codes or ["HK", "US", "SG", "JP"])
+    }
     for item in results:
         item["score"] = final_score(item)
+        item["region_priority"] = 0 if str(item.get("country_code") or "").upper() in preferred else 1
     return sorted(
         results,
         key=lambda item: (
+            item["region_priority"],
             -item["score"],
             item["latency_ms"],
             -item["success_rate"],
@@ -786,7 +796,7 @@ def run_ipv4(config: dict[str, Any]) -> dict[str, Any]:
     print(f"IPv4 failure reasons: {json.dumps(failure_reasons, ensure_ascii=False, sort_keys=True)}")
     run_speed_tests(results, 4, config)
     enrich_country_info(results)
-    ranked = sort_and_score(results)
+    ranked = sort_and_score(results, scan.get("preferred_country_codes", ["HK", "US", "SG", "JP"]))
     top_n = [int(value) for value in scan["top_n"]]
     write_family_outputs(4, ranked, top_n)
 
