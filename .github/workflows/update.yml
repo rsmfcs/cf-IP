@@ -87,24 +87,31 @@ jobs:
 
       - name: Clean up old workflow run records
         if: always()
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
+          PREVIOUS_STEPS_FAILED: ${{ failure() }}
         shell: bash
         run: |
           set -euo pipefail
 
           RUNS_JSON="$(gh api --paginate "repos/${GITHUB_REPOSITORY}/actions/workflows/update.yml/runs?per_page=100" | jq -s '[.[].workflow_runs[]]')"
-          LATEST_SUCCESS_ID="$(jq -r '[.[] | select(.status == "completed" and .conclusion == "success")] | sort_by(.created_at) | last | .id // empty' <<< "$RUNS_JSON")"
 
-          if [[ -z "$LATEST_SUCCESS_ID" ]]; then
-            echo "No successful run exists yet; keeping completed records for diagnosis."
-            exit 0
+          if [[ "$PREVIOUS_STEPS_FAILED" == "true" ]]; then
+            LATEST_SUCCESS_ID="$(jq -r '[.[] | select(.status == "completed" and .conclusion == "success")] | sort_by(.created_at) | last | .id // empty' <<< "$RUNS_JSON")"
+            if [[ -z "$LATEST_SUCCESS_ID" ]]; then
+              echo "No successful run exists yet; keeping completed records for diagnosis."
+              exit 0
+            fi
+            echo "Previous steps failed; preserving latest successful run: $LATEST_SUCCESS_ID"
+            RUN_IDS="$(jq -r --arg keep "$LATEST_SUCCESS_ID" '.[] | select(.status == "completed" and (.id | tostring) != $keep) | .id' <<< "$RUNS_JSON")"
+          else
+            echo "Current scan and publish steps succeeded; removing all older completed run records."
+            RUN_IDS="$(jq -r '.[] | select(.status == "completed") | .id' <<< "$RUNS_JSON")"
           fi
 
-          echo "Keeping latest successful run: $LATEST_SUCCESS_ID"
           while IFS= read -r run_id; do
             [[ -z "$run_id" ]] && continue
-            [[ "$run_id" == "$LATEST_SUCCESS_ID" ]] && continue
             echo "Deleting old completed run: $run_id"
-            gh api --method DELETE "repos/${GITHUB_REPOSITORY}/actions/runs/$run_id"
-          done < <(jq -r '.[] | select(.status == "completed") | .id' <<< "$RUNS_JSON")
+            gh api --method DELETE "repos/${GITHUB_REPOSITORY}/actions/runs/$run_id" || echo "Could not delete run $run_id; continuing."
+          done <<< "$RUN_IDS"
