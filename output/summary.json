@@ -1,7 +1,7 @@
 {
   "project": "Cloudflare-IP-Auto",
-  "version": "3.4",
-  "generated_at": "2026-11-26T02:44:57+00:00",
+  "version": "3.5",
+  "generated_at": "2026-11-26T02:50:16+00:00",
   "schedule": "17 */6 * * * (UTC)",
   "ip_family": "IPv4 only",
   "ports": [
@@ -14,16 +14,30 @@
       "egress_check": {
         "available": true,
         "target": "1.1.1.1:443",
-        "connect_ms": 18.03
+        "connect_ms": 11.63
       },
       "network_count": 15,
-      "candidate_count": 1024,
-      "preliminary_pass_count": 205,
-      "tcp_tls_http_pass_count": 205,
-      "usable_count": 205,
-      "speed_tested_count": 49,
-      "ranked_count": 205,
-      "top_ip": "162.159.45.44",
+      "candidate_count": 2048,
+      "preliminary_pass_count": 409,
+      "tcp_tls_http_pass_count": 409,
+      "usable_count": 105,
+      "speed_tested_count": 50,
+      "ranked_count": 105,
+      "region_targets": {
+        "HK": 15,
+        "US": 15,
+        "SG": 10,
+        "JP": 10
+      },
+      "region_counts": {
+        "US": 45,
+        "CA": 60
+      },
+      "colo_counts": {
+        "IAD": 105
+      },
+      "geoip_note": "GeoIP is approximate; colo is observed from Cloudflare /cdn-cgi/trace.",
+      "top_ip": "141.101.114.88",
       "failure_reasons": {},
       "output_dir": "output/ipv4/",
       "subscription_format": "IPv4:443"
