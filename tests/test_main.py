@@ -157,7 +157,7 @@ def test_ipv6_source_output_preserves_previous_files_when_empty(tmp_path, monkey
     monkeypatch.setattr(main, "ROOT", tmp_path)
     monkeypatch.setattr(main, "OUTPUT", tmp_path / "output")
     (tmp_path / "output" / "ipv6").mkdir(parents=True)
-    previous = "[2606:4700:4700::1111]:443#美国\\n"
+    previous = "[2606:4700:4700::1111]:443#美国\n"
     (tmp_path / "ipv6.txt").write_text(previous, encoding="utf-8")
 
     main.write_ipv6_source_outputs([], {"candidate_count": 0})
@@ -170,7 +170,7 @@ def test_ipv6_source_outputs_merge_into_root_all_subscription(tmp_path, monkeypa
     monkeypatch.setattr(main, "OUTPUT", tmp_path / "output")
     (tmp_path / "output" / "ipv4").mkdir(parents=True)
     (tmp_path / "all.txt").write_text(
-        "1.1.1.1:443#美国\\n[2606:4700::old]:443#旧IPv6\\n",
+        "1.1.1.1:443#美国\n[2606:4700::old]:443#旧IPv6\n",
         encoding="utf-8",
     )
     candidates = [
@@ -201,13 +201,13 @@ def test_ipv6_source_outputs_merge_into_root_all_subscription(tmp_path, monkeypa
         "cf-ipv4-top100.txt", "cf-ipv4-top200.txt", "cf-ipv4-top400.txt",
     ):
         path = tmp_path / name
-        path.write_text("2.2.2.2:443#美国\\n", encoding="utf-8")
+        path.write_text("2.2.2.2:443#美国\n", encoding="utf-8")
 
     family_dir = tmp_path / "output" / "ipv4"
     family_dir.mkdir(parents=True, exist_ok=True)
-    (family_dir / "all.txt").write_text("3.3.3.3:443#美国\\n", encoding="utf-8")
-    (family_dir / "fast.txt").write_text("3.3.3.3:443#美国\\n", encoding="utf-8")
-    (family_dir / "stable.txt").write_text("3.3.3.3:443#美国\\n", encoding="utf-8")
+    (family_dir / "all.txt").write_text("3.3.3.3:443#美国\n", encoding="utf-8")
+    (family_dir / "fast.txt").write_text("3.3.3.3:443#美国\n", encoding="utf-8")
+    (family_dir / "stable.txt").write_text("3.3.3.3:443#美国\n", encoding="utf-8")
 
     main.write_ipv6_source_outputs(candidates, {"candidate_count": 1})
 
