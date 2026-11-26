@@ -28,3 +28,34 @@ def test_empty_scan_preserves_previous_subscriptions(tmp_path, monkeypatch):
 
     assert (tmp_path / "best-cf-ip-scanned-top20.txt").read_text(encoding="utf-8") == "1.1.1.1:443#US 🇺🇸\n"
     assert (tmp_path / "output" / "ipv4" / "all.json").read_text(encoding="utf-8") == '[{"ip": "1.1.1.1"}]'
+
+
+
+def test_probe_stages_filter_candidates_in_order(monkeypatch):
+    calls = []
+
+    def tcp(ip, port, timeout, version=4):
+        calls.append(("tcp", ip))
+        return ip != "198.51.100.3"
+
+    def tls(ip, port, timeout, version=4):
+        calls.append(("tls", ip))
+        return ip != "198.51.100.2"
+
+    def http(ip, port, timeout, version, user_agent):
+        calls.append(("http", ip))
+        return ip == "198.51.100.1"
+
+    monkeypatch.setattr(main, "tcp_connect_probe", tcp)
+    monkeypatch.setattr(main, "tls_handshake_probe", tls)
+    monkeypatch.setattr(main, "http_response_probe", http)
+    config = {"scan": {"timeout_seconds": 1, "workers": 2, "user_agent": "test"}}
+
+    survivors = main.run_probe_stages(
+        ["198.51.100.1", "198.51.100.2", "198.51.100.3"], config
+    )
+
+    assert survivors == ["198.51.100.1"]
+    assert ("tls", "198.51.100.3") not in calls
+    assert ("http", "198.51.100.2") not in calls
+    assert ("http", "198.51.100.1") in calls
