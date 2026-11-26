@@ -1,5 +1,5 @@
 scan:
-  max_candidates_per_family: 1024
+  max_candidates_per_family: 2048
   workers: 40
   preliminary_rounds: 1
   rounds: 3
@@ -16,7 +16,14 @@ scan:
   - 100
   - 200
   - 400
-  samples_per_network: 96
+  samples_per_network: 160
+  region_target_counts:
+    HK: 15
+    US: 15
+    SG: 10
+    JP: 10
+  region_candidate_multiplier: 3
+  region_fallback_candidates: 60
   user_agent: Cloudflare-IP-Auto/3.2
   custom_ipv4: []
   preferred_country_codes:
