@@ -1,7 +1,7 @@
 {
   "project": "Cloudflare-IP-Auto",
   "version": "3.2",
-  "generated_at": "2026-11-26T01:29:00+00:00",
+  "generated_at": "2026-11-26T01:47:46+00:00",
   "schedule": "17 */6 * * * (UTC)",
   "ip_family": "IPv4 only",
   "ports": [
@@ -14,15 +14,15 @@
       "egress_check": {
         "available": true,
         "target": "1.1.1.1:443",
-        "connect_ms": 2.83
+        "connect_ms": 10.31
       },
       "network_count": 15,
       "candidate_count": 1024,
       "preliminary_pass_count": 205,
       "usable_count": 205,
-      "speed_tested_count": 50,
+      "speed_tested_count": 48,
       "ranked_count": 205,
-      "top_ip": "198.41.197.165",
+      "top_ip": "104.25.120.120",
       "failure_reasons": {
         "Timeout": 810,
         "ConnectionResetError:104": 6,
