@@ -125,6 +125,103 @@ def enrich_country_info(results: list[dict[str, Any]]) -> None:
         item["region_zh"] = region_label(item)
         
 
+def select_region_candidates(
+    candidates: list[dict[str, Any]],
+    region_targets: dict[str, int],
+    multiplier: int = 3,
+    fallback_count: int = 60,
+) -> list[dict[str, Any]]:
+    """Keep an expanded sample for each target GeoIP region plus non-target fallbacks."""
+    selected: list[dict[str, Any]] = []
+    preferred = {str(code).upper(): max(0, int(count)) for code, count in region_targets.items()}
+    for code, target in preferred.items():
+        region_items = [item for item in candidates if str(item.get("country_code") or "ZZ").upper() == code]
+        selected.extend(region_items[: target * max(1, int(multiplier))])
+    fallback = [
+        item for item in candidates
+        if str(item.get("country_code") or "ZZ").upper() not in preferred
+    ]
+    selected.extend(fallback[:max(0, int(fallback_count))])
+    selected_ips = {str(item["ip"]) for item in selected}
+    return [item for item in candidates if str(item["ip"]) in selected_ips]
+
+
+def parse_colo_code(body: str) -> str | None:
+    """Extract the Cloudflare colo code from /cdn-cgi/trace output."""
+    for line in body.splitlines():
+        if line.startswith("colo="):
+            code = line.split("=", 1)[1].strip().upper()
+            if len(code) == 3 and code.isascii() and code.isalpha():
+                return code
+    return None
+
+
+def fetch_colo_code(ip: str, port: int, timeout: float, user_agent: str) -> str | None:
+    """Query Cloudflare trace through a pinned IP and return its observed colo."""
+    sock = make_socket(ip, port, 4, timeout)
+    tls_sock: ssl.SSLSocket | None = None
+    response: HTTPResponse | None = None
+    try:
+        sock.connect((ip, port))
+        context = ssl.create_default_context()
+        tls_sock = context.wrap_socket(sock, server_hostname="www.cloudflare.com")
+        tls_sock.settimeout(timeout)
+        request = (
+            "GET /cdn-cgi/trace HTTP/1.1\r\n"
+            "Host: www.cloudflare.com\r\n"
+            f"User-Agent: {user_agent}\r\n"
+            "Accept: */*\r\n"
+            "Connection: close\r\n\r\n"
+        )
+        tls_sock.sendall(request.encode("ascii"))
+        response = HTTPResponse(tls_sock)
+        response.begin()
+        if not 200 <= response.status < 400:
+            return None
+        body = response.read(65536).decode("utf-8", errors="replace")
+        return parse_colo_code(body)
+    except (OSError, ssl.SSLError, TimeoutError):
+        return None
+    finally:
+        if response is not None:
+            try:
+                response.close()
+            except OSError:
+                pass
+        if tls_sock is not None:
+            try:
+                tls_sock.close()
+            except OSError:
+                pass
+        else:
+            try:
+                sock.close()
+            except OSError:
+                pass
+
+
+def enrich_colo_info(results: list[dict[str, Any]], config: dict[str, Any]) -> None:
+    """Attach the observed Cloudflare colo code without failing the scan."""
+    if not results:
+        return
+    scan = config["scan"]
+    timeout = float(scan["timeout_seconds"])
+    workers = int(scan["workers"])
+    user_agent = str(scan.get("user_agent", "Cloudflare-IP-Auto/3.2"))
+    with ThreadPoolExecutor(max_workers=workers) as executor:
+        futures = {
+            executor.submit(fetch_colo_code, str(item["ip"]), int(item.get("port", 443)), timeout, user_agent): item
+            for item in results
+        }
+        for future in as_completed(futures):
+            item = futures[future]
+            try:
+                item["colo"] = future.result() or ""
+            except Exception as exc:
+                item["colo"] = ""
+                print(f"Cloudflare colo lookup failed for {item['ip']}: {type(exc).__name__}: {exc}")
+
+
 def subscription_line(item: dict[str, Any]) -> str:
     region = str(item.get("region_zh") or region_label(item))
     return f"{item['ip']}:{int(item.get('port', 443))}#{region}"
@@ -188,6 +285,15 @@ def validate_config(config: dict[str, Any]) -> None:
             raise ValueError(f"invalid TCP port: {port}")
     if not scan.get("top_n"):
         raise ValueError("config.scan.top_n must not be empty")
+    targets = scan.get("region_target_counts", {"HK": 15, "US": 15, "SG": 10, "JP": 10})
+    if not isinstance(targets, dict) or not targets:
+        raise ValueError("config.scan.region_target_counts must be a non-empty mapping")
+    if any(int(value) < 0 for value in targets.values()):
+        raise ValueError("region target counts must not be negative")
+    if int(scan.get("region_candidate_multiplier", 3)) <= 0:
+        raise ValueError("region_candidate_multiplier must be greater than zero")
+    if int(scan.get("region_fallback_candidates", 60)) < 0:
+        raise ValueError("region_fallback_candidates must not be negative")
 
 
 def parse_custom_networks(version: int, values: list[str]) -> list[ipaddress._BaseNetwork]:
@@ -682,9 +788,10 @@ def write_family_outputs(version: int, results: list[dict[str, Any]], top_n: lis
 
     write_json(output_dir / "all.json", results)
     csv_fields = [
-        "ip", "version", "port", "latency_ms", "median_latency_ms",
-        "jitter_ms", "p95_latency_ms", "speed_mbps", "speed_tested",
-        "success_rate", "successful_rounds", "total_rounds", "score", "tested_at",
+        "ip", "version", "port", "country_code", "city", "region_zh", "colo",
+        "latency_ms", "median_latency_ms", "jitter_ms", "p95_latency_ms",
+        "speed_mbps", "speed_tested", "success_rate", "successful_rounds",
+        "total_rounds", "score", "tested_at",
     ]
     with (output_dir / "all.csv").open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=csv_fields, extrasaction="ignore")
@@ -724,7 +831,7 @@ def write_family_outputs(version: int, results: list[dict[str, Any]], top_n: lis
         (ROOT / name).write_text(payload, encoding="utf-8")
         (output_dir / name).write_text(payload, encoding="utf-8")
     write_json(OUTPUT / "summary.json", {
-        "project": "Cloudflare-IP-Auto", "version": "3.4", "generated_at": utc_now(),
+        "project": "Cloudflare-IP-Auto", "version": "3.5", "generated_at": utc_now(),
         "ip_family": "IPv4 only", "port": 443,
         "ranked_count": len(results), "all_count": len(results),
         "fast_count": len(fast_items), "fast_min_mbps": 25.0,
@@ -772,17 +879,48 @@ def run_ipv4(config: dict[str, Any]) -> dict[str, Any]:
     failure_reasons: dict[str, int] = {}
     preliminary = run_probe_stages(candidates, config)
 
-    # Stage 4: repeat the complete TLS + HTTP probe for stability scoring.
-    print(f"IPv4: stability retest for {len(preliminary)} HTTP-qualified candidates")
+    # GeoIP is a practical region label, not proof of the actual edge location.
+    geo_candidates = [{"ip": ip} for ip in preliminary]
+    enrich_country_info(geo_candidates)
+    region_targets = {
+        str(code).upper(): int(count)
+        for code, count in scan.get(
+            "region_target_counts", {"HK": 15, "US": 15, "SG": 10, "JP": 10}
+        ).items()
+    }
+    selected_geo = select_region_candidates(
+        geo_candidates,
+        region_targets,
+        int(scan.get("region_candidate_multiplier", 3)),
+        int(scan.get("region_fallback_candidates", 60)),
+    )
+    geo_by_ip = {str(item["ip"]): item for item in geo_candidates}
+    selected_ips = [str(item["ip"]) for item in selected_geo]
+    print(
+        "IPv4 region candidate selection: "
+        + json.dumps(
+            {code: sum(1 for item in selected_geo if item.get("country_code") == code)
+             for code in region_targets},
+            ensure_ascii=False,
+        )
+        + f"; fallback={sum(1 for item in selected_geo if item.get('country_code') not in region_targets)}"
+    )
+
+    # Stage 4: repeat the complete TLS + HTTP probe for region-selected candidates.
+    print(f"IPv4: stability retest for {len(selected_ips)} region-selected candidates")
     results: list[dict[str, Any]] = []
     completed = 0
     with ThreadPoolExecutor(max_workers=int(scan["workers"])) as executor:
-        futures = {executor.submit(probe_candidate, ip, 4, config): ip for ip in preliminary}
+        futures = {executor.submit(probe_candidate, ip, 4, config): ip for ip in selected_ips}
         for future in as_completed(futures):
             completed += 1
             try:
                 item, reasons = future.result()
                 if item is not None:
+                    geo = geo_by_ip.get(str(item["ip"]), {})
+                    item["country_code"] = geo.get("country_code", "ZZ")
+                    item["city"] = geo.get("city", "")
+                    item["region_zh"] = geo.get("region_zh", "未知地区")
                     results.append(item)
                 for reason, count in reasons.items():
                     failure_reasons[reason] = failure_reasons.get(reason, 0) + count
@@ -795,8 +933,16 @@ def run_ipv4(config: dict[str, Any]) -> dict[str, Any]:
 
     print(f"IPv4 failure reasons: {json.dumps(failure_reasons, ensure_ascii=False, sort_keys=True)}")
     run_speed_tests(results, 4, config)
-    enrich_country_info(results)
+    enrich_colo_info(results, config)
     ranked = sort_and_score(results, scan.get("preferred_country_codes", ["HK", "US", "SG", "JP"]))
+    region_counts: dict[str, int] = {}
+    colo_counts: dict[str, int] = {}
+    for item in ranked:
+        code = str(item.get("country_code") or "ZZ")
+        region_counts[code] = region_counts.get(code, 0) + 1
+        colo = str(item.get("colo") or "")
+        if colo:
+            colo_counts[colo] = colo_counts.get(colo, 0) + 1
     top_n = [int(value) for value in scan["top_n"]]
     write_family_outputs(4, ranked, top_n)
 
@@ -811,6 +957,10 @@ def run_ipv4(config: dict[str, Any]) -> dict[str, Any]:
         "usable_count": len(results),
         "speed_tested_count": sum(1 for item in results if item["speed_tested"]),
         "ranked_count": len(ranked),
+        "region_targets": region_targets,
+        "region_counts": region_counts,
+        "colo_counts": colo_counts,
+        "geoip_note": "GeoIP is approximate; colo is observed from Cloudflare /cdn-cgi/trace.",
         "top_ip": ranked[0]["ip"] if ranked else None,
         "failure_reasons": failure_reasons,
         "output_dir": "output/ipv4/",
@@ -823,7 +973,7 @@ def main() -> None:
     OUTPUT.mkdir(parents=True, exist_ok=True)
     summary: dict[str, Any] = {
         "project": "Cloudflare-IP-Auto",
-        "version": "3.4",
+        "version": "3.5",
         "generated_at": utc_now(),
         "schedule": "17 */6 * * * (UTC)",
         "ip_family": "IPv4 only",
