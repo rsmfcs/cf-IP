@@ -1,7 +1,7 @@
 {
   "project": "Cloudflare-IP-Auto",
   "version": "3.5",
-  "generated_at": "2026-11-26T02:55:59+00:00",
+  "generated_at": "2026-11-26T02:59:36+00:00",
   "schedule": "17 */6 * * * (UTC)",
   "ip_family": "IPv4 only",
   "ports": [
@@ -14,7 +14,7 @@
       "egress_check": {
         "available": true,
         "target": "1.1.1.1:443",
-        "connect_ms": 6.1
+        "connect_ms": 6.39
       },
       "network_count": 15,
       "candidate_count": 2048,
@@ -34,9 +34,7 @@
         "CA": 60
       },
       "colo_counts": {
-        "MSP": 65,
-        "ORD": 38,
-        "DFW": 2
+        "IAD": 105
       },
       "geoip_note": "GeoIP is approximate; colo is observed from Cloudflare /cdn-cgi/trace.",
       "top_ip": "162.159.45.44",
