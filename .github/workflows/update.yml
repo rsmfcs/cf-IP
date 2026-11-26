@@ -66,11 +66,11 @@ jobs:
                   with context.wrap_socket(raw, server_hostname="cloudflare.com") as tls:
                       tls.settimeout(6)
                       tls.sendall(
-                          b"HEAD /cdn-cgi/trace HTTP/1.1\\r\\n"
-                          b"Host: cloudflare.com\\r\\n"
-                          b"Connection: close\\r\\n\\r\\n"
+                          b"HEAD /cdn-cgi/trace HTTP/1.1\r\n"
+                          b"Host: cloudflare.com\r\n"
+                          b"Connection: close\r\n\r\n"
                       )
-                      response = tls.recv(256).split(b"\\r\\n", 1)[0]
+                      response = tls.recv(256).split(b"\r\n", 1)[0]
                       print(f"IPv6 TCP/TLS/HTTPS to {address}: PASS ({response.decode(errors='replace')})")
                       website_ok = True
                       break
