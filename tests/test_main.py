@@ -163,3 +163,33 @@ def test_ipv6_source_output_preserves_previous_files_when_empty(tmp_path, monkey
     main.write_ipv6_source_outputs([], {"candidate_count": 0})
 
     assert (tmp_path / "ipv6.txt").read_text(encoding="utf-8") == previous
+
+
+def test_ipv6_source_outputs_merge_into_root_all_subscription(tmp_path, monkeypatch):
+    monkeypatch.setattr(main, "ROOT", tmp_path)
+    monkeypatch.setattr(main, "OUTPUT", tmp_path / "output")
+    (tmp_path / "output" / "ipv4").mkdir(parents=True)
+    (tmp_path / "all.txt").write_text(
+        "1.1.1.1:443#美国\\n[2606:4700::old]:443#旧IPv6\\n",
+        encoding="utf-8",
+    )
+    candidates = [
+        {
+            "ip": "2606:4700:4700::1111",
+            "port": 443,
+            "region_zh": "美国",
+            "country_code": "US",
+        }
+    ]
+
+    main.write_ipv6_source_outputs(candidates, {"candidate_count": 1})
+
+    combined = (tmp_path / "all.txt").read_text(encoding="utf-8").splitlines()
+    assert combined == [
+        "1.1.1.1:443#美国",
+        "[2606:4700:4700::1111]:443#美国",
+    ]
+    # The IPv4 family output remains IPv4-only.
+    assert "[2606:4700:4700::1111]" not in (
+        tmp_path / "output" / "ipv4" / "all.txt"
+    ).read_text(encoding="utf-8") if (tmp_path / "output" / "ipv4" / "all.txt").exists() else True
