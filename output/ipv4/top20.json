@@ -1,71 +1,456 @@
 [
   {
-    "ip": "104.25.75.75",
+    "ip": "108.162.194.211",
     "version": 4,
     "port": 443,
-    "latency_ms": 94.71,
-    "median_latency_ms": 96.58,
-    "jitter_ms": 2.79,
-    "p95_latency_ms": 96.77,
+    "latency_ms": 111.52,
+    "median_latency_ms": 115.51,
+    "jitter_ms": 5.83,
+    "p95_latency_ms": 115.77,
     "success_rate": 1.0,
     "successful_rounds": 3,
     "total_rounds": 3,
-    "speed_mbps": 54.549,
+    "speed_mbps": 52.162,
     "speed_tested": true,
     "speed_samples_mbps": [
-      53.938,
-      55.159
+      47.248,
+      57.077
     ],
-    "score": 92.66,
+    "score": 91.63,
     "port_results": [
       {
         "port": 443,
         "success_rate": 1.0,
         "successful_rounds": 3,
         "total_rounds": 3,
-        "latency_ms": 94.71,
-        "median_latency_ms": 96.58,
-        "jitter_ms": 2.79,
-        "p95_latency_ms": 96.77,
+        "latency_ms": 111.52,
+        "median_latency_ms": 115.51,
+        "jitter_ms": 5.83,
+        "p95_latency_ms": 115.77,
         "errors": {}
       }
     ],
-    "tested_at": "2026-11-26T02:04:51+00:00",
+    "tested_at": "2026-11-26T02:24:59+00:00",
     "country_code": "CA",
     "country_flag": "🇨🇦"
   },
   {
-    "ip": "104.24.30.31",
+    "ip": "190.93.244.120",
     "version": 4,
     "port": 443,
-    "latency_ms": 93.1,
-    "median_latency_ms": 93.83,
-    "jitter_ms": 2.1,
-    "p95_latency_ms": 95.23,
+    "latency_ms": 107.83,
+    "median_latency_ms": 105.98,
+    "jitter_ms": 8.04,
+    "p95_latency_ms": 118.46,
     "success_rate": 1.0,
     "successful_rounds": 3,
     "total_rounds": 3,
-    "speed_mbps": 53.582,
+    "speed_mbps": 50.02,
     "speed_tested": true,
     "speed_samples_mbps": [
-      55.784,
-      51.38
+      56.045,
+      43.994
     ],
-    "score": 92.64,
+    "score": 91.38,
     "port_results": [
       {
         "port": 443,
         "success_rate": 1.0,
         "successful_rounds": 3,
         "total_rounds": 3,
-        "latency_ms": 93.1,
-        "median_latency_ms": 93.83,
-        "jitter_ms": 2.1,
-        "p95_latency_ms": 95.23,
+        "latency_ms": 107.83,
+        "median_latency_ms": 105.98,
+        "jitter_ms": 8.04,
+        "p95_latency_ms": 118.46,
         "errors": {}
       }
     ],
-    "tested_at": "2026-11-26T02:04:51+00:00",
+    "tested_at": "2026-11-26T02:25:00+00:00",
+    "country_code": "CR",
+    "country_flag": "🇨🇷"
+  },
+  {
+    "ip": "172.67.135.135",
+    "version": 4,
+    "port": 443,
+    "latency_ms": 119.66,
+    "median_latency_ms": 119.31,
+    "jitter_ms": 3.09,
+    "p95_latency_ms": 123.6,
+    "success_rate": 1.0,
+    "successful_rounds": 3,
+    "total_rounds": 3,
+    "speed_mbps": 46.997,
+    "speed_tested": true,
+    "speed_samples_mbps": [
+      48.899,
+      45.095
+    ],
+    "score": 90.82,
+    "port_results": [
+      {
+        "port": 443,
+        "success_rate": 1.0,
+        "successful_rounds": 3,
+        "total_rounds": 3,
+        "latency_ms": 119.66,
+        "median_latency_ms": 119.31,
+        "jitter_ms": 3.09,
+        "p95_latency_ms": 123.6,
+        "errors": {}
+      }
+    ],
+    "tested_at": "2026-11-26T02:24:59+00:00",
+    "country_code": "CA",
+    "country_flag": "🇨🇦"
+  },
+  {
+    "ip": "198.41.214.149",
+    "version": 4,
+    "port": 443,
+    "latency_ms": 113.21,
+    "median_latency_ms": 111.39,
+    "jitter_ms": 16.51,
+    "p95_latency_ms": 134.27,
+    "success_rate": 1.0,
+    "successful_rounds": 3,
+    "total_rounds": 3,
+    "speed_mbps": 50.034,
+    "speed_tested": true,
+    "speed_samples_mbps": [
+      47.92,
+      52.147
+    ],
+    "score": 90.77,
+    "port_results": [
+      {
+        "port": 443,
+        "success_rate": 1.0,
+        "successful_rounds": 3,
+        "total_rounds": 3,
+        "latency_ms": 113.21,
+        "median_latency_ms": 111.39,
+        "jitter_ms": 16.51,
+        "p95_latency_ms": 134.27,
+        "errors": {}
+      }
+    ],
+    "tested_at": "2026-11-26T02:25:00+00:00",
+    "country_code": "CA",
+    "country_flag": "🇨🇦"
+  },
+  {
+    "ip": "141.101.123.73",
+    "version": 4,
+    "port": 443,
+    "latency_ms": 116.36,
+    "median_latency_ms": 115.51,
+    "jitter_ms": 2.07,
+    "p95_latency_ms": 119.22,
+    "success_rate": 1.0,
+    "successful_rounds": 3,
+    "total_rounds": 3,
+    "speed_mbps": 44.239,
+    "speed_tested": true,
+    "speed_samples_mbps": [
+      46.618,
+      41.86
+    ],
+    "score": 90.6,
+    "port_results": [
+      {
+        "port": 443,
+        "success_rate": 1.0,
+        "successful_rounds": 3,
+        "total_rounds": 3,
+        "latency_ms": 116.36,
+        "median_latency_ms": 115.51,
+        "jitter_ms": 2.07,
+        "p95_latency_ms": 119.22,
+        "errors": {}
+      }
+    ],
+    "tested_at": "2026-11-26T02:24:59+00:00",
+    "country_code": "GB",
+    "country_flag": "🇬🇧"
+  },
+  {
+    "ip": "190.93.245.225",
+    "version": 4,
+    "port": 443,
+    "latency_ms": 123.46,
+    "median_latency_ms": 121.25,
+    "jitter_ms": 3.66,
+    "p95_latency_ms": 128.62,
+    "success_rate": 1.0,
+    "successful_rounds": 3,
+    "total_rounds": 3,
+    "speed_mbps": 46.34,
+    "speed_tested": true,
+    "speed_samples_mbps": [
+      43.155,
+      49.525
+    ],
+    "score": 90.57,
+    "port_results": [
+      {
+        "port": 443,
+        "success_rate": 1.0,
+        "successful_rounds": 3,
+        "total_rounds": 3,
+        "latency_ms": 123.46,
+        "median_latency_ms": 121.25,
+        "jitter_ms": 3.66,
+        "p95_latency_ms": 128.62,
+        "errors": {}
+      }
+    ],
+    "tested_at": "2026-11-26T02:24:59+00:00",
+    "country_code": "CR",
+    "country_flag": "🇨🇷"
+  },
+  {
+    "ip": "190.93.247.74",
+    "version": 4,
+    "port": 443,
+    "latency_ms": 123.63,
+    "median_latency_ms": 122.44,
+    "jitter_ms": 2.13,
+    "p95_latency_ms": 126.62,
+    "success_rate": 1.0,
+    "successful_rounds": 3,
+    "total_rounds": 3,
+    "speed_mbps": 44.509,
+    "speed_tested": true,
+    "speed_samples_mbps": [
+      42.934,
+      46.084
+    ],
+    "score": 90.38,
+    "port_results": [
+      {
+        "port": 443,
+        "success_rate": 1.0,
+        "successful_rounds": 3,
+        "total_rounds": 3,
+        "latency_ms": 123.63,
+        "median_latency_ms": 122.44,
+        "jitter_ms": 2.13,
+        "p95_latency_ms": 126.62,
+        "errors": {}
+      }
+    ],
+    "tested_at": "2026-11-26T02:25:00+00:00",
+    "country_code": "CR",
+    "country_flag": "🇨🇷"
+  },
+  {
+    "ip": "198.41.193.225",
+    "version": 4,
+    "port": 443,
+    "latency_ms": 112.35,
+    "median_latency_ms": 112.97,
+    "jitter_ms": 10.31,
+    "p95_latency_ms": 124.66,
+    "success_rate": 1.0,
+    "successful_rounds": 3,
+    "total_rounds": 3,
+    "speed_mbps": 43.958,
+    "speed_tested": true,
+    "speed_samples_mbps": [
+      43.741,
+      44.175
+    ],
+    "score": 90.29,
+    "port_results": [
+      {
+        "port": 443,
+        "success_rate": 1.0,
+        "successful_rounds": 3,
+        "total_rounds": 3,
+        "latency_ms": 112.35,
+        "median_latency_ms": 112.97,
+        "jitter_ms": 10.31,
+        "p95_latency_ms": 124.66,
+        "errors": {}
+      }
+    ],
+    "tested_at": "2026-11-26T02:25:00+00:00",
+    "country_code": "CA",
+    "country_flag": "🇨🇦"
+  },
+  {
+    "ip": "172.67.75.75",
+    "version": 4,
+    "port": 443,
+    "latency_ms": 116.21,
+    "median_latency_ms": 110.22,
+    "jitter_ms": 9.85,
+    "p95_latency_ms": 130.1,
+    "success_rate": 1.0,
+    "successful_rounds": 3,
+    "total_rounds": 3,
+    "speed_mbps": 44.65,
+    "speed_tested": true,
+    "speed_samples_mbps": [
+      43.284,
+      46.015
+    ],
+    "score": 90.28,
+    "port_results": [
+      {
+        "port": 443,
+        "success_rate": 1.0,
+        "successful_rounds": 3,
+        "total_rounds": 3,
+        "latency_ms": 116.21,
+        "median_latency_ms": 110.22,
+        "jitter_ms": 9.85,
+        "p95_latency_ms": 130.1,
+        "errors": {}
+      }
+    ],
+    "tested_at": "2026-11-26T02:24:59+00:00",
+    "country_code": "CA",
+    "country_flag": "🇨🇦"
+  },
+  {
+    "ip": "141.101.120.118",
+    "version": 4,
+    "port": 443,
+    "latency_ms": 122.62,
+    "median_latency_ms": 118.66,
+    "jitter_ms": 8.84,
+    "p95_latency_ms": 134.86,
+    "success_rate": 1.0,
+    "successful_rounds": 3,
+    "total_rounds": 3,
+    "speed_mbps": 45.803,
+    "speed_tested": true,
+    "speed_samples_mbps": [
+      45.499,
+      46.108
+    ],
+    "score": 90.27,
+    "port_results": [
+      {
+        "port": 443,
+        "success_rate": 1.0,
+        "successful_rounds": 3,
+        "total_rounds": 3,
+        "latency_ms": 122.62,
+        "median_latency_ms": 118.66,
+        "jitter_ms": 8.84,
+        "p95_latency_ms": 134.86,
+        "errors": {}
+      }
+    ],
+    "tested_at": "2026-11-26T02:24:59+00:00",
+    "country_code": "FR",
+    "country_flag": "🇫🇷"
+  },
+  {
+    "ip": "104.21.225.224",
+    "version": 4,
+    "port": 443,
+    "latency_ms": 125.13,
+    "median_latency_ms": 127.01,
+    "jitter_ms": 6.32,
+    "p95_latency_ms": 131.76,
+    "success_rate": 1.0,
+    "successful_rounds": 3,
+    "total_rounds": 3,
+    "speed_mbps": 45.532,
+    "speed_tested": true,
+    "speed_samples_mbps": [
+      43.575,
+      47.489
+    ],
+    "score": 90.27,
+    "port_results": [
+      {
+        "port": 443,
+        "success_rate": 1.0,
+        "successful_rounds": 3,
+        "total_rounds": 3,
+        "latency_ms": 125.13,
+        "median_latency_ms": 127.01,
+        "jitter_ms": 6.32,
+        "p95_latency_ms": 131.76,
+        "errors": {}
+      }
+    ],
+    "tested_at": "2026-11-26T02:24:58+00:00",
+    "country_code": "CA",
+    "country_flag": "🇨🇦"
+  },
+  {
+    "ip": "190.93.247.14",
+    "version": 4,
+    "port": 443,
+    "latency_ms": 120.97,
+    "median_latency_ms": 127.53,
+    "jitter_ms": 10.09,
+    "p95_latency_ms": 128.67,
+    "success_rate": 1.0,
+    "successful_rounds": 3,
+    "total_rounds": 3,
+    "speed_mbps": 45.797,
+    "speed_tested": true,
+    "speed_samples_mbps": [
+      48.0,
+      43.593
+    ],
+    "score": 90.26,
+    "port_results": [
+      {
+        "port": 443,
+        "success_rate": 1.0,
+        "successful_rounds": 3,
+        "total_rounds": 3,
+        "latency_ms": 120.97,
+        "median_latency_ms": 127.53,
+        "jitter_ms": 10.09,
+        "p95_latency_ms": 128.67,
+        "errors": {}
+      }
+    ],
+    "tested_at": "2026-11-26T02:25:00+00:00",
+    "country_code": "CR",
+    "country_flag": "🇨🇷"
+  },
+  {
+    "ip": "104.27.60.58",
+    "version": 4,
+    "port": 443,
+    "latency_ms": 123.7,
+    "median_latency_ms": 120.92,
+    "jitter_ms": 4.28,
+    "p95_latency_ms": 129.75,
+    "success_rate": 1.0,
+    "successful_rounds": 3,
+    "total_rounds": 3,
+    "speed_mbps": 44.443,
+    "speed_tested": true,
+    "speed_samples_mbps": [
+      43.142,
+      45.744
+    ],
+    "score": 90.26,
+    "port_results": [
+      {
+        "port": 443,
+        "success_rate": 1.0,
+        "successful_rounds": 3,
+        "total_rounds": 3,
+        "latency_ms": 123.7,
+        "median_latency_ms": 120.92,
+        "jitter_ms": 4.28,
+        "p95_latency_ms": 129.75,
+        "errors": {}
+      }
+    ],
+    "tested_at": "2026-11-26T02:24:59+00:00",
     "country_code": "CA",
     "country_flag": "🇨🇦"
   },
@@ -73,630 +458,245 @@
     "ip": "198.41.222.28",
     "version": 4,
     "port": 443,
-    "latency_ms": 97.33,
-    "median_latency_ms": 96.85,
-    "jitter_ms": 0.86,
-    "p95_latency_ms": 98.53,
+    "latency_ms": 118.2,
+    "median_latency_ms": 123.26,
+    "jitter_ms": 8.66,
+    "p95_latency_ms": 125.33,
     "success_rate": 1.0,
     "successful_rounds": 3,
     "total_rounds": 3,
-    "speed_mbps": 54.184,
+    "speed_mbps": 44.329,
     "speed_tested": true,
     "speed_samples_mbps": [
-      53.865,
-      54.502
+      47.985,
+      40.673
     ],
-    "score": 92.62,
+    "score": 90.22,
     "port_results": [
       {
         "port": 443,
         "success_rate": 1.0,
         "successful_rounds": 3,
         "total_rounds": 3,
-        "latency_ms": 97.33,
-        "median_latency_ms": 96.85,
-        "jitter_ms": 0.86,
-        "p95_latency_ms": 98.53,
+        "latency_ms": 118.2,
+        "median_latency_ms": 123.26,
+        "jitter_ms": 8.66,
+        "p95_latency_ms": 125.33,
         "errors": {}
       }
     ],
-    "tested_at": "2026-11-26T02:04:52+00:00",
+    "tested_at": "2026-11-26T02:25:00+00:00",
     "country_code": "CA",
     "country_flag": "🇨🇦"
   },
   {
-    "ip": "104.21.195.194",
+    "ip": "190.93.246.90",
     "version": 4,
     "port": 443,
-    "latency_ms": 93.84,
-    "median_latency_ms": 93.17,
-    "jitter_ms": 1.35,
-    "p95_latency_ms": 95.72,
+    "latency_ms": 123.36,
+    "median_latency_ms": 124.88,
+    "jitter_ms": 7.28,
+    "p95_latency_ms": 131.42,
     "success_rate": 1.0,
     "successful_rounds": 3,
     "total_rounds": 3,
-    "speed_mbps": 52.752,
+    "speed_mbps": 44.73,
     "speed_tested": true,
     "speed_samples_mbps": [
-      51.698,
-      53.806
+      40.165,
+      49.296
     ],
-    "score": 92.55,
+    "score": 90.17,
     "port_results": [
       {
         "port": 443,
         "success_rate": 1.0,
         "successful_rounds": 3,
         "total_rounds": 3,
-        "latency_ms": 93.84,
-        "median_latency_ms": 93.17,
-        "jitter_ms": 1.35,
-        "p95_latency_ms": 95.72,
+        "latency_ms": 123.36,
+        "median_latency_ms": 124.88,
+        "jitter_ms": 7.28,
+        "p95_latency_ms": 131.42,
         "errors": {}
       }
     ],
-    "tested_at": "2026-11-26T02:04:51+00:00",
+    "tested_at": "2026-11-26T02:24:59+00:00",
+    "country_code": "CR",
+    "country_flag": "🇨🇷"
+  },
+  {
+    "ip": "190.93.247.135",
+    "version": 4,
+    "port": 443,
+    "latency_ms": 117.5,
+    "median_latency_ms": 114.61,
+    "jitter_ms": 5.98,
+    "p95_latency_ms": 125.84,
+    "success_rate": 1.0,
+    "successful_rounds": 3,
+    "total_rounds": 3,
+    "speed_mbps": 42.748,
+    "speed_tested": true,
+    "speed_samples_mbps": [
+      44.29,
+      41.207
+    ],
+    "score": 90.15,
+    "port_results": [
+      {
+        "port": 443,
+        "success_rate": 1.0,
+        "successful_rounds": 3,
+        "total_rounds": 3,
+        "latency_ms": 117.5,
+        "median_latency_ms": 114.61,
+        "jitter_ms": 5.98,
+        "p95_latency_ms": 125.84,
+        "errors": {}
+      }
+    ],
+    "tested_at": "2026-11-26T02:25:00+00:00",
+    "country_code": "CR",
+    "country_flag": "🇨🇷"
+  },
+  {
+    "ip": "162.159.195.194",
+    "version": 4,
+    "port": 443,
+    "latency_ms": 123.97,
+    "median_latency_ms": 127.56,
+    "jitter_ms": 7.79,
+    "p95_latency_ms": 131.19,
+    "success_rate": 1.0,
+    "successful_rounds": 3,
+    "total_rounds": 3,
+    "speed_mbps": 44.93,
+    "speed_tested": true,
+    "speed_samples_mbps": [
+      42.726,
+      47.133
+    ],
+    "score": 90.15,
+    "port_results": [
+      {
+        "port": 443,
+        "success_rate": 1.0,
+        "successful_rounds": 3,
+        "total_rounds": 3,
+        "latency_ms": 123.97,
+        "median_latency_ms": 127.56,
+        "jitter_ms": 7.79,
+        "p95_latency_ms": 131.19,
+        "errors": {}
+      }
+    ],
+    "tested_at": "2026-11-26T02:24:59+00:00",
     "country_code": "CA",
     "country_flag": "🇨🇦"
   },
   {
-    "ip": "104.20.60.59",
+    "ip": "190.93.245.105",
     "version": 4,
     "port": 443,
-    "latency_ms": 93.16,
-    "median_latency_ms": 93.71,
-    "jitter_ms": 2.81,
-    "p95_latency_ms": 96.3,
+    "latency_ms": 117.27,
+    "median_latency_ms": 112.18,
+    "jitter_ms": 9.39,
+    "p95_latency_ms": 130.44,
     "success_rate": 1.0,
     "successful_rounds": 3,
     "total_rounds": 3,
-    "speed_mbps": 53.03,
+    "speed_mbps": 43.534,
     "speed_tested": true,
     "speed_samples_mbps": [
-      53.112,
-      52.948
+      44.998,
+      42.07
     ],
-    "score": 92.53,
+    "score": 90.1,
     "port_results": [
       {
         "port": 443,
         "success_rate": 1.0,
         "successful_rounds": 3,
         "total_rounds": 3,
-        "latency_ms": 93.16,
-        "median_latency_ms": 93.71,
-        "jitter_ms": 2.81,
-        "p95_latency_ms": 96.3,
+        "latency_ms": 117.27,
+        "median_latency_ms": 112.18,
+        "jitter_ms": 9.39,
+        "p95_latency_ms": 130.44,
         "errors": {}
       }
     ],
-    "tested_at": "2026-11-26T02:04:51+00:00",
+    "tested_at": "2026-11-26T02:25:00+00:00",
+    "country_code": "CR",
+    "country_flag": "🇨🇷"
+  },
+  {
+    "ip": "172.67.105.105",
+    "version": 4,
+    "port": 443,
+    "latency_ms": 112.5,
+    "median_latency_ms": 112.62,
+    "jitter_ms": 5.86,
+    "p95_latency_ms": 119.61,
+    "success_rate": 1.0,
+    "successful_rounds": 3,
+    "total_rounds": 3,
+    "speed_mbps": 40.986,
+    "speed_tested": true,
+    "speed_samples_mbps": [
+      42.481,
+      39.491
+    ],
+    "score": 90.06,
+    "port_results": [
+      {
+        "port": 443,
+        "success_rate": 1.0,
+        "successful_rounds": 3,
+        "total_rounds": 3,
+        "latency_ms": 112.5,
+        "median_latency_ms": 112.62,
+        "jitter_ms": 5.86,
+        "p95_latency_ms": 119.61,
+        "errors": {}
+      }
+    ],
+    "tested_at": "2026-11-26T02:24:59+00:00",
     "country_code": "CA",
     "country_flag": "🇨🇦"
   },
   {
-    "ip": "104.17.135.135",
+    "ip": "190.93.247.195",
     "version": 4,
     "port": 443,
-    "latency_ms": 93.25,
-    "median_latency_ms": 93.87,
-    "jitter_ms": 3.62,
-    "p95_latency_ms": 97.35,
+    "latency_ms": 115.4,
+    "median_latency_ms": 110.71,
+    "jitter_ms": 10.71,
+    "p95_latency_ms": 130.22,
     "success_rate": 1.0,
     "successful_rounds": 3,
     "total_rounds": 3,
-    "speed_mbps": 53.287,
+    "speed_mbps": 43.05,
     "speed_tested": true,
     "speed_samples_mbps": [
-      54.81,
-      51.764
+      42.445,
+      43.654
     ],
-    "score": 92.52,
+    "score": 90.03,
     "port_results": [
       {
         "port": 443,
         "success_rate": 1.0,
         "successful_rounds": 3,
         "total_rounds": 3,
-        "latency_ms": 93.25,
-        "median_latency_ms": 93.87,
-        "jitter_ms": 3.62,
-        "p95_latency_ms": 97.35,
+        "latency_ms": 115.4,
+        "median_latency_ms": 110.71,
+        "jitter_ms": 10.71,
+        "p95_latency_ms": 130.22,
         "errors": {}
       }
     ],
-    "tested_at": "2026-11-26T02:04:51+00:00",
-    "country_code": "CA",
-    "country_flag": "🇨🇦"
-  },
-  {
-    "ip": "104.25.225.225",
-    "version": 4,
-    "port": 443,
-    "latency_ms": 91.79,
-    "median_latency_ms": 93.71,
-    "jitter_ms": 3.62,
-    "p95_latency_ms": 94.94,
-    "success_rate": 1.0,
-    "successful_rounds": 3,
-    "total_rounds": 3,
-    "speed_mbps": 52.587,
-    "speed_tested": true,
-    "speed_samples_mbps": [
-      53.061,
-      52.113
-    ],
-    "score": 92.49,
-    "port_results": [
-      {
-        "port": 443,
-        "success_rate": 1.0,
-        "successful_rounds": 3,
-        "total_rounds": 3,
-        "latency_ms": 91.79,
-        "median_latency_ms": 93.71,
-        "jitter_ms": 3.62,
-        "p95_latency_ms": 94.94,
-        "errors": {}
-      }
-    ],
-    "tested_at": "2026-11-26T02:04:51+00:00",
-    "country_code": "CA",
-    "country_flag": "🇨🇦"
-  },
-  {
-    "ip": "104.19.75.75",
-    "version": 4,
-    "port": 443,
-    "latency_ms": 92.15,
-    "median_latency_ms": 92.65,
-    "jitter_ms": 1.29,
-    "p95_latency_ms": 93.41,
-    "success_rate": 1.0,
-    "successful_rounds": 3,
-    "total_rounds": 3,
-    "speed_mbps": 51.745,
-    "speed_tested": true,
-    "speed_samples_mbps": [
-      51.408,
-      52.082
-    ],
-    "score": 92.49,
-    "port_results": [
-      {
-        "port": 443,
-        "success_rate": 1.0,
-        "successful_rounds": 3,
-        "total_rounds": 3,
-        "latency_ms": 92.15,
-        "median_latency_ms": 92.65,
-        "jitter_ms": 1.29,
-        "p95_latency_ms": 93.41,
-        "errors": {}
-      }
-    ],
-    "tested_at": "2026-11-26T02:04:51+00:00",
-    "country_code": "CA",
-    "country_flag": "🇨🇦"
-  },
-  {
-    "ip": "104.18.210.210",
-    "version": 4,
-    "port": 443,
-    "latency_ms": 91.73,
-    "median_latency_ms": 91.61,
-    "jitter_ms": 3.39,
-    "p95_latency_ms": 95.94,
-    "success_rate": 1.0,
-    "successful_rounds": 3,
-    "total_rounds": 3,
-    "speed_mbps": 51.754,
-    "speed_tested": true,
-    "speed_samples_mbps": [
-      53.23,
-      50.277
-    ],
-    "score": 92.4,
-    "port_results": [
-      {
-        "port": 443,
-        "success_rate": 1.0,
-        "successful_rounds": 3,
-        "total_rounds": 3,
-        "latency_ms": 91.73,
-        "median_latency_ms": 91.61,
-        "jitter_ms": 3.39,
-        "p95_latency_ms": 95.94,
-        "errors": {}
-      }
-    ],
-    "tested_at": "2026-11-26T02:04:51+00:00",
-    "country_code": "CA",
-    "country_flag": "🇨🇦"
-  },
-  {
-    "ip": "104.24.180.181",
-    "version": 4,
-    "port": 443,
-    "latency_ms": 94.39,
-    "median_latency_ms": 92.89,
-    "jitter_ms": 3.99,
-    "p95_latency_ms": 99.85,
-    "success_rate": 1.0,
-    "successful_rounds": 3,
-    "total_rounds": 3,
-    "speed_mbps": 52.776,
-    "speed_tested": true,
-    "speed_samples_mbps": [
-      52.141,
-      53.412
-    ],
-    "score": 92.4,
-    "port_results": [
-      {
-        "port": 443,
-        "success_rate": 1.0,
-        "successful_rounds": 3,
-        "total_rounds": 3,
-        "latency_ms": 94.39,
-        "median_latency_ms": 92.89,
-        "jitter_ms": 3.99,
-        "p95_latency_ms": 99.85,
-        "errors": {}
-      }
-    ],
-    "tested_at": "2026-11-26T02:04:51+00:00",
-    "country_code": "CA",
-    "country_flag": "🇨🇦"
-  },
-  {
-    "ip": "104.21.75.74",
-    "version": 4,
-    "port": 443,
-    "latency_ms": 97.85,
-    "median_latency_ms": 98.52,
-    "jitter_ms": 1.07,
-    "p95_latency_ms": 98.7,
-    "success_rate": 1.0,
-    "successful_rounds": 3,
-    "total_rounds": 3,
-    "speed_mbps": 52.459,
-    "speed_tested": true,
-    "speed_samples_mbps": [
-      55.538,
-      49.381
-    ],
-    "score": 92.39,
-    "port_results": [
-      {
-        "port": 443,
-        "success_rate": 1.0,
-        "successful_rounds": 3,
-        "total_rounds": 3,
-        "latency_ms": 97.85,
-        "median_latency_ms": 98.52,
-        "jitter_ms": 1.07,
-        "p95_latency_ms": 98.7,
-        "errors": {}
-      }
-    ],
-    "tested_at": "2026-11-26T02:04:51+00:00",
-    "country_code": "CA",
-    "country_flag": "🇨🇦"
-  },
-  {
-    "ip": "198.41.223.254",
-    "version": 4,
-    "port": 443,
-    "latency_ms": 95.36,
-    "median_latency_ms": 95.85,
-    "jitter_ms": 2.31,
-    "p95_latency_ms": 97.91,
-    "success_rate": 1.0,
-    "successful_rounds": 3,
-    "total_rounds": 3,
-    "speed_mbps": 52.091,
-    "speed_tested": true,
-    "speed_samples_mbps": [
-      49.869,
-      54.313
-    ],
-    "score": 92.37,
-    "port_results": [
-      {
-        "port": 443,
-        "success_rate": 1.0,
-        "successful_rounds": 3,
-        "total_rounds": 3,
-        "latency_ms": 95.36,
-        "median_latency_ms": 95.85,
-        "jitter_ms": 2.31,
-        "p95_latency_ms": 97.91,
-        "errors": {}
-      }
-    ],
-    "tested_at": "2026-11-26T02:04:52+00:00",
-    "country_code": "CA",
-    "country_flag": "🇨🇦"
-  },
-  {
-    "ip": "104.17.15.15",
-    "version": 4,
-    "port": 443,
-    "latency_ms": 95.39,
-    "median_latency_ms": 92.61,
-    "jitter_ms": 4.0,
-    "p95_latency_ms": 101.04,
-    "success_rate": 1.0,
-    "successful_rounds": 3,
-    "total_rounds": 3,
-    "speed_mbps": 52.795,
-    "speed_tested": true,
-    "speed_samples_mbps": [
-      52.097,
-      53.493
-    ],
-    "score": 92.37,
-    "port_results": [
-      {
-        "port": 443,
-        "success_rate": 1.0,
-        "successful_rounds": 3,
-        "total_rounds": 3,
-        "latency_ms": 95.39,
-        "median_latency_ms": 92.61,
-        "jitter_ms": 4.0,
-        "p95_latency_ms": 101.04,
-        "errors": {}
-      }
-    ],
-    "tested_at": "2026-11-26T02:04:51+00:00",
-    "country_code": "CA",
-    "country_flag": "🇨🇦"
-  },
-  {
-    "ip": "198.41.195.195",
-    "version": 4,
-    "port": 443,
-    "latency_ms": 98.81,
-    "median_latency_ms": 98.01,
-    "jitter_ms": 1.58,
-    "p95_latency_ms": 101.03,
-    "success_rate": 1.0,
-    "successful_rounds": 3,
-    "total_rounds": 3,
-    "speed_mbps": 52.809,
-    "speed_tested": true,
-    "speed_samples_mbps": [
-      54.301,
-      51.316
-    ],
-    "score": 92.37,
-    "port_results": [
-      {
-        "port": 443,
-        "success_rate": 1.0,
-        "successful_rounds": 3,
-        "total_rounds": 3,
-        "latency_ms": 98.81,
-        "median_latency_ms": 98.01,
-        "jitter_ms": 1.58,
-        "p95_latency_ms": 101.03,
-        "errors": {}
-      }
-    ],
-    "tested_at": "2026-11-26T02:04:52+00:00",
-    "country_code": "CA",
-    "country_flag": "🇨🇦"
-  },
-  {
-    "ip": "104.24.240.241",
-    "version": 4,
-    "port": 443,
-    "latency_ms": 92.55,
-    "median_latency_ms": 95.09,
-    "jitter_ms": 3.84,
-    "p95_latency_ms": 95.44,
-    "success_rate": 1.0,
-    "successful_rounds": 3,
-    "total_rounds": 3,
-    "speed_mbps": 51.84,
-    "speed_tested": true,
-    "speed_samples_mbps": [
-      51.111,
-      52.57
-    ],
-    "score": 92.36,
-    "port_results": [
-      {
-        "port": 443,
-        "success_rate": 1.0,
-        "successful_rounds": 3,
-        "total_rounds": 3,
-        "latency_ms": 92.55,
-        "median_latency_ms": 95.09,
-        "jitter_ms": 3.84,
-        "p95_latency_ms": 95.44,
-        "errors": {}
-      }
-    ],
-    "tested_at": "2026-11-26T02:04:51+00:00",
-    "country_code": "CA",
-    "country_flag": "🇨🇦"
-  },
-  {
-    "ip": "104.24.135.136",
-    "version": 4,
-    "port": 443,
-    "latency_ms": 93.08,
-    "median_latency_ms": 92.46,
-    "jitter_ms": 1.4,
-    "p95_latency_ms": 95.01,
-    "success_rate": 1.0,
-    "successful_rounds": 3,
-    "total_rounds": 3,
-    "speed_mbps": 51.061,
-    "speed_tested": true,
-    "speed_samples_mbps": [
-      51.044,
-      51.078
-    ],
-    "score": 92.36,
-    "port_results": [
-      {
-        "port": 443,
-        "success_rate": 1.0,
-        "successful_rounds": 3,
-        "total_rounds": 3,
-        "latency_ms": 93.08,
-        "median_latency_ms": 92.46,
-        "jitter_ms": 1.4,
-        "p95_latency_ms": 95.01,
-        "errors": {}
-      }
-    ],
-    "tested_at": "2026-11-26T02:04:51+00:00",
-    "country_code": "CA",
-    "country_flag": "🇨🇦"
-  },
-  {
-    "ip": "104.24.150.151",
-    "version": 4,
-    "port": 443,
-    "latency_ms": 94.53,
-    "median_latency_ms": 92.09,
-    "jitter_ms": 5.01,
-    "p95_latency_ms": 101.51,
-    "success_rate": 1.0,
-    "successful_rounds": 3,
-    "total_rounds": 3,
-    "speed_mbps": 52.919,
-    "speed_tested": true,
-    "speed_samples_mbps": [
-      53.756,
-      52.083
-    ],
-    "score": 92.36,
-    "port_results": [
-      {
-        "port": 443,
-        "success_rate": 1.0,
-        "successful_rounds": 3,
-        "total_rounds": 3,
-        "latency_ms": 94.53,
-        "median_latency_ms": 92.09,
-        "jitter_ms": 5.01,
-        "p95_latency_ms": 101.51,
-        "errors": {}
-      }
-    ],
-    "tested_at": "2026-11-26T02:04:51+00:00",
-    "country_code": "CA",
-    "country_flag": "🇨🇦"
-  },
-  {
-    "ip": "188.114.96.241",
-    "version": 4,
-    "port": 443,
-    "latency_ms": 99.73,
-    "median_latency_ms": 99.32,
-    "jitter_ms": 1.73,
-    "p95_latency_ms": 102.03,
-    "success_rate": 1.0,
-    "successful_rounds": 3,
-    "total_rounds": 3,
-    "speed_mbps": 52.099,
-    "speed_tested": true,
-    "speed_samples_mbps": [
-      54.326,
-      49.873
-    ],
-    "score": 92.24,
-    "port_results": [
-      {
-        "port": 443,
-        "success_rate": 1.0,
-        "successful_rounds": 3,
-        "total_rounds": 3,
-        "latency_ms": 99.73,
-        "median_latency_ms": 99.32,
-        "jitter_ms": 1.73,
-        "p95_latency_ms": 102.03,
-        "errors": {}
-      }
-    ],
-    "tested_at": "2026-11-26T02:04:52+00:00",
-    "country_code": "CA",
-    "country_flag": "🇨🇦"
-  },
-  {
-    "ip": "104.20.30.29",
-    "version": 4,
-    "port": 443,
-    "latency_ms": 92.81,
-    "median_latency_ms": 89.49,
-    "jitter_ms": 4.92,
-    "p95_latency_ms": 99.76,
-    "success_rate": 1.0,
-    "successful_rounds": 3,
-    "total_rounds": 3,
-    "speed_mbps": 50.955,
-    "speed_tested": true,
-    "speed_samples_mbps": [
-      49.773,
-      52.136
-    ],
-    "score": 92.18,
-    "port_results": [
-      {
-        "port": 443,
-        "success_rate": 1.0,
-        "successful_rounds": 3,
-        "total_rounds": 3,
-        "latency_ms": 92.81,
-        "median_latency_ms": 89.49,
-        "jitter_ms": 4.92,
-        "p95_latency_ms": 99.76,
-        "errors": {}
-      }
-    ],
-    "tested_at": "2026-11-26T02:04:51+00:00",
-    "country_code": "CA",
-    "country_flag": "🇨🇦"
-  },
-  {
-    "ip": "104.19.105.105",
-    "version": 4,
-    "port": 443,
-    "latency_ms": 92.67,
-    "median_latency_ms": 94.27,
-    "jitter_ms": 2.99,
-    "p95_latency_ms": 95.27,
-    "success_rate": 1.0,
-    "successful_rounds": 3,
-    "total_rounds": 3,
-    "speed_mbps": 49.632,
-    "speed_tested": true,
-    "speed_samples_mbps": [
-      51.111,
-      48.153
-    ],
-    "score": 92.12,
-    "port_results": [
-      {
-        "port": 443,
-        "success_rate": 1.0,
-        "successful_rounds": 3,
-        "total_rounds": 3,
-        "latency_ms": 92.67,
-        "median_latency_ms": 94.27,
-        "jitter_ms": 2.99,
-        "p95_latency_ms": 95.27,
-        "errors": {}
-      }
-    ],
-    "tested_at": "2026-11-26T02:04:51+00:00",
-    "country_code": "CA",
-    "country_flag": "🇨🇦"
+    "tested_at": "2026-11-26T02:25:00+00:00",
+    "country_code": "CR",
+    "country_flag": "🇨🇷"
   }
 ]
