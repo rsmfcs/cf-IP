@@ -43,7 +43,7 @@ IPv4 继续扫描 Cloudflare 官方 IPv4 网段并检测 TCP 443；IPv6 从 Host
 
 - `output/summary.json`：最近一次扫描时间、候选数量、可用数量及失败原因。
 - `output/ipv4/all.json` / `all.csv`：完整 IPv4 检测数据。
-- 根目录 `all.txt`：IPv4 实测节点 + HostMonit IPv6 来源候选的综合订阅；IPv6 未经过本项目连通性和速度实测。
+- 根目录 `all.txt`、`fast.txt`、`stable.txt` 及 TOP 20/50/100/200/400 订阅均包含 HostMonit IPv6 来源候选；IPv6 未经过本项目连通性和速度实测，因此这些 IPv6 地址不参与速度和稳定性排名。
 - `output/ipv6/source.json`：HostMonit IPv6 来源信息、更新时间及候选地址。
 - `output/ipv6/source.txt` / `all.txt`：IPv6 独立订阅。
 - `output/ipv4/topN.json` / `topN.txt`：各排名的详细数据。
