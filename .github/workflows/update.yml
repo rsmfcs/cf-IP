@@ -36,14 +36,17 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run tests
+        id: tests
         run: pytest -q
 
       - name: Run IPv4 scan (TCP 443 only)
+        id: scan
         run: python -m src.main
         env:
           PYTHONUNBUFFERED: "1"
 
       - name: Commit and push results (retry safely)
+        id: publish
         shell: bash
         run: |
           set -euo pipefail
@@ -90,14 +93,16 @@ jobs:
         continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
-          PREVIOUS_STEPS_FAILED: ${{ failure() }}
+          TEST_OUTCOME: ${{ steps.tests.outcome }}
+          SCAN_OUTCOME: ${{ steps.scan.outcome }}
+          PUBLISH_OUTCOME: ${{ steps.publish.outcome }}
         shell: bash
         run: |
           set -euo pipefail
 
           RUNS_JSON="$(gh api --paginate "repos/${GITHUB_REPOSITORY}/actions/workflows/update.yml/runs?per_page=100" | jq -s '[.[].workflow_runs[]]')"
 
-          if [[ "$PREVIOUS_STEPS_FAILED" == "true" ]]; then
+          if [[ "$TEST_OUTCOME" != "success" || "$SCAN_OUTCOME" != "success" || "$PUBLISH_OUTCOME" != "success" ]]; then
             LATEST_SUCCESS_ID="$(jq -r '[.[] | select(.status == "completed" and .conclusion == "success")] | sort_by(.created_at) | last | .id // empty' <<< "$RUNS_JSON")"
             if [[ -z "$LATEST_SUCCESS_ID" ]]; then
               echo "No successful run exists yet; keeping completed records for diagnosis."
