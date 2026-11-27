@@ -925,7 +925,8 @@ def write_family_outputs(version: int, results: list[dict[str, Any]], top_n: lis
         "ip", "version", "port", "country_code", "city", "region_zh", "colo",
         "latency_ms", "median_latency_ms", "jitter_ms", "p95_latency_ms",
         "speed_mbps", "speed_tested", "success_rate", "successful_rounds",
-        "china_probe",
+        "china_tested_isps", "china_success_isps", "china_ct_rtt_ms",
+        "china_cu_rtt_ms", "china_cm_rtt_ms", "china_median_rtt_ms",
         "total_rounds", "score", "tested_at",
     ]
     with (output_dir / "all.csv").open("w", newline="", encoding="utf-8") as handle:
