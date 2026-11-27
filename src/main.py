@@ -1176,10 +1176,10 @@ def main() -> None:
     OUTPUT.mkdir(parents=True, exist_ok=True)
     summary: dict[str, Any] = {
         "project": "Cloudflare-IP-Auto",
-        "version": "3.8",
+        "version": "3.9",
         "generated_at": utc_now(),
         "schedule": "17 */6 * * * (UTC)",
-        "ip_family": "IPv4 scan + IPv6 source sync",
+        "ip_family": "IPv4 + IPv6 domestic carrier verification",
         "ports": [443],
         "families": {},
     }
