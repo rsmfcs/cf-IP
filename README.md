@@ -4,7 +4,7 @@
 
 ## 自动更新
 
-- 定时任务：UTC 每天 00:17、12:17（北京时间每天 08:17、20:17）。
+- 定时任务：UTC 每天 10:00、22:00（北京时间每天 18:00、次日 06:00）。
 - 可在仓库 **Actions → Update Cloudflare IPs (IPv4 + IPv6 China verified) → Run workflow** 手动运行。
 - 工作流先运行测试，测试通过后执行扫描并更新订阅。
 - 定时任务在默认分支 `main` 上运行；GitHub Actions 可能因排队略有延迟。
