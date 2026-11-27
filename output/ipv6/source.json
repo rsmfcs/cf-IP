@@ -2,7 +2,7 @@
   "metadata": {
     "source": "HostMonit",
     "api": "https://api.hostmonit.com/get_optimization_ip",
-    "fetched_at": "2026-11-26T17:01:08+00:00",
+    "fetched_at": "2026-11-27T00:31:53+00:00",
     "source_counts": {
       "CM": 5,
       "CT": 0,
@@ -14,7 +14,7 @@
   },
   "items": [
     {
-      "ip": "2606:4700:9640:ba1:46c8:391c:2d45:6283",
+      "ip": "2606:4700:9a9d:1c51:65db:5da0:1e97:7930",
       "version": 6,
       "port": 443,
       "source": "CM",
@@ -24,43 +24,43 @@
       "quality_status": "source_candidate_unverified"
     },
     {
-      "ip": "2606:4700:9640:3989:6df0:44ab:75b:a5d5",
+      "ip": "2606:4700:83b5:3207:6bbe:7465:6e8:9057",
       "version": 6,
       "port": 443,
       "source": "CM",
-      "country_code": "FR",
-      "city": "Paris",
-      "region_zh": "法国-巴黎",
+      "country_code": "IN",
+      "city": "Chennai",
+      "region_zh": "印度",
       "quality_status": "source_candidate_unverified"
     },
     {
-      "ip": "2606:4700:8dd2:4603:1977:2b1:e075:7790",
+      "ip": "2606:4700:83b5:82ac:6966:aacf:9697:2655",
       "version": 6,
       "port": 443,
       "source": "CM",
-      "country_code": "FR",
-      "city": "Paris",
-      "region_zh": "法国-巴黎",
+      "country_code": "IN",
+      "city": "Chennai",
+      "region_zh": "印度",
       "quality_status": "source_candidate_unverified"
     },
     {
-      "ip": "2606:4700:9645:197a:1cbd:1c5f:1c20:bee4",
+      "ip": "2606:4700:83ba:e08d:1af:f412:85ce:1ebb",
       "version": 6,
       "port": 443,
       "source": "CM",
-      "country_code": "FR",
-      "city": "Paris",
-      "region_zh": "法国-巴黎",
+      "country_code": "IN",
+      "city": "Chennai",
+      "region_zh": "印度",
       "quality_status": "source_candidate_unverified"
     },
     {
-      "ip": "2606:4700:9aec:d828:4449:d6d9:ff64:d791",
+      "ip": "2606:4700:90c3:823f:9932:5239:575a:de6",
       "version": 6,
       "port": 443,
       "source": "CM",
-      "country_code": "FR",
-      "city": "Paris",
-      "region_zh": "法国-巴黎",
+      "country_code": "IN",
+      "city": "New Delhi",
+      "region_zh": "印度",
       "quality_status": "source_candidate_unverified"
     }
   ]
