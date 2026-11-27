@@ -966,6 +966,20 @@ def write_family_outputs(version: int, results: list[dict[str, Any]], top_n: lis
         payload = "\n".join(lines) + "\n"
         (ROOT / name).write_text(payload, encoding="utf-8")
         (output_dir / name).write_text(payload, encoding="utf-8")
+
+    # Carrier-specific China probe subscriptions; empty lists are still published
+    # as empty files so clients never mistake overseas-only candidates as verified.
+    for isp, field in (
+        ("ct", "china_ct_rtt_ms"),
+        ("cu", "china_cu_rtt_ms"),
+        ("cm", "china_cm_rtt_ms"),
+    ):
+        carrier_items = [item for item in results if item.get(field) is not None]
+        carrier_items.sort(key=lambda item: (float(item[field]), -float(item.get("score") or 0)))
+        payload = "\n".join(subscription_line(item) for item in carrier_items)
+        payload += "\n" if payload else ""
+        (ROOT / f"china-{isp}.txt").write_text(payload, encoding="utf-8")
+        (output_dir / f"china-{isp}.txt").write_text(payload, encoding="utf-8")
     write_json(OUTPUT / "summary.json", {
         "project": "Cloudflare-IP-Auto", "version": "3.5", "generated_at": utc_now(),
         "ip_family": "IPv4 only", "port": 443,
