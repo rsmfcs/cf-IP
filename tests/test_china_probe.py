@@ -116,3 +116,13 @@ def test_probe_budget_uses_two_probes_per_carrier():
 
     assert PROBES_PER_ISP == 2
     assert [location["limit"] for location in ISP_LOCATIONS] == [2, 2, 2]
+
+
+def test_subscription_gate_requires_mobile_and_unicom_but_not_telecom():
+    from src.china_probe import is_mobile_unicom_qualified
+
+    assert is_mobile_unicom_qualified({"CU": True, "CM": True, "CT": False}) is True
+    assert is_mobile_unicom_qualified({"CU": True, "CM": True, "CT": True}) is True
+    assert is_mobile_unicom_qualified({"CU": True, "CM": False, "CT": True}) is False
+    assert is_mobile_unicom_qualified({"CU": False, "CM": True, "CT": True}) is False
+    assert is_mobile_unicom_qualified({"CU": True, "CM": False}) is False
