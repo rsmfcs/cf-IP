@@ -23,8 +23,8 @@ ISPS = {
     9808: "CM", 24400: "CM", 24445: "CM", 56040: "CM", 56041: "CM",
     56042: "CM", 56044: "CM", 56046: "CM", 56047: "CM", 56048: "CM",
 }
-KEEP_HOURS = 720  # Keep 30 days so the rotating verifier can cover the full candidate pool.
-DEFAULT_BUDGET = 12
+KEEP_HOURS = 168  # Only accept domestic evidence from the last 7 days.
+DEFAULT_BUDGET = 24
 MIN_PROBES_PER_ISP = 2
 MAX_CHINA_RTT_MS = 350.0
 PROBES_PER_ISP = 3

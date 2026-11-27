@@ -916,7 +916,16 @@ def write_family_outputs(version: int, results: list[dict[str, Any]], top_n: lis
     family = "ipv4" if version == 4 else "ipv6"
     output_dir = OUTPUT / family
     if not results:
-        print(f"IPv{version}: no usable IPs; preserving previous valid result and subscription files")
+        print(f"IPv{version}: no usable IPs")
+        if version == 4:
+            # A successful empty scan must not leave old, unverified IPs published.
+            for name in ("all.txt", "fast.txt", "stable.txt", "china-ct.txt", "china-cu.txt", "china-cm.txt"):
+                for base in (ROOT, OUTPUT / "ipv4"):
+                    base.mkdir(parents=True, exist_ok=True)
+                    (base / name).write_text("", encoding="utf-8")
+            for count in top_n:
+                for name in (f"best-cf-ip-scanned-top{count}.txt", f"cf-ipv4-top{count}.txt"):
+                    (ROOT / name).write_text("", encoding="utf-8")
         return
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -931,7 +940,8 @@ def write_family_outputs(version: int, results: list[dict[str, Any]], top_n: lis
         "ip", "version", "port", "country_code", "city", "region_zh", "colo",
         "latency_ms", "median_latency_ms", "jitter_ms", "p95_latency_ms",
         "speed_mbps", "speed_tested", "success_rate", "successful_rounds",
-        "china_tested_isps", "china_success_isps", "china_ct_rtt_ms",
+        "china_tested_isps", "china_success_isps", "china_qualified_isps",
+        "china_qualified", "china_ct_rtt_ms",
         "china_cu_rtt_ms", "china_cm_rtt_ms", "china_median_rtt_ms",
         "total_rounds", "score", "tested_at",
     ]
@@ -957,9 +967,9 @@ def write_family_outputs(version: int, results: list[dict[str, Any]], top_n: lis
     # Root-level plain subscription lists: one IPv4 endpoint per line.
     # Both naming conventions are published for convenient client integration.
     for count in top_n:
-        top = results[:int(count)]
+        top = subscription_results[:int(count)]
         endpoints = "\n".join(subscription_line(item) for item in top)
-        payload = endpoints + "\n"
+        payload = endpoints + "\n" if endpoints else ""
         (ROOT / f"best-cf-ip-scanned-top{count}.txt").write_text(payload, encoding="utf-8")
         (ROOT / f"cf-ipv4-top{count}.txt").write_text(payload, encoding="utf-8")
 
@@ -969,7 +979,7 @@ def write_family_outputs(version: int, results: list[dict[str, Any]], top_n: lis
     stable_items = [item for item in subscription_results if item.get("success_rate", 0) >= 1.0 and item.get("jitter_ms", 9999) <= 50.0]
     for name, items in (("all.txt", subscription_results), ("fast.txt", fast_items), ("stable.txt", stable_items)):
         lines = [subscription_line(item) for item in items]
-        payload = "\n".join(lines) + "\n"
+        payload = "\n".join(lines) + ("\n" if lines else "")
         (ROOT / name).write_text(payload, encoding="utf-8")
         (output_dir / name).write_text(payload, encoding="utf-8")
 
@@ -1114,7 +1124,7 @@ def run_ipv4(config: dict[str, Any]) -> dict[str, Any]:
 
     return {
         "family": "ipv4",
-        "status": "ok" if ranked else "no_usable_ip",
+        "status": "ok" if china_verified else "no_domestic_qualified_ip",
         "egress_check": egress,
         "network_count": len(networks),
         "candidate_count": len(candidates),
