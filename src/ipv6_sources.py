@@ -8,6 +8,7 @@ from __future__ import annotations
 import ipaddress
 import re
 from html.parser import HTMLParser
+from datetime import datetime, timezone
 from typing import Any
 from urllib.request import Request, urlopen
 
@@ -173,7 +174,7 @@ def collect_ipv6_candidates(hostmonit_items: list[dict[str, Any]]) -> tuple[list
     result = list(merged.values())
     metadata = {
         "sources": [ "HostMonit", "WeTest", "CMLiu" ],
-        "fetched_at": __import__("datetime").datetime.now(__import__("datetime").timezone.utc).isoformat(timespec="seconds"),
+        "fetched_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "source_counts": source_counts,
         "source_errors": errors,
         "official_prefix_validation": CLOUDFLARE_IPV6_RANGES_URL,
