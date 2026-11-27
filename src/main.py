@@ -316,7 +316,10 @@ def write_ipv6_source_outputs(
     """Publish only freshly verified IPv6 addresses; keep raw sources diagnostic-only."""
     output_dir = OUTPUT / "ipv6"
     output_dir.mkdir(parents=True, exist_ok=True)
-    qualified = [item for item in ranked if item.get("china_qualified")]
+    qualified = [
+        {**item, "quality_status": "domestic_three_carrier_verified"}
+        for item in ranked if item.get("china_qualified")
+    ]
     write_json(output_dir / "source.json", {"metadata": metadata, "items": candidates})
     write_json(output_dir / "all.json", ranked)
     write_json(output_dir / "qualified.json", qualified)
