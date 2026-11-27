@@ -66,7 +66,7 @@ def test_parse_colo_code_from_cloudflare_trace():
     assert main.parse_colo_code("colo=HongKong\n") is None
 
 
-def test_empty_scan_preserves_previous_subscriptions(tmp_path, monkeypatch):
+def test_empty_scan_clears_previous_subscriptions(tmp_path, monkeypatch):
     monkeypatch.setattr(main, "ROOT", tmp_path)
     monkeypatch.setattr(main, "OUTPUT", tmp_path / "output")
     (tmp_path / "output" / "ipv4").mkdir(parents=True)
@@ -75,7 +75,7 @@ def test_empty_scan_preserves_previous_subscriptions(tmp_path, monkeypatch):
 
     main.write_family_outputs(4, [], [20])
 
-    assert (tmp_path / "best-cf-ip-scanned-top20.txt").read_text(encoding="utf-8") == "1.1.1.1:443#美国\n"
+    assert (tmp_path / "best-cf-ip-scanned-top20.txt").read_text(encoding="utf-8") == ""
     assert (tmp_path / "output" / "ipv4" / "all.json").read_text(encoding="utf-8") == '[{"ip": "1.1.1.1"}]'
 
 

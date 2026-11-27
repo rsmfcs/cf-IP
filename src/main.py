@@ -1139,7 +1139,7 @@ def run_ipv4(config: dict[str, Any]) -> dict[str, Any]:
         "china_qualified_count": china_verified,
         "china_carrier_counts": china_carrier_counts,
         "china_probe_isps": ["CT", "CU", "CM"],
-        "domestic_gate": {"min_successful_probes_per_isp": 2, "max_median_tcp_rtt_ms": 350},
+        "domestic_gate": {"min_successful_probes_per_isp": 2, "max_median_tcp_rtt_ms": 300},
         "ranked_count": china_verified,
         "region_targets": region_targets,
         "region_counts": region_counts,

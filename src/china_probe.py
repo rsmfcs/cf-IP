@@ -26,7 +26,7 @@ ISPS = {
 KEEP_HOURS = 168  # Only accept domestic evidence from the last 7 days.
 DEFAULT_BUDGET = 24
 MIN_PROBES_PER_ISP = 2
-MAX_CHINA_RTT_MS = 350.0
+MAX_CHINA_RTT_MS = 300.0
 PROBES_PER_ISP = 3
 ISP_LOCATIONS = [
     {"country": "CN", "asn": 4134, "tags": ["eyeball-network"], "limit": PROBES_PER_ISP},

@@ -26,7 +26,7 @@ IPv4 继续扫描 Cloudflare 官方 IPv4 网段并检测 TCP 443；IPv6 从 Host
 > V3.8 起，国内三网验证是 IPv4 订阅的强制准入门槛。
 
 - 国内可用性是正式 IPv4 订阅的准入条件，不再是排序加分项。海外扫描通过但未完成国内验证的 IP，只保留在 `output/ipv4/all.json` 和 `all.csv` 诊断数据中，不进入 `all.txt`、`fast.txt`、`stable.txt` 或 TOP 订阅。
-- 电信（AS4134）、联通（AS4837）、移动（AS9808）每个运营商最多请求 3 个中国大陆 eyeball-network 探针；每个运营商至少 2 个不同探针 HTTPS 验证成功，且该运营商 TCP 延迟中位数不超过 350 ms，才算该运营商合格。
+- 电信（AS4134）、联通（AS4837）、移动（AS9808）每个运营商最多请求 3 个中国大陆 eyeball-network 探针；每个运营商至少 2 个不同探针 HTTPS 验证成功，且该运营商 TCP 延迟中位数不超过 300 ms，才算该运营商合格。
 - 通用 IPv4 订阅要求三家运营商全部合格；`china-ct.txt`、`china-cu.txt`、`china-cm.txt` 则分别要求对应运营商合格。探针不足、数据过期或测试失败的 IP 一律不进入正式订阅。
 - 每 6 小时轮转最多 24 个候选，优先测试从未测试或最久未测试的 IP；验证记录保留最近 7 天，以便覆盖整个候选池。Globalping 探针数量属于尽力而为，无法保证每次都能分配到请求数量，因此不满足探针门槛时宁可不发布该 IP。
 - 可选 GitHub Actions Secret：`GLOBALPING_TOKEN`。未配置时使用 Globalping 公共额度；可选变量 `CHINA_PROBE_BUDGET` 用于调整每轮候选数（默认 24，最大 30）。
