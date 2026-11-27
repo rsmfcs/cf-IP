@@ -1,0 +1,37 @@
+{
+  "sources": [
+    "HostMonit",
+    "WeTest",
+    "CMLiu"
+  ],
+  "fetched_at": "2026-11-27T01:43:07+00:00",
+  "source_counts": {
+    "HostMonit": 5,
+    "WeTest": 15,
+    "CMLiu": 6
+  },
+  "source_errors": {},
+  "official_prefix_validation": "https://www.cloudflare.com/ips-v6",
+  "candidate_count": 26,
+  "quality_status": "domestic_three_carrier_verified",
+  "note": "Community sources are candidate discovery only; publication requires fresh domestic IPv6 HTTPS verification.",
+  "hostmonit": {
+    "source": "HostMonit",
+    "api": "https://api.hostmonit.com/get_optimization_ip",
+    "fetched_at": "2026-11-27T01:43:07+00:00",
+    "source_counts": {
+      "CM": 5,
+      "CT": 0,
+      "CU": 0
+    },
+    "candidate_count": 5,
+    "quality_status": "source_candidate_unverified",
+    "note": "Collected and validated from HostMonit; not connectivity-tested by this GitHub Actions runner."
+  },
+  "qualified_count": 1,
+  "carrier_qualified_counts": {
+    "CT": 2,
+    "CU": 2,
+    "CM": 1
+  }
+}

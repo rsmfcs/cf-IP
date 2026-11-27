@@ -1,0 +1,44 @@
+[
+  {
+    "ip": "2606:4700:9a9e:344e:ed06:2278:6e:2845",
+    "version": 6,
+    "port": 443,
+    "source": [
+      "HostMonit"
+    ],
+    "source_carriers": [
+      "CM"
+    ],
+    "country_code": "FR",
+    "city": "Paris",
+    "region_zh": "法国-巴黎",
+    "quality_status": "source_candidate_unverified",
+    "china_probe": {
+      "tested_isps": 3,
+      "success_isps": 3,
+      "qualified_isps": 3,
+      "ct_rtt_ms": 195.0,
+      "cu_rtt_ms": 283.0,
+      "cm_rtt_ms": 298.0,
+      "median_rtt_ms": 283.0,
+      "carrier_qualified": {
+        "CT": true,
+        "CU": true,
+        "CM": true
+      }
+    },
+    "china_tested_isps": 3,
+    "china_success_isps": 3,
+    "china_qualified_isps": 3,
+    "china_carrier_qualified": {
+      "CT": true,
+      "CU": true,
+      "CM": true
+    },
+    "china_qualified": true,
+    "china_ct_rtt_ms": 195.0,
+    "china_cu_rtt_ms": 283.0,
+    "china_cm_rtt_ms": 298.0,
+    "china_median_rtt_ms": 283.0
+  }
+]

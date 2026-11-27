@@ -1,0 +1,204 @@
+{
+  "cursor": 2,
+  "records": [
+    {
+      "ip": "2606:4700:9a9e:344e:ed06:2278:6e:2845",
+      "isp": "CT",
+      "ok": true,
+      "rtt_ms": 214.0,
+      "total_ms": 666.0,
+      "colo": "FRA",
+      "asn": 4134,
+      "probe_key": "cn|eastern asia|nanning||22.82|108.32|4134",
+      "at": "2026-11-27T01:43:07+00:00"
+    },
+    {
+      "ip": "2606:4700:9a9e:344e:ed06:2278:6e:2845",
+      "isp": "CT",
+      "ok": true,
+      "rtt_ms": 148.0,
+      "total_ms": 470.0,
+      "colo": "FRA",
+      "asn": 4134,
+      "probe_key": "cn|eastern asia|xi'an||34.26|108.93|4134",
+      "at": "2026-11-27T01:43:07+00:00"
+    },
+    {
+      "ip": "2606:4700:9a9e:344e:ed06:2278:6e:2845",
+      "isp": "CT",
+      "ok": true,
+      "rtt_ms": 195.0,
+      "total_ms": 600.0,
+      "colo": "FRA",
+      "asn": 4134,
+      "probe_key": "cn|eastern asia|chongqing||29.56|106.56|4134",
+      "at": "2026-11-27T01:43:07+00:00"
+    },
+    {
+      "ip": "2606:4700:9a9e:344e:ed06:2278:6e:2845",
+      "isp": "CU",
+      "ok": true,
+      "rtt_ms": 283.0,
+      "total_ms": 861.0,
+      "colo": "AMS",
+      "asn": 4837,
+      "probe_key": "cn|eastern asia|changsha||28.2|112.97|4837",
+      "at": "2026-11-27T01:43:07+00:00"
+    },
+    {
+      "ip": "2606:4700:9a9e:344e:ed06:2278:6e:2845",
+      "isp": "CU",
+      "ok": true,
+      "rtt_ms": 291.0,
+      "total_ms": 891.0,
+      "colo": "AMS",
+      "asn": 4837,
+      "probe_key": "cn|eastern asia|wuhan||30.58|114.27|4837",
+      "at": "2026-11-27T01:43:07+00:00"
+    },
+    {
+      "ip": "2606:4700:9a9e:344e:ed06:2278:6e:2845",
+      "isp": "CU",
+      "ok": true,
+      "rtt_ms": 270.0,
+      "total_ms": 825.0,
+      "colo": "AMS",
+      "asn": 4837,
+      "probe_key": "cn|eastern asia|guilin||25.28|110.29|4837",
+      "at": "2026-11-27T01:43:07+00:00"
+    },
+    {
+      "ip": "2606:4700:9a9e:344e:ed06:2278:6e:2845",
+      "isp": "CM",
+      "ok": true,
+      "rtt_ms": 276.0,
+      "total_ms": 834.0,
+      "colo": "CDG",
+      "asn": 9808,
+      "probe_key": "cn|eastern asia|nanning||22.82|108.32|9808",
+      "at": "2026-11-27T01:43:07+00:00"
+    },
+    {
+      "ip": "2606:4700:9a9e:344e:ed06:2278:6e:2845",
+      "isp": "CM",
+      "ok": true,
+      "rtt_ms": 298.0,
+      "total_ms": 919.0,
+      "colo": "CDG",
+      "asn": 9808,
+      "probe_key": "cn|eastern asia|taishan||22.25|112.78|9808",
+      "at": "2026-11-27T01:43:07+00:00"
+    },
+    {
+      "ip": "2606:4700:9a9e:344e:ed06:2278:6e:2845",
+      "isp": "CM",
+      "ok": true,
+      "rtt_ms": 308.0,
+      "total_ms": 2509.0,
+      "colo": "AMS",
+      "asn": 9808,
+      "probe_key": "cn|eastern asia|chengdu||30.67|104.07|9808",
+      "at": "2026-11-27T01:43:07+00:00"
+    },
+    {
+      "ip": "2606:4700:9b00:3059:1a1:c783:d0b9:2423",
+      "isp": "CT",
+      "ok": true,
+      "rtt_ms": 221.0,
+      "total_ms": 664.0,
+      "colo": "FRA",
+      "asn": 4134,
+      "probe_key": "cn|eastern asia|nanning||22.82|108.32|4134",
+      "at": "2026-11-27T01:43:07+00:00"
+    },
+    {
+      "ip": "2606:4700:9b00:3059:1a1:c783:d0b9:2423",
+      "isp": "CT",
+      "ok": true,
+      "rtt_ms": 150.0,
+      "total_ms": 462.0,
+      "colo": "FRA",
+      "asn": 4134,
+      "probe_key": "cn|eastern asia|xi'an||34.26|108.93|4134",
+      "at": "2026-11-27T01:43:07+00:00"
+    },
+    {
+      "ip": "2606:4700:9b00:3059:1a1:c783:d0b9:2423",
+      "isp": "CT",
+      "ok": true,
+      "rtt_ms": 209.0,
+      "total_ms": 653.0,
+      "colo": "FRA",
+      "asn": 4134,
+      "probe_key": "cn|eastern asia|chongqing||29.56|106.56|4134",
+      "at": "2026-11-27T01:43:07+00:00"
+    },
+    {
+      "ip": "2606:4700:9b00:3059:1a1:c783:d0b9:2423",
+      "isp": "CU",
+      "ok": true,
+      "rtt_ms": 321.0,
+      "total_ms": 975.0,
+      "colo": "AMS",
+      "asn": 4837,
+      "probe_key": "cn|eastern asia|changsha||28.2|112.97|4837",
+      "at": "2026-11-27T01:43:07+00:00"
+    },
+    {
+      "ip": "2606:4700:9b00:3059:1a1:c783:d0b9:2423",
+      "isp": "CU",
+      "ok": true,
+      "rtt_ms": 287.0,
+      "total_ms": 875.0,
+      "colo": "AMS",
+      "asn": 4837,
+      "probe_key": "cn|eastern asia|wuhan||30.58|114.27|4837",
+      "at": "2026-11-27T01:43:07+00:00"
+    },
+    {
+      "ip": "2606:4700:9b00:3059:1a1:c783:d0b9:2423",
+      "isp": "CU",
+      "ok": true,
+      "rtt_ms": 260.0,
+      "total_ms": 785.0,
+      "colo": "AMS",
+      "asn": 4837,
+      "probe_key": "cn|eastern asia|guilin||25.28|110.29|4837",
+      "at": "2026-11-27T01:43:07+00:00"
+    },
+    {
+      "ip": "2606:4700:9b00:3059:1a1:c783:d0b9:2423",
+      "isp": "CM",
+      "ok": false,
+      "rtt_ms": null,
+      "total_ms": null,
+      "colo": "",
+      "asn": 9808,
+      "probe_key": "cn|eastern asia|nanning||22.82|108.32|9808",
+      "at": "2026-11-27T01:43:07+00:00"
+    },
+    {
+      "ip": "2606:4700:9b00:3059:1a1:c783:d0b9:2423",
+      "isp": "CM",
+      "ok": false,
+      "rtt_ms": null,
+      "total_ms": null,
+      "colo": "",
+      "asn": 9808,
+      "probe_key": "cn|eastern asia|taishan||22.25|112.78|9808",
+      "at": "2026-11-27T01:43:07+00:00"
+    },
+    {
+      "ip": "2606:4700:9b00:3059:1a1:c783:d0b9:2423",
+      "isp": "CM",
+      "ok": false,
+      "rtt_ms": null,
+      "total_ms": null,
+      "colo": "",
+      "asn": 9808,
+      "probe_key": "cn|eastern asia|chengdu||30.67|104.07|9808",
+      "at": "2026-11-27T01:43:07+00:00"
+    }
+  ],
+  "updated_at": "2026-11-27T01:43:07+00:00"
+}
