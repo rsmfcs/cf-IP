@@ -23,7 +23,7 @@ IPv4 扫描 Cloudflare 官方网段，IPv6 汇总 HostMonit、WeTest、CMLiu 等
 
 ## 中国大陆三网准入验证
 
-> V3.9 起，国内三网验证是 IPv4 订阅的强制准入门槛。
+> V3.9 起，国内三网验证是 IPv4 和 IPv6 正式订阅的强制准入门槛。
 
 - 国内可用性是正式 IPv4 订阅的准入条件，不再是排序加分项。海外扫描通过但未完成国内验证的 IP，只保留在 `output/ipv4/all.json` 和 `all.csv` 诊断数据中，不进入 `all.txt`、`fast.txt`、`stable.txt` 或 TOP 订阅。
 - 电信（AS4134）、联通（AS4837）、移动（AS9808）每个运营商最多请求 3 个中国大陆 eyeball-network 探针；每个运营商至少 2 个不同探针 HTTPS 验证成功，且该运营商 TCP 延迟中位数不超过 300 ms，才算该运营商合格。
