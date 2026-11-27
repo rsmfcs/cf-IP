@@ -2,7 +2,7 @@
   "metadata": {
     "source": "HostMonit",
     "api": "https://api.hostmonit.com/get_optimization_ip",
-    "fetched_at": "2026-11-27T01:08:23+00:00",
+    "fetched_at": "2026-11-27T01:13:51+00:00",
     "source_counts": {
       "CM": 5,
       "CT": 0,
