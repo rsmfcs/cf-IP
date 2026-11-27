@@ -116,10 +116,8 @@ def collect_ipv6_candidates(hostmonit_items: list[dict[str, Any]]) -> tuple[list
     try:
         parsed = parse_wetest_ipv6(_fetch_text(WETEST_IPV6_URL))
         candidates.extend(parsed)
-        source_counts["WeTest"] = len(parsed)
     except Exception as exc:
         errors["WeTest"] = f"{type(exc).__name__}: {exc}"
-        source_counts["WeTest"] = 0
 
     try:
         parsed = parse_plain_ipv6(
@@ -128,10 +126,8 @@ def collect_ipv6_candidates(hostmonit_items: list[dict[str, Any]]) -> tuple[list
             carrier="CM",
         )
         candidates.extend(parsed)
-        source_counts["CMLiu"] = len(parsed)
     except Exception as exc:
         errors["CMLiu"] = f"{type(exc).__name__}: {exc}"
-        source_counts["CMLiu"] = 0
 
     # The official prefix list is mandatory: third-party feeds are discovery
     # sources, not authority for deciding whether an address belongs to CF.
