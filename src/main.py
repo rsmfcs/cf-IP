@@ -1065,6 +1065,8 @@ def run_ipv4(config: dict[str, Any]) -> dict[str, Any]:
     run_speed_tests(results, 4, config)
     enrich_colo_info(results, config)
     ranked = sort_and_score(results, scan.get("preferred_country_codes", ["HK", "US", "SG", "JP"]))
+    ranked = apply_china_probes(ranked)
+    china_verified = sum(1 for item in ranked if (item.get("china_probe") or {}).get("success_isps", 0) > 0)
     region_counts: dict[str, int] = {}
     colo_counts: dict[str, int] = {}
     for item in ranked:
@@ -1086,6 +1088,8 @@ def run_ipv4(config: dict[str, Any]) -> dict[str, Any]:
         "tcp_tls_http_pass_count": len(preliminary),
         "usable_count": len(results),
         "speed_tested_count": sum(1 for item in results if item["speed_tested"]),
+        "china_verified_count": china_verified,
+        "china_probe_isps": ["CT", "CU", "CM"],
         "ranked_count": len(ranked),
         "region_targets": region_targets,
         "region_counts": region_counts,
