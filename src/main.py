@@ -317,8 +317,11 @@ def write_ipv6_source_outputs(
     output_dir = OUTPUT / "ipv6"
     output_dir.mkdir(parents=True, exist_ok=True)
     qualified = [
-        {**item, "quality_status": "domestic_three_carrier_verified"}
-        for item in ranked if item.get("china_qualified")
+        {**item, "quality_status": (
+            "domestic_three_carrier_verified" if item.get("china_three_carrier_qualified")
+            else "domestic_mobile_unicom_verified"
+        )}
+        for item in ranked if item.get("china_mobile_unicom_qualified", item.get("china_qualified"))
     ]
     write_json(output_dir / "source.json", {"metadata": metadata, "items": candidates})
     write_json(output_dir / "all.json", ranked)
@@ -351,7 +354,7 @@ def write_ipv6_source_outputs(
         (output_dir / name).write_text(payload, encoding="utf-8")
 
     # all.txt is the combined public subscription. Remove every old IPv6 line,
-    # then append only addresses that passed all three domestic carrier gates.
+    # then append addresses passing both China Unicom and China Mobile gates.
     combined_path = ROOT / "all.txt"
     existing_ipv4 = []
     if combined_path.exists():
@@ -375,7 +378,7 @@ def write_ipv6_source_outputs(
             isp: sum(1 for item in ranked if (item.get("china_carrier_qualified") or {}).get(isp))
             for isp in ("CT", "CU", "CM")
         },
-        "quality_status": "domestic_three_carrier_verified" if qualified else "no_domestic_qualified_ipv6",
+        "quality_status": "domestic_mobile_unicom_verified" if qualified else "no_domestic_qualified_ipv6",
     }
     write_json(output_dir / "metadata.json", metadata)
 
@@ -955,8 +958,8 @@ def write_family_outputs(version: int, results: list[dict[str, Any]], top_n: lis
     output_dir.mkdir(parents=True, exist_ok=True)
 
     write_json(output_dir / "all.json", results)
-    # Public IPv4 subscriptions are strict domestic-qualified lists only.
-    # The complete overseas scan remains available in all.json/all.csv for diagnostics.
+    # Public IPv4 subscriptions require both China Unicom and China Mobile.
+    # Three-carrier-qualified entries remain identifiable in the diagnostic JSON/CSV.
     subscription_results = (
         [item for item in results if item.get("china_qualified")]
         if version == 4 else results
@@ -966,7 +969,7 @@ def write_family_outputs(version: int, results: list[dict[str, Any]], top_n: lis
         "latency_ms", "median_latency_ms", "jitter_ms", "p95_latency_ms",
         "speed_mbps", "speed_tested", "success_rate", "successful_rounds",
         "china_tested_isps", "china_success_isps", "china_qualified_isps",
-        "china_qualified", "china_ct_rtt_ms",
+        "china_qualified", "china_three_carrier_qualified", "china_mobile_unicom_qualified", "quality_status", "china_ct_rtt_ms",
         "china_cu_rtt_ms", "china_cm_rtt_ms", "china_median_rtt_ms",
         "total_rounds", "score", "tested_at",
     ]
@@ -1159,9 +1162,15 @@ def run_ipv4(config: dict[str, Any]) -> dict[str, Any]:
         "speed_tested_count": sum(1 for item in results if item["speed_tested"]),
         "china_verified_count": china_verified,
         "china_qualified_count": china_verified,
+        "china_three_carrier_qualified_count": sum(1 for item in ranked if item.get("china_three_carrier_qualified")),
         "china_carrier_counts": china_carrier_counts,
         "china_probe_isps": ["CT", "CU", "CM"],
-        "domestic_gate": {"min_successful_probes_per_isp": 2, "max_median_tcp_rtt_ms": 300},
+        "domestic_gate": {
+            "required_carriers": ["CU", "CM"],
+            "min_successful_probes_per_isp": 2,
+            "max_median_tcp_rtt_ms": 300,
+            "three_carrier_is_bonus": True,
+        },
         "ranked_count": china_verified,
         "region_targets": region_targets,
         "region_counts": region_counts,
@@ -1229,13 +1238,16 @@ def main() -> None:
             "qualified_count": len(ipv6_qualified),
             "carrier_qualified_counts": carrier_counts,
             "domestic_gate": {
+                "required_carriers": ["CU", "CM"],
                 "min_successful_probes_per_isp": 2,
                 "max_median_tcp_rtt_ms": 300,
+                "three_carrier_is_bonus": True,
             },
             "output_dir": "output/ipv6/",
             "subscription_file": "ipv6.txt",
             "subscription_format": "[IPv6]:443",
-            "note": "Only fresh IPv6 addresses passing all three mainland carrier tests are published in ipv6.txt.",
+            "three_carrier_qualified_count": sum(1 for item in ipv6_ranked if item.get("china_three_carrier_qualified")),
+            "note": "Only fresh IPv6 addresses passing both China Unicom and China Mobile gates are published in ipv6.txt; Telecom qualification is retained as an additional quality label.",
         }
     except Exception as exc:
         message = f"{type(exc).__name__}: {exc}"
