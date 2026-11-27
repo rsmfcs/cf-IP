@@ -70,7 +70,7 @@ def test_empty_scan_clears_previous_subscriptions(tmp_path, monkeypatch):
     monkeypatch.setattr(main, "ROOT", tmp_path)
     monkeypatch.setattr(main, "OUTPUT", tmp_path / "output")
     (tmp_path / "output" / "ipv4").mkdir(parents=True)
-    (tmp_path / "best-cf-ip-scanned-top20.txt").write_text("1.1.1.1:443#美国\n", encoding="utf-8")
+    (tmp_path / "china-cu-cm.txt").write_text("1.1.1.1:443#美国\\n", encoding="utf-8")
     (tmp_path / "output" / "ipv4" / "all.json").write_text('[{"ip": "1.1.1.1"}]', encoding="utf-8")
 
     main.write_family_outputs(4, [], [20])
@@ -78,6 +78,65 @@ def test_empty_scan_clears_previous_subscriptions(tmp_path, monkeypatch):
     assert (tmp_path / "china-cu-cm.txt").read_text(encoding="utf-8") == ""
     assert (tmp_path / "output" / "ipv4" / "all.json").read_text(encoding="utf-8") == '[{"ip": "1.1.1.1"}]'
 
+
+def test_ipv6_outputs_clear_stale_unverified_addresses_when_empty(tmp_path, monkeypatch):
+    monkeypatch.setattr(main, "ROOT", tmp_path)
+    monkeypatch.setattr(main, "OUTPUT", tmp_path / "output")
+    (tmp_path / "china-cu-cm.txt").write_text("1.1.1.1:443#美国\\n", encoding="utf-8")
+    (tmp_path / "all.txt").write_text("1.1.1.1:443#美国\\n[2606:4700::old]:443#旧IPv6\\n", encoding="utf-8")
+
+    main.write_ipv6_source_outputs([], [], {"candidate_count": 0})
+
+    assert (tmp_path / "output" / "ipv6" / "all.txt").read_text(encoding="utf-8") == ""
+    assert (tmp_path / "all.txt").read_text(encoding="utf-8") == "1.1.1.1:443#美国\\n"
+
+
+def test_ipv6_outputs_publish_only_carrier_qualified_ips(tmp_path, monkeypatch):
+    monkeypatch.setattr(main, "ROOT", tmp_path)
+    monkeypatch.setattr(main, "OUTPUT", tmp_path / "output")
+    (tmp_path / "china-cu-cm.txt").write_text("1.1.1.1:443#美国\\n", encoding="utf-8")
+    candidates = [
+        {"ip": "2606:4700:4700::1111", "port": 443, "country_code": "US", "city": "Los Angeles"}
+    ]
+    qualified = [{
+        **candidates[0],
+        "china_qualified": True,
+        "china_mobile_unicom_qualified": True,
+        "china_carrier_qualified": {"CT": True, "CU": True, "CM": True},
+        "china_probe": {"ct_rtt_ms": 80, "cu_rtt_ms": 100, "cm_rtt_ms": 90},
+        "score": 90,
+    }]
+    main.write_ipv6_source_outputs(candidates, qualified, {"candidate_count": 1})
+
+    expected = "[2606:4700:4700::1111]:443#美国-洛杉矶\\n"
+    assert (tmp_path / "output" / "ipv6" / "all.txt").read_text(encoding="utf-8") == expected
+    assert (tmp_path / "output" / "ipv6" / "china-ct-ipv6.txt").read_text(encoding="utf-8") == expected
+    assert (tmp_path / "output" / "ipv6" / "china-cu-ipv6.txt").read_text(encoding="utf-8") == expected
+    assert (tmp_path / "output" / "ipv6" / "china-cm-ipv6.txt").read_text(encoding="utf-8") == expected
+    assert (tmp_path / "china-ct.txt").read_text(encoding="utf-8") == expected
+    assert (tmp_path / "china-cu-cm.txt").read_text(encoding="utf-8") == "1.1.1.1:443#美国\\n" + expected
+    assert (tmp_path / "all.txt").read_text(encoding="utf-8") == "1.1.1.1:443#美国\\n" + expected
+
+
+def test_ipv6_outputs_never_publish_partially_qualified_ip(tmp_path, monkeypatch):
+    monkeypatch.setattr(main, "ROOT", tmp_path)
+    monkeypatch.setattr(main, "OUTPUT", tmp_path / "output")
+    (tmp_path / "china-cu-cm.txt").write_text("1.1.1.1:443#美国\\n", encoding="utf-8")
+    candidate = {
+        "ip": "2606:4700:4700::2222", "port": 443,
+        "country_code": "US", "city": "Los Angeles",
+        "china_qualified": False,
+        "china_carrier_qualified": {"CT": True, "CU": False, "CM": True},
+        "china_probe": {"ct_rtt_ms": 80, "cu_rtt_ms": None, "cm_rtt_ms": 90},
+    }
+
+    main.write_ipv6_source_outputs([candidate], [candidate], {"candidate_count": 1})
+
+    assert (tmp_path / "output" / "ipv6" / "all.txt").read_text(encoding="utf-8") == ""
+    assert (tmp_path / "output" / "ipv6" / "china-ct-ipv6.txt").read_text(encoding="utf-8") != ""
+    assert (tmp_path / "output" / "ipv6" / "china-cu-ipv6.txt").read_text(encoding="utf-8") == ""
+    assert (tmp_path / "china-ct.txt").read_text(encoding="utf-8") != ""
+    assert (tmp_path / "china-cu-cm.txt").read_text(encoding="utf-8") == "1.1.1.1:443#美国\\n"
 
 
 def test_probe_stages_filter_candidates_in_order(monkeypatch):
