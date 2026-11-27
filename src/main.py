@@ -924,8 +924,11 @@ def write_family_outputs(version: int, results: list[dict[str, Any]], top_n: lis
                     base.mkdir(parents=True, exist_ok=True)
                     (base / name).write_text("", encoding="utf-8")
             for count in top_n:
-                for name in (f"best-cf-ip-scanned-top{count}.txt", f"cf-ipv4-top{count}.txt"):
-                    (ROOT / name).write_text("", encoding="utf-8")
+                for base in (ROOT, OUTPUT / "ipv4"):
+                    base.mkdir(parents=True, exist_ok=True)
+                    for name in (f"best-cf-ip-scanned-top{count}.txt", f"cf-ipv4-top{count}.txt", f"top{count}.txt"):
+                        (base / name).write_text("", encoding="utf-8")
+                    write_json(base / f"top{count}.json", [])
         return
     output_dir.mkdir(parents=True, exist_ok=True)
 
