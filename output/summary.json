@@ -1,7 +1,7 @@
 {
   "project": "Cloudflare-IP-Auto",
   "version": "3.9",
-  "generated_at": "2026-11-27T03:03:03+00:00",
+  "generated_at": "2026-11-27T03:14:31+00:00",
   "schedule": "17 */12 * * * (UTC)",
   "ip_family": "IPv4 + IPv6 domestic carrier verification",
   "ports": [
@@ -14,7 +14,7 @@
       "egress_check": {
         "available": true,
         "target": "1.1.1.1:443",
-        "connect_ms": 10.05
+        "connect_ms": 15.04
       },
       "network_count": 15,
       "candidate_count": 2048,
@@ -22,10 +22,10 @@
       "tcp_tls_http_pass_count": 409,
       "usable_count": 105,
       "speed_tested_count": 50,
-      "china_verified_count": 69,
-      "china_qualified_count": 69,
+      "china_verified_count": 93,
+      "china_qualified_count": 93,
       "china_carrier_counts": {
-        "CT": 80,
+        "CT": 81,
         "CU": 101,
         "CM": 97
       },
@@ -38,7 +38,7 @@
         "min_successful_probes_per_isp": 2,
         "max_median_tcp_rtt_ms": 300
       },
-      "ranked_count": 69,
+      "ranked_count": 93,
       "region_targets": {
         "HK": 15,
         "US": 15,
@@ -50,8 +50,9 @@
         "US": 45
       },
       "colo_counts": {
-        "SEA": 72,
-        "ORD": 33
+        "LAX": 70,
+        "ORD": 33,
+        "SJC": 2
       },
       "geoip_note": "GeoIP is approximate; colo is observed from Cloudflare /cdn-cgi/trace.",
       "top_ip": "104.18.45.45",
@@ -68,11 +69,11 @@
         "CMLiu"
       ],
       "candidate_count": 26,
-      "qualified_count": 3,
+      "qualified_count": 2,
       "carrier_qualified_counts": {
-        "CT": 12,
-        "CU": 3,
-        "CM": 3
+        "CT": 8,
+        "CU": 2,
+        "CM": 2
       },
       "domestic_gate": {
         "min_successful_probes_per_isp": 2,
