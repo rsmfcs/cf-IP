@@ -1113,7 +1113,7 @@ def main() -> None:
     OUTPUT.mkdir(parents=True, exist_ok=True)
     summary: dict[str, Any] = {
         "project": "Cloudflare-IP-Auto",
-        "version": "3.6",
+        "version": "3.7",
         "generated_at": utc_now(),
         "schedule": "17 */6 * * * (UTC)",
         "ip_family": "IPv4 scan + IPv6 source sync",
