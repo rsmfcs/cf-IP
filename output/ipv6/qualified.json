@@ -42,49 +42,5 @@
     "china_cu_rtt_ms": 183.0,
     "china_cm_rtt_ms": 206.5,
     "china_median_rtt_ms": 183.0
-  },
-  {
-    "ip": "2606:4700:3034:8ee8:97ba:7016:8789:bd9d",
-    "version": 6,
-    "port": 443,
-    "source": [
-      "HostMonit"
-    ],
-    "source_carriers": [
-      "CM"
-    ],
-    "country_code": "CA",
-    "city": "Toronto",
-    "region_zh": "加拿大-多伦多",
-    "quality_status": "domestic_three_carrier_verified",
-    "china_probe": {
-      "tested_isps": 3,
-      "success_isps": 3,
-      "qualified_isps": 3,
-      "ct_rtt_ms": 261.5,
-      "cu_rtt_ms": 191.0,
-      "cm_rtt_ms": 181.0,
-      "median_rtt_ms": 191.0,
-      "carrier_qualified": {
-        "CT": true,
-        "CU": true,
-        "CM": true
-      }
-    },
-    "china_tested_isps": 3,
-    "china_success_isps": 3,
-    "china_qualified_isps": 3,
-    "china_carrier_qualified": {
-      "CT": true,
-      "CU": true,
-      "CM": true
-    },
-    "china_three_carrier_qualified": true,
-    "china_mobile_unicom_qualified": true,
-    "china_qualified": true,
-    "china_ct_rtt_ms": 261.5,
-    "china_cu_rtt_ms": 191.0,
-    "china_cm_rtt_ms": 181.0,
-    "china_median_rtt_ms": 191.0
   }
 ]

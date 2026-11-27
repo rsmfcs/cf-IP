@@ -1,7 +1,7 @@
 {
   "project": "Cloudflare-IP-Auto",
   "version": "3.9",
-  "generated_at": "2026-11-27T03:14:31+00:00",
+  "generated_at": "2026-11-27T03:18:29+00:00",
   "schedule": "17 */12 * * * (UTC)",
   "ip_family": "IPv4 + IPv6 domestic carrier verification",
   "ports": [
@@ -14,20 +14,21 @@
       "egress_check": {
         "available": true,
         "target": "1.1.1.1:443",
-        "connect_ms": 15.04
+        "connect_ms": 20.85
       },
       "network_count": 15,
       "candidate_count": 2048,
-      "preliminary_pass_count": 409,
-      "tcp_tls_http_pass_count": 409,
+      "preliminary_pass_count": 410,
+      "tcp_tls_http_pass_count": 410,
       "usable_count": 105,
       "speed_tested_count": 50,
-      "china_verified_count": 93,
-      "china_qualified_count": 93,
+      "china_verified_count": 91,
+      "china_qualified_count": 91,
+      "china_three_carrier_qualified_count": 70,
       "china_carrier_counts": {
         "CT": 81,
-        "CU": 101,
-        "CM": 97
+        "CU": 100,
+        "CM": 95
       },
       "china_probe_isps": [
         "CT",
@@ -35,10 +36,15 @@
         "CM"
       ],
       "domestic_gate": {
+        "required_carriers": [
+          "CU",
+          "CM"
+        ],
         "min_successful_probes_per_isp": 2,
-        "max_median_tcp_rtt_ms": 300
+        "max_median_tcp_rtt_ms": 300,
+        "three_carrier_is_bonus": true
       },
-      "ranked_count": 93,
+      "ranked_count": 91,
       "region_targets": {
         "HK": 15,
         "US": 15,
@@ -50,9 +56,8 @@
         "US": 45
       },
       "colo_counts": {
-        "LAX": 70,
-        "ORD": 33,
-        "SJC": 2
+        "DFW": 72,
+        "ORD": 33
       },
       "geoip_note": "GeoIP is approximate; colo is observed from Cloudflare /cdn-cgi/trace.",
       "top_ip": "104.18.45.45",
@@ -69,20 +74,26 @@
         "CMLiu"
       ],
       "candidate_count": 26,
-      "qualified_count": 2,
+      "qualified_count": 1,
       "carrier_qualified_counts": {
-        "CT": 8,
-        "CU": 2,
-        "CM": 2
+        "CT": 3,
+        "CU": 1,
+        "CM": 1
       },
       "domestic_gate": {
+        "required_carriers": [
+          "CU",
+          "CM"
+        ],
         "min_successful_probes_per_isp": 2,
-        "max_median_tcp_rtt_ms": 300
+        "max_median_tcp_rtt_ms": 300,
+        "three_carrier_is_bonus": true
       },
       "output_dir": "output/ipv6/",
       "subscription_file": "ipv6.txt",
       "subscription_format": "[IPv6]:443",
-      "note": "Only fresh IPv6 addresses passing all three mainland carrier tests are published in ipv6.txt."
+      "three_carrier_qualified_count": 1,
+      "note": "Only fresh IPv6 addresses passing both China Unicom and China Mobile gates are published in ipv6.txt; Telecom qualification is retained as an additional quality label."
     }
   }
 }
