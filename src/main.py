@@ -1181,7 +1181,7 @@ def main() -> None:
         "project": "Cloudflare-IP-Auto",
         "version": "3.9",
         "generated_at": utc_now(),
-        "schedule": "17 */6 * * * (UTC)",
+        "schedule": "17 */12 * * * (UTC)",
         "ip_family": "IPv4 + IPv6 domestic carrier verification",
         "ports": [443],
         "families": {},
