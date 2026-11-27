@@ -1119,25 +1119,23 @@ def main() -> None:
         "project": "Cloudflare-IP-Auto",
         "version": "4.0",
         "generated_at": utc_now(),
-        "schedule": "17 */12 * * * (UTC)",
+        "schedule": "0 10,22 * * * (UTC)",
         "ip_family": "IPv4 + IPv6 domestic carrier verification",
         "ports": [443],
         "families": {},
     }
-    try:
-        summary["families"]["ipv4"] = run_ipv4(config)
-    except Exception as exc:
-        message = f"{type(exc).__name__}: {exc}"
-        print(f"IPv4 scan failed: {message}")
-        summary["families"]["ipv4"] = {"family": "ipv4", "status": "scan_failed", "error": message}
-        write_json(OUTPUT / "summary.json", summary)
-        raise
 
-    try:
-        from .ipv6_sources import collect_ipv6_candidates
+    # IPv6 has a much smaller candidate pool. Probe it first so IPv4 cannot
+    # consume the shared Globalping quota before IPv6 gets its turn.
+    from .ipv6_sources import collect_ipv6_candidates
 
-        hostmonit_candidates = []
-        hostmonit_metadata = {}
+    hostmonit_candidates: list[dict[str, Any]] = []
+    hostmonit_metadata: dict[str, Any] = {}
+    ipv6_candidates: list[dict[str, Any]] = []
+    ipv6_ranked: list[dict[str, Any]] = []
+    ipv6_metadata: dict[str, Any] = {}
+    ipv6_error: str | None = None
+    try:
         try:
             hostmonit_candidates, hostmonit_metadata = fetch_hostmonit_ipv6()
         except Exception as exc:
@@ -1152,8 +1150,39 @@ def main() -> None:
         ipv6_metadata["hostmonit"] = hostmonit_metadata
         enrich_country_info(ipv6_candidates)
         ipv6_ranked = apply_china_probes(ipv6_candidates, ip_version=6)
-        write_ipv6_source_outputs(ipv6_candidates, ipv6_ranked, ipv6_metadata)
+    except Exception as exc:
+        ipv6_error = f"{type(exc).__name__}: {exc}"
+        ipv6_metadata = {
+            "source_errors": {"pipeline": ipv6_error},
+            "candidate_count": 0,
+            "quality_status": "pipeline_failed_no_publication",
+        }
+        print(f"IPv6 candidate collection or verification failed: {ipv6_error}")
 
+    # Run the large IPv4 scan only after the IPv6 Globalping measurements finish.
+    try:
+        summary["families"]["ipv4"] = run_ipv4(config)
+    except Exception as exc:
+        message = f"{type(exc).__name__}: {exc}"
+        print(f"IPv4 scan failed: {message}")
+        summary["families"]["ipv4"] = {"family": "ipv4", "status": "scan_failed", "error": message}
+        write_json(OUTPUT / "summary.json", summary)
+        raise
+
+    # Publish IPv6 only after IPv4 files exist; otherwise the later IPv4 writer
+    # could overwrite the IPv6 entries just merged into the dual-stack files.
+    write_ipv6_source_outputs(ipv6_candidates, ipv6_ranked, ipv6_metadata)
+
+    if ipv6_error:
+        summary["families"]["ipv6"] = {
+            "family": "ipv6",
+            "status": "pipeline_failed",
+            "error": ipv6_error,
+            "candidate_count": 0,
+            "qualified_count": 0,
+            "note": "IPv6 subscriptions were cleared because fresh domestic verification did not complete.",
+        }
+    else:
         ipv6_qualified = [item for item in ipv6_ranked if item.get("china_qualified")]
         carrier_counts = {
             isp: sum(1 for item in ipv6_ranked if (item.get("china_carrier_qualified") or {}).get(isp))
@@ -1176,23 +1205,7 @@ def main() -> None:
             "subscription_files": ["china-ct.txt", "china-cu.txt", "china-cm.txt", "china-cu-cm.txt"],
             "subscription_format": "[IPv6]:443",
             "three_carrier_qualified_count": sum(1 for item in ipv6_ranked if item.get("china_three_carrier_qualified")),
-            "note": "Fresh IPv6 addresses are merged with the matching IPv4 carrier results in the four root dual-stack subscriptions.",
-        }
-    except Exception as exc:
-        message = f"{type(exc).__name__}: {exc}"
-        print(f"IPv6 candidate collection or verification failed: {message}")
-        write_ipv6_source_outputs([], [], {
-            "source_errors": {"pipeline": message},
-            "candidate_count": 0,
-            "quality_status": "pipeline_failed_no_publication",
-        })
-        summary["families"]["ipv6"] = {
-            "family": "ipv6",
-            "status": "pipeline_failed",
-            "error": message,
-            "candidate_count": 0,
-            "qualified_count": 0,
-            "note": "IPv6 subscriptions were cleared because fresh domestic verification did not complete.",
+            "note": "IPv6 is probed before IPv4 to protect its Globalping quota; verified IPv6 results are merged after IPv4 outputs are written.",
         }
 
     write_json(OUTPUT / "summary.json", summary)
