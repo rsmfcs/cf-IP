@@ -5,7 +5,7 @@
       "WeTest",
       "CMLiu"
     ],
-    "fetched_at": "2026-11-27T01:55:42+00:00",
+    "fetched_at": "2026-11-27T02:54:01+00:00",
     "source_counts": {
       "HostMonit": 5,
       "WeTest": 15,
@@ -19,7 +19,7 @@
     "hostmonit": {
       "source": "HostMonit",
       "api": "https://api.hostmonit.com/get_optimization_ip",
-      "fetched_at": "2026-11-27T01:55:41+00:00",
+      "fetched_at": "2026-11-27T02:54:00+00:00",
       "source_counts": {
         "CM": 5,
         "CT": 0,
@@ -32,7 +32,7 @@
   },
   "items": [
     {
-      "ip": "2606:4700:9a9e:344e:ed06:2278:6e:2845",
+      "ip": "2606:4700:f:5f56:1d3b:1cdb:682c:375",
       "version": 6,
       "port": 443,
       "source": [
@@ -41,18 +41,18 @@
       "source_carriers": [
         "CM"
       ],
-      "country_code": "FR",
-      "city": "Paris",
-      "region_zh": "法国-巴黎",
+      "country_code": "CA",
+      "city": "Montreal",
+      "region_zh": "加拿大-蒙特利尔",
       "quality_status": "source_candidate_unverified",
       "china_probe": {
         "tested_isps": 3,
         "success_isps": 3,
         "qualified_isps": 3,
-        "ct_rtt_ms": 181.0,
-        "cu_rtt_ms": 287.0,
-        "cm_rtt_ms": 287.0,
-        "median_rtt_ms": 287.0,
+        "ct_rtt_ms": 209.0,
+        "cu_rtt_ms": 205.5,
+        "cm_rtt_ms": 190.0,
+        "median_rtt_ms": 205.5,
         "carrier_qualified": {
           "CT": true,
           "CU": true,
@@ -68,13 +68,55 @@
         "CM": true
       },
       "china_qualified": true,
-      "china_ct_rtt_ms": 181.0,
-      "china_cu_rtt_ms": 287.0,
-      "china_cm_rtt_ms": 287.0,
-      "china_median_rtt_ms": 287.0
+      "china_ct_rtt_ms": 209.0,
+      "china_cu_rtt_ms": 205.5,
+      "china_cm_rtt_ms": 190.0,
+      "china_median_rtt_ms": 205.5
     },
     {
-      "ip": "2606:4700:9b00:3059:1a1:c783:d0b9:2423",
+      "ip": "2606:4700:2e:ab21:2ca9:ccfb:54a4:86d4",
+      "version": 6,
+      "port": 443,
+      "source": [
+        "HostMonit"
+      ],
+      "source_carriers": [
+        "CM"
+      ],
+      "country_code": "CA",
+      "city": "Toronto",
+      "region_zh": "加拿大-多伦多",
+      "quality_status": "source_candidate_unverified",
+      "china_probe": {
+        "tested_isps": 3,
+        "success_isps": 3,
+        "qualified_isps": 3,
+        "ct_rtt_ms": 215.5,
+        "cu_rtt_ms": 212.5,
+        "cm_rtt_ms": 175.0,
+        "median_rtt_ms": 212.5,
+        "carrier_qualified": {
+          "CT": true,
+          "CU": true,
+          "CM": true
+        }
+      },
+      "china_tested_isps": 3,
+      "china_success_isps": 3,
+      "china_qualified_isps": 3,
+      "china_carrier_qualified": {
+        "CT": true,
+        "CU": true,
+        "CM": true
+      },
+      "china_qualified": true,
+      "china_ct_rtt_ms": 215.5,
+      "china_cu_rtt_ms": 212.5,
+      "china_cm_rtt_ms": 175.0,
+      "china_median_rtt_ms": 212.5
+    },
+    {
+      "ip": "2606:4700:9c65:cc94:c8b8:17fe:a8f3:ddfa",
       "version": 6,
       "port": 443,
       "source": [
@@ -91,13 +133,13 @@
         "tested_isps": 3,
         "success_isps": 2,
         "qualified_isps": 1,
-        "ct_rtt_ms": 185.5,
-        "cu_rtt_ms": 304.0,
+        "ct_rtt_ms": 714.0,
+        "cu_rtt_ms": 269.5,
         "cm_rtt_ms": null,
-        "median_rtt_ms": 244.75,
+        "median_rtt_ms": 491.75,
         "carrier_qualified": {
-          "CT": true,
-          "CU": false,
+          "CT": false,
+          "CU": true,
           "CM": false
         }
       },
@@ -105,60 +147,18 @@
       "china_success_isps": 2,
       "china_qualified_isps": 1,
       "china_carrier_qualified": {
-        "CT": true,
-        "CU": false,
+        "CT": false,
+        "CU": true,
         "CM": false
       },
       "china_qualified": false,
-      "china_ct_rtt_ms": 185.5,
-      "china_cu_rtt_ms": 304.0,
+      "china_ct_rtt_ms": 714.0,
+      "china_cu_rtt_ms": 269.5,
       "china_cm_rtt_ms": null,
-      "china_median_rtt_ms": 244.75
+      "china_median_rtt_ms": 491.75
     },
     {
-      "ip": "2606:4700:9a9e:a601:28c9:bb16:18a0:8b8f",
-      "version": 6,
-      "port": 443,
-      "source": [
-        "HostMonit"
-      ],
-      "source_carriers": [
-        "CM"
-      ],
-      "country_code": "FR",
-      "city": "Paris",
-      "region_zh": "法国-巴黎",
-      "quality_status": "source_candidate_unverified",
-      "china_probe": {
-        "tested_isps": 3,
-        "success_isps": 3,
-        "qualified_isps": 2,
-        "ct_rtt_ms": 208.5,
-        "cu_rtt_ms": 301.5,
-        "cm_rtt_ms": 300.0,
-        "median_rtt_ms": 300.0,
-        "carrier_qualified": {
-          "CT": true,
-          "CU": false,
-          "CM": true
-        }
-      },
-      "china_tested_isps": 3,
-      "china_success_isps": 3,
-      "china_qualified_isps": 2,
-      "china_carrier_qualified": {
-        "CT": true,
-        "CU": false,
-        "CM": true
-      },
-      "china_qualified": false,
-      "china_ct_rtt_ms": 208.5,
-      "china_cu_rtt_ms": 301.5,
-      "china_cm_rtt_ms": 300.0,
-      "china_median_rtt_ms": 300.0
-    },
-    {
-      "ip": "2606:4700:3025:4c9:fda5:b46f:fdc1:a173",
+      "ip": "2606:4700:f:ba4c:c60c:4bda:22c1:21d3",
       "version": 6,
       "port": 443,
       "source": [
@@ -168,17 +168,17 @@
         "CM"
       ],
       "country_code": "CA",
-      "city": "Toronto",
-      "region_zh": "加拿大-多伦多",
+      "city": "Montreal",
+      "region_zh": "加拿大-蒙特利尔",
       "quality_status": "source_candidate_unverified",
       "china_probe": {
         "tested_isps": 3,
         "success_isps": 3,
         "qualified_isps": 3,
-        "ct_rtt_ms": 208.0,
-        "cu_rtt_ms": 246.5,
-        "cm_rtt_ms": 214.5,
-        "median_rtt_ms": 214.5,
+        "ct_rtt_ms": 217.0,
+        "cu_rtt_ms": 188.5,
+        "cm_rtt_ms": 193.5,
+        "median_rtt_ms": 193.5,
         "carrier_qualified": {
           "CT": true,
           "CU": true,
@@ -194,13 +194,13 @@
         "CM": true
       },
       "china_qualified": true,
-      "china_ct_rtt_ms": 208.0,
-      "china_cu_rtt_ms": 246.5,
-      "china_cm_rtt_ms": 214.5,
-      "china_median_rtt_ms": 214.5
+      "china_ct_rtt_ms": 217.0,
+      "china_cu_rtt_ms": 188.5,
+      "china_cm_rtt_ms": 193.5,
+      "china_median_rtt_ms": 193.5
     },
     {
-      "ip": "2606:4700:9b00:1a2e:b810:ccee:4d16:9198",
+      "ip": "2606:4700:9764:bca8:e5d2:ab73:ac7:cebe",
       "version": 6,
       "port": 443,
       "source": [
@@ -217,10 +217,10 @@
         "tested_isps": 3,
         "success_isps": 2,
         "qualified_isps": 2,
-        "ct_rtt_ms": 189.5,
-        "cu_rtt_ms": 273.0,
+        "ct_rtt_ms": 211.5,
+        "cu_rtt_ms": 296.5,
         "cm_rtt_ms": null,
-        "median_rtt_ms": 231.25,
+        "median_rtt_ms": 254.0,
         "carrier_qualified": {
           "CT": true,
           "CU": true,
@@ -236,13 +236,97 @@
         "CM": false
       },
       "china_qualified": false,
-      "china_ct_rtt_ms": 189.5,
-      "china_cu_rtt_ms": 273.0,
+      "china_ct_rtt_ms": 211.5,
+      "china_cu_rtt_ms": 296.5,
       "china_cm_rtt_ms": null,
-      "china_median_rtt_ms": 231.25
+      "china_median_rtt_ms": 254.0
     },
     {
-      "ip": "2606:4700:9641::d95d:a2a7",
+      "ip": "2606:4700:90d9::929:b695",
+      "version": 6,
+      "port": 443,
+      "source": [
+        "WeTest"
+      ],
+      "source_carriers": [
+        "CM"
+      ],
+      "country_code": "FR",
+      "city": "Paris",
+      "region_zh": "法国-巴黎",
+      "quality_status": "source_candidate_unverified",
+      "china_probe": {
+        "tested_isps": 3,
+        "success_isps": 2,
+        "qualified_isps": 2,
+        "ct_rtt_ms": 206.5,
+        "cu_rtt_ms": 242.0,
+        "cm_rtt_ms": null,
+        "median_rtt_ms": 224.25,
+        "carrier_qualified": {
+          "CT": true,
+          "CU": true,
+          "CM": false
+        }
+      },
+      "china_tested_isps": 3,
+      "china_success_isps": 2,
+      "china_qualified_isps": 2,
+      "china_carrier_qualified": {
+        "CT": true,
+        "CU": true,
+        "CM": false
+      },
+      "china_qualified": false,
+      "china_ct_rtt_ms": 206.5,
+      "china_cu_rtt_ms": 242.0,
+      "china_cm_rtt_ms": null,
+      "china_median_rtt_ms": 224.25
+    },
+    {
+      "ip": "2606:4700:9a6a::96cd:93d1",
+      "version": 6,
+      "port": 443,
+      "source": [
+        "WeTest"
+      ],
+      "source_carriers": [
+        "CM"
+      ],
+      "country_code": "FR",
+      "city": "Paris",
+      "region_zh": "法国-巴黎",
+      "quality_status": "source_candidate_unverified",
+      "china_probe": {
+        "tested_isps": 3,
+        "success_isps": 2,
+        "qualified_isps": 2,
+        "ct_rtt_ms": 204.5,
+        "cu_rtt_ms": 255.5,
+        "cm_rtt_ms": null,
+        "median_rtt_ms": 230.0,
+        "carrier_qualified": {
+          "CT": true,
+          "CU": true,
+          "CM": false
+        }
+      },
+      "china_tested_isps": 3,
+      "china_success_isps": 2,
+      "china_qualified_isps": 2,
+      "china_carrier_qualified": {
+        "CT": true,
+        "CU": true,
+        "CM": false
+      },
+      "china_qualified": false,
+      "china_ct_rtt_ms": 204.5,
+      "china_cu_rtt_ms": 255.5,
+      "china_cm_rtt_ms": null,
+      "china_median_rtt_ms": 230.0
+    },
+    {
+      "ip": "2606:4700:99e0::25d5:7a80",
       "version": 6,
       "port": 443,
       "source": [
@@ -259,10 +343,10 @@
         "tested_isps": 3,
         "success_isps": 2,
         "qualified_isps": 1,
-        "ct_rtt_ms": 709.0,
-        "cu_rtt_ms": 263.0,
+        "ct_rtt_ms": 707.0,
+        "cu_rtt_ms": 280.0,
         "cm_rtt_ms": null,
-        "median_rtt_ms": 486.0,
+        "median_rtt_ms": 493.5,
         "carrier_qualified": {
           "CT": false,
           "CU": true,
@@ -278,55 +362,13 @@
         "CM": false
       },
       "china_qualified": false,
-      "china_ct_rtt_ms": 709.0,
-      "china_cu_rtt_ms": 263.0,
+      "china_ct_rtt_ms": 707.0,
+      "china_cu_rtt_ms": 280.0,
       "china_cm_rtt_ms": null,
-      "china_median_rtt_ms": 486.0
+      "china_median_rtt_ms": 493.5
     },
     {
-      "ip": "2606:4700:23::d637:2107",
-      "version": 6,
-      "port": 443,
-      "source": [
-        "WeTest"
-      ],
-      "source_carriers": [
-        "CM"
-      ],
-      "country_code": "CA",
-      "city": "Toronto",
-      "region_zh": "加拿大-多伦多",
-      "quality_status": "source_candidate_unverified",
-      "china_probe": {
-        "tested_isps": 3,
-        "success_isps": 3,
-        "qualified_isps": 3,
-        "ct_rtt_ms": 195.0,
-        "cu_rtt_ms": 203.0,
-        "cm_rtt_ms": 191.5,
-        "median_rtt_ms": 195.0,
-        "carrier_qualified": {
-          "CT": true,
-          "CU": true,
-          "CM": true
-        }
-      },
-      "china_tested_isps": 3,
-      "china_success_isps": 3,
-      "china_qualified_isps": 3,
-      "china_carrier_qualified": {
-        "CT": true,
-        "CU": true,
-        "CM": true
-      },
-      "china_qualified": true,
-      "china_ct_rtt_ms": 195.0,
-      "china_cu_rtt_ms": 203.0,
-      "china_cm_rtt_ms": 191.5,
-      "china_median_rtt_ms": 195.0
-    },
-    {
-      "ip": "2606:4700:9a92::3c84:241a",
+      "ip": "2606:4700:9a62::b40f:de98",
       "version": 6,
       "port": 443,
       "source": [
@@ -343,10 +385,10 @@
         "tested_isps": 3,
         "success_isps": 2,
         "qualified_isps": 2,
-        "ct_rtt_ms": 205.0,
-        "cu_rtt_ms": 259.5,
+        "ct_rtt_ms": 216.5,
+        "cu_rtt_ms": 266.5,
         "cm_rtt_ms": null,
-        "median_rtt_ms": 232.25,
+        "median_rtt_ms": 241.5,
         "carrier_qualified": {
           "CT": true,
           "CU": true,
@@ -362,13 +404,13 @@
         "CM": false
       },
       "china_qualified": false,
-      "china_ct_rtt_ms": 205.0,
-      "china_cu_rtt_ms": 259.5,
+      "china_ct_rtt_ms": 216.5,
+      "china_cu_rtt_ms": 266.5,
       "china_cm_rtt_ms": null,
-      "china_median_rtt_ms": 232.25
+      "china_median_rtt_ms": 241.5
     },
     {
-      "ip": "2606:4700:90d3::32c:c4b9",
+      "ip": "2606:4700:90d6::eb75:fbb2",
       "version": 6,
       "port": 443,
       "source": [
@@ -385,10 +427,10 @@
         "tested_isps": 3,
         "success_isps": 2,
         "qualified_isps": 2,
-        "ct_rtt_ms": 190.5,
-        "cu_rtt_ms": 268.0,
+        "ct_rtt_ms": 188.5,
+        "cu_rtt_ms": 294.0,
         "cm_rtt_ms": null,
-        "median_rtt_ms": 229.25,
+        "median_rtt_ms": 241.25,
         "carrier_qualified": {
           "CT": true,
           "CU": true,
@@ -404,55 +446,13 @@
         "CM": false
       },
       "china_qualified": false,
-      "china_ct_rtt_ms": 190.5,
-      "china_cu_rtt_ms": 268.0,
+      "china_ct_rtt_ms": 188.5,
+      "china_cu_rtt_ms": 294.0,
       "china_cm_rtt_ms": null,
-      "china_median_rtt_ms": 229.25
+      "china_median_rtt_ms": 241.25
     },
     {
-      "ip": "2606:4700:9a91::d27f:3403",
-      "version": 6,
-      "port": 443,
-      "source": [
-        "WeTest"
-      ],
-      "source_carriers": [
-        "CM"
-      ],
-      "country_code": "FR",
-      "city": "Paris",
-      "region_zh": "法国-巴黎",
-      "quality_status": "source_candidate_unverified",
-      "china_probe": {
-        "tested_isps": 3,
-        "success_isps": 2,
-        "qualified_isps": 2,
-        "ct_rtt_ms": 197.0,
-        "cu_rtt_ms": 271.0,
-        "cm_rtt_ms": null,
-        "median_rtt_ms": 234.0,
-        "carrier_qualified": {
-          "CT": true,
-          "CU": true,
-          "CM": false
-        }
-      },
-      "china_tested_isps": 3,
-      "china_success_isps": 2,
-      "china_qualified_isps": 2,
-      "china_carrier_qualified": {
-        "CT": true,
-        "CU": true,
-        "CM": false
-      },
-      "china_qualified": false,
-      "china_ct_rtt_ms": 197.0,
-      "china_cu_rtt_ms": 271.0,
-      "china_cm_rtt_ms": null,
-      "china_median_rtt_ms": 234.0
-    },
-    {
-      "ip": "2606:4700:4403::fe92:c51a",
+      "ip": "2606:4700:4402::1b15:bb58",
       "version": 6,
       "port": 443,
       "source": [
@@ -469,10 +469,10 @@
         "tested_isps": 3,
         "success_isps": 3,
         "qualified_isps": 3,
-        "ct_rtt_ms": 57.5,
-        "cu_rtt_ms": 182.0,
-        "cm_rtt_ms": 204.5,
-        "median_rtt_ms": 182.0,
+        "ct_rtt_ms": 55.0,
+        "cu_rtt_ms": 282.0,
+        "cm_rtt_ms": 217.5,
+        "median_rtt_ms": 217.5,
         "carrier_qualified": {
           "CT": true,
           "CU": true,
@@ -488,55 +488,13 @@
         "CM": true
       },
       "china_qualified": true,
-      "china_ct_rtt_ms": 57.5,
-      "china_cu_rtt_ms": 182.0,
-      "china_cm_rtt_ms": 204.5,
-      "china_median_rtt_ms": 182.0
+      "china_ct_rtt_ms": 55.0,
+      "china_cu_rtt_ms": 282.0,
+      "china_cm_rtt_ms": 217.5,
+      "china_median_rtt_ms": 217.5
     },
     {
-      "ip": "2606:4700:4400::3d21:75c1",
-      "version": 6,
-      "port": 443,
-      "source": [
-        "WeTest"
-      ],
-      "source_carriers": [
-        "CU"
-      ],
-      "country_code": "CA",
-      "city": "Montreal",
-      "region_zh": "加拿大-蒙特利尔",
-      "quality_status": "source_candidate_unverified",
-      "china_probe": {
-        "tested_isps": 3,
-        "success_isps": 3,
-        "qualified_isps": 3,
-        "ct_rtt_ms": 57.5,
-        "cu_rtt_ms": 195.0,
-        "cm_rtt_ms": 206.5,
-        "median_rtt_ms": 195.0,
-        "carrier_qualified": {
-          "CT": true,
-          "CU": true,
-          "CM": true
-        }
-      },
-      "china_tested_isps": 3,
-      "china_success_isps": 3,
-      "china_qualified_isps": 3,
-      "china_carrier_qualified": {
-        "CT": true,
-        "CU": true,
-        "CM": true
-      },
-      "china_qualified": true,
-      "china_ct_rtt_ms": 57.5,
-      "china_cu_rtt_ms": 195.0,
-      "china_cm_rtt_ms": 206.5,
-      "china_median_rtt_ms": 195.0
-    },
-    {
-      "ip": "2606:4700:440a::1345:cf37",
+      "ip": "2606:4700:4700::1fda:b16e",
       "version": 6,
       "port": 443,
       "source": [
@@ -553,10 +511,10 @@
         "tested_isps": 3,
         "success_isps": 3,
         "qualified_isps": 3,
-        "ct_rtt_ms": 57.0,
-        "cu_rtt_ms": 207.0,
-        "cm_rtt_ms": 212.0,
-        "median_rtt_ms": 207.0,
+        "ct_rtt_ms": 55.5,
+        "cu_rtt_ms": 184.5,
+        "cm_rtt_ms": 214.0,
+        "median_rtt_ms": 184.5,
         "carrier_qualified": {
           "CT": true,
           "CU": true,
@@ -572,13 +530,13 @@
         "CM": true
       },
       "china_qualified": true,
-      "china_ct_rtt_ms": 57.0,
-      "china_cu_rtt_ms": 207.0,
-      "china_cm_rtt_ms": 212.0,
-      "china_median_rtt_ms": 207.0
+      "china_ct_rtt_ms": 55.5,
+      "china_cu_rtt_ms": 184.5,
+      "china_cm_rtt_ms": 214.0,
+      "china_median_rtt_ms": 184.5
     },
     {
-      "ip": "2606:4700:2a::493f:9129",
+      "ip": "2606:4700:2a::80ab:b646",
       "version": 6,
       "port": 443,
       "source": [
@@ -592,35 +550,35 @@
       "region_zh": "加拿大-多伦多",
       "quality_status": "source_candidate_unverified",
       "china_probe": {
-        "tested_isps": 3,
-        "success_isps": 3,
-        "qualified_isps": 3,
-        "ct_rtt_ms": 207.0,
-        "cu_rtt_ms": 196.5,
-        "cm_rtt_ms": 177.0,
-        "median_rtt_ms": 196.5,
+        "tested_isps": 0,
+        "success_isps": 0,
+        "qualified_isps": 0,
+        "ct_rtt_ms": null,
+        "cu_rtt_ms": null,
+        "cm_rtt_ms": null,
+        "median_rtt_ms": null,
         "carrier_qualified": {
-          "CT": true,
-          "CU": true,
-          "CM": true
+          "CT": false,
+          "CU": false,
+          "CM": false
         }
       },
-      "china_tested_isps": 3,
-      "china_success_isps": 3,
-      "china_qualified_isps": 3,
+      "china_tested_isps": 0,
+      "china_success_isps": 0,
+      "china_qualified_isps": 0,
       "china_carrier_qualified": {
-        "CT": true,
-        "CU": true,
-        "CM": true
+        "CT": false,
+        "CU": false,
+        "CM": false
       },
-      "china_qualified": true,
-      "china_ct_rtt_ms": 207.0,
-      "china_cu_rtt_ms": 196.5,
-      "china_cm_rtt_ms": 177.0,
-      "china_median_rtt_ms": 196.5
+      "china_qualified": false,
+      "china_ct_rtt_ms": null,
+      "china_cu_rtt_ms": null,
+      "china_cm_rtt_ms": null,
+      "china_median_rtt_ms": null
     },
     {
-      "ip": "2a06:98c1:3107::1aed:53cd",
+      "ip": "2606:4700:a1::9523:6298",
       "version": 6,
       "port": 443,
       "source": [
@@ -628,178 +586,10 @@
       ],
       "source_carriers": [
         "CU"
-      ],
-      "country_code": "GB",
-      "city": "London",
-      "region_zh": "英国-伦敦",
-      "quality_status": "source_candidate_unverified",
-      "china_probe": {
-        "tested_isps": 0,
-        "success_isps": 0,
-        "qualified_isps": 0,
-        "ct_rtt_ms": null,
-        "cu_rtt_ms": null,
-        "cm_rtt_ms": null,
-        "median_rtt_ms": null,
-        "carrier_qualified": {
-          "CT": false,
-          "CU": false,
-          "CM": false
-        }
-      },
-      "china_tested_isps": 0,
-      "china_success_isps": 0,
-      "china_qualified_isps": 0,
-      "china_carrier_qualified": {
-        "CT": false,
-        "CU": false,
-        "CM": false
-      },
-      "china_qualified": false,
-      "china_ct_rtt_ms": null,
-      "china_cu_rtt_ms": null,
-      "china_cm_rtt_ms": null,
-      "china_median_rtt_ms": null
-    },
-    {
-      "ip": "2a06:98c1:3101::4a3f:33df",
-      "version": 6,
-      "port": 443,
-      "source": [
-        "WeTest"
-      ],
-      "source_carriers": [
-        "CT"
-      ],
-      "country_code": "GB",
-      "city": "London",
-      "region_zh": "英国-伦敦",
-      "quality_status": "source_candidate_unverified",
-      "china_probe": {
-        "tested_isps": 0,
-        "success_isps": 0,
-        "qualified_isps": 0,
-        "ct_rtt_ms": null,
-        "cu_rtt_ms": null,
-        "cm_rtt_ms": null,
-        "median_rtt_ms": null,
-        "carrier_qualified": {
-          "CT": false,
-          "CU": false,
-          "CM": false
-        }
-      },
-      "china_tested_isps": 0,
-      "china_success_isps": 0,
-      "china_qualified_isps": 0,
-      "china_carrier_qualified": {
-        "CT": false,
-        "CU": false,
-        "CM": false
-      },
-      "china_qualified": false,
-      "china_ct_rtt_ms": null,
-      "china_cu_rtt_ms": null,
-      "china_cm_rtt_ms": null,
-      "china_median_rtt_ms": null
-    },
-    {
-      "ip": "2a06:98c1:3108::606e:b63",
-      "version": 6,
-      "port": 443,
-      "source": [
-        "WeTest"
-      ],
-      "source_carriers": [
-        "CT"
-      ],
-      "country_code": "GB",
-      "city": "London",
-      "region_zh": "英国-伦敦",
-      "quality_status": "source_candidate_unverified",
-      "china_probe": {
-        "tested_isps": 0,
-        "success_isps": 0,
-        "qualified_isps": 0,
-        "ct_rtt_ms": null,
-        "cu_rtt_ms": null,
-        "cm_rtt_ms": null,
-        "median_rtt_ms": null,
-        "carrier_qualified": {
-          "CT": false,
-          "CU": false,
-          "CM": false
-        }
-      },
-      "china_tested_isps": 0,
-      "china_success_isps": 0,
-      "china_qualified_isps": 0,
-      "china_carrier_qualified": {
-        "CT": false,
-        "CU": false,
-        "CM": false
-      },
-      "china_qualified": false,
-      "china_ct_rtt_ms": null,
-      "china_cu_rtt_ms": null,
-      "china_cm_rtt_ms": null,
-      "china_median_rtt_ms": null
-    },
-    {
-      "ip": "2606:4700:4401::d4f7:8e90",
-      "version": 6,
-      "port": 443,
-      "source": [
-        "WeTest"
-      ],
-      "source_carriers": [
-        "CT"
-      ],
-      "country_code": "CA",
-      "city": "Montreal",
-      "region_zh": "加拿大-蒙特利尔",
-      "quality_status": "source_candidate_unverified",
-      "china_probe": {
-        "tested_isps": 0,
-        "success_isps": 0,
-        "qualified_isps": 0,
-        "ct_rtt_ms": null,
-        "cu_rtt_ms": null,
-        "cm_rtt_ms": null,
-        "median_rtt_ms": null,
-        "carrier_qualified": {
-          "CT": false,
-          "CU": false,
-          "CM": false
-        }
-      },
-      "china_tested_isps": 0,
-      "china_success_isps": 0,
-      "china_qualified_isps": 0,
-      "china_carrier_qualified": {
-        "CT": false,
-        "CU": false,
-        "CM": false
-      },
-      "china_qualified": false,
-      "china_ct_rtt_ms": null,
-      "china_cu_rtt_ms": null,
-      "china_cm_rtt_ms": null,
-      "china_median_rtt_ms": null
-    },
-    {
-      "ip": "2606:4700:4700::bf28:b4be",
-      "version": 6,
-      "port": 443,
-      "source": [
-        "WeTest"
-      ],
-      "source_carriers": [
-        "CT"
       ],
       "country_code": "US",
-      "city": "San Francisco",
-      "region_zh": "美国-旧金山",
+      "city": "Miami",
+      "region_zh": "美国-迈阿密",
       "quality_status": "source_candidate_unverified",
       "china_probe": {
         "tested_isps": 0,
@@ -830,7 +620,49 @@
       "china_median_rtt_ms": null
     },
     {
-      "ip": "2606:4700:4404::240e:a00",
+      "ip": "2606:4700:440f::3c4c:53e9",
+      "version": 6,
+      "port": 443,
+      "source": [
+        "WeTest"
+      ],
+      "source_carriers": [
+        "CU"
+      ],
+      "country_code": "CA",
+      "city": "Montreal",
+      "region_zh": "加拿大-蒙特利尔",
+      "quality_status": "source_candidate_unverified",
+      "china_probe": {
+        "tested_isps": 0,
+        "success_isps": 0,
+        "qualified_isps": 0,
+        "ct_rtt_ms": null,
+        "cu_rtt_ms": null,
+        "cm_rtt_ms": null,
+        "median_rtt_ms": null,
+        "carrier_qualified": {
+          "CT": false,
+          "CU": false,
+          "CM": false
+        }
+      },
+      "china_tested_isps": 0,
+      "china_success_isps": 0,
+      "china_qualified_isps": 0,
+      "china_carrier_qualified": {
+        "CT": false,
+        "CU": false,
+        "CM": false
+      },
+      "china_qualified": false,
+      "china_ct_rtt_ms": null,
+      "china_cu_rtt_ms": null,
+      "china_cm_rtt_ms": null,
+      "china_median_rtt_ms": null
+    },
+    {
+      "ip": "2606:4700:440b::9362:d0e9",
       "version": 6,
       "port": 443,
       "source": [
@@ -872,18 +704,18 @@
       "china_median_rtt_ms": null
     },
     {
-      "ip": "2606:4700:3036:6ed4:e1ed:36:8916:dace",
+      "ip": "2606:4700:440f::b355:f3a2",
       "version": 6,
       "port": 443,
       "source": [
-        "CMLiu"
+        "WeTest"
       ],
       "source_carriers": [
-        "CM"
+        "CT"
       ],
       "country_code": "CA",
-      "city": "Toronto",
-      "region_zh": "加拿大-多伦多",
+      "city": "Montreal",
+      "region_zh": "加拿大-蒙特利尔",
       "quality_status": "source_candidate_unverified",
       "china_probe": {
         "tested_isps": 0,
@@ -914,18 +746,18 @@
       "china_median_rtt_ms": null
     },
     {
-      "ip": "2606:4700:3036:6ed4:e1ed:ae00:3c36:e683",
+      "ip": "2a06:98c1:3105::2726:a1ab",
       "version": 6,
       "port": 443,
       "source": [
-        "CMLiu"
+        "WeTest"
       ],
       "source_carriers": [
-        "CM"
+        "CT"
       ],
-      "country_code": "CA",
-      "city": "Toronto",
-      "region_zh": "加拿大-多伦多",
+      "country_code": "GB",
+      "city": "London",
+      "region_zh": "英国-伦敦",
       "quality_status": "source_candidate_unverified",
       "china_probe": {
         "tested_isps": 0,
@@ -956,7 +788,91 @@
       "china_median_rtt_ms": null
     },
     {
-      "ip": "2606:4700:3036::ce:d6ea",
+      "ip": "2606:4700:4401::1d8a:d283",
+      "version": 6,
+      "port": 443,
+      "source": [
+        "WeTest"
+      ],
+      "source_carriers": [
+        "CT"
+      ],
+      "country_code": "CA",
+      "city": "Montreal",
+      "region_zh": "加拿大-蒙特利尔",
+      "quality_status": "source_candidate_unverified",
+      "china_probe": {
+        "tested_isps": 0,
+        "success_isps": 0,
+        "qualified_isps": 0,
+        "ct_rtt_ms": null,
+        "cu_rtt_ms": null,
+        "cm_rtt_ms": null,
+        "median_rtt_ms": null,
+        "carrier_qualified": {
+          "CT": false,
+          "CU": false,
+          "CM": false
+        }
+      },
+      "china_tested_isps": 0,
+      "china_success_isps": 0,
+      "china_qualified_isps": 0,
+      "china_carrier_qualified": {
+        "CT": false,
+        "CU": false,
+        "CM": false
+      },
+      "china_qualified": false,
+      "china_ct_rtt_ms": null,
+      "china_cu_rtt_ms": null,
+      "china_cm_rtt_ms": null,
+      "china_median_rtt_ms": null
+    },
+    {
+      "ip": "2606:4700:4409::d175:871d",
+      "version": 6,
+      "port": 443,
+      "source": [
+        "WeTest"
+      ],
+      "source_carriers": [
+        "CT"
+      ],
+      "country_code": "CA",
+      "city": "Montreal",
+      "region_zh": "加拿大-蒙特利尔",
+      "quality_status": "source_candidate_unverified",
+      "china_probe": {
+        "tested_isps": 0,
+        "success_isps": 0,
+        "qualified_isps": 0,
+        "ct_rtt_ms": null,
+        "cu_rtt_ms": null,
+        "cm_rtt_ms": null,
+        "median_rtt_ms": null,
+        "carrier_qualified": {
+          "CT": false,
+          "CU": false,
+          "CM": false
+        }
+      },
+      "china_tested_isps": 0,
+      "china_success_isps": 0,
+      "china_qualified_isps": 0,
+      "china_carrier_qualified": {
+        "CT": false,
+        "CU": false,
+        "CM": false
+      },
+      "china_qualified": false,
+      "china_ct_rtt_ms": null,
+      "china_cu_rtt_ms": null,
+      "china_cm_rtt_ms": null,
+      "china_median_rtt_ms": null
+    },
+    {
+      "ip": "2606:4700:3036:0:a36a:4a23:4a60:9f3f",
       "version": 6,
       "port": 443,
       "source": [
@@ -1040,7 +956,7 @@
       "china_median_rtt_ms": null
     },
     {
-      "ip": "2606:4700:3036:ef:95e:7a29:2ccc:d331",
+      "ip": "2606:4700:3036:ef:db9e:eecc:caef:9d4a",
       "version": 6,
       "port": 443,
       "source": [
@@ -1082,7 +998,91 @@
       "china_median_rtt_ms": null
     },
     {
-      "ip": "2606:4700:3036:0:a36a:4aa4:75d9:9f75",
+      "ip": "2606:4700:3036:6ed4:260:e3e9:a48c:8437",
+      "version": 6,
+      "port": 443,
+      "source": [
+        "CMLiu"
+      ],
+      "source_carriers": [
+        "CM"
+      ],
+      "country_code": "CA",
+      "city": "Toronto",
+      "region_zh": "加拿大-多伦多",
+      "quality_status": "source_candidate_unverified",
+      "china_probe": {
+        "tested_isps": 0,
+        "success_isps": 0,
+        "qualified_isps": 0,
+        "ct_rtt_ms": null,
+        "cu_rtt_ms": null,
+        "cm_rtt_ms": null,
+        "median_rtt_ms": null,
+        "carrier_qualified": {
+          "CT": false,
+          "CU": false,
+          "CM": false
+        }
+      },
+      "china_tested_isps": 0,
+      "china_success_isps": 0,
+      "china_qualified_isps": 0,
+      "china_carrier_qualified": {
+        "CT": false,
+        "CU": false,
+        "CM": false
+      },
+      "china_qualified": false,
+      "china_ct_rtt_ms": null,
+      "china_cu_rtt_ms": null,
+      "china_cm_rtt_ms": null,
+      "china_median_rtt_ms": null
+    },
+    {
+      "ip": "2606:4700:3036:ef:92f:be51:8695:9fc5",
+      "version": 6,
+      "port": 443,
+      "source": [
+        "CMLiu"
+      ],
+      "source_carriers": [
+        "CM"
+      ],
+      "country_code": "CA",
+      "city": "Toronto",
+      "region_zh": "加拿大-多伦多",
+      "quality_status": "source_candidate_unverified",
+      "china_probe": {
+        "tested_isps": 0,
+        "success_isps": 0,
+        "qualified_isps": 0,
+        "ct_rtt_ms": null,
+        "cu_rtt_ms": null,
+        "cm_rtt_ms": null,
+        "median_rtt_ms": null,
+        "carrier_qualified": {
+          "CT": false,
+          "CU": false,
+          "CM": false
+        }
+      },
+      "china_tested_isps": 0,
+      "china_success_isps": 0,
+      "china_qualified_isps": 0,
+      "china_carrier_qualified": {
+        "CT": false,
+        "CU": false,
+        "CM": false
+      },
+      "china_qualified": false,
+      "china_ct_rtt_ms": null,
+      "china_cu_rtt_ms": null,
+      "china_cm_rtt_ms": null,
+      "china_median_rtt_ms": null
+    },
+    {
+      "ip": "2606:4700:3036:6ed4:ffdf:f2ba:820b:ed5c",
       "version": 6,
       "port": 443,
       "source": [
