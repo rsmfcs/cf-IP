@@ -44,6 +44,9 @@ IPv4 继续扫描 Cloudflare 官方 IPv4 网段并检测 TCP 443；IPv6 从 Host
 | HostMonit IPv6 独立订阅 | [ipv6.txt](https://raw.githubusercontent.com/rsmfcs/cf-IP/main/ipv6.txt) |
 | 高速节点（≥25 Mbps） | [fast.txt](https://raw.githubusercontent.com/rsmfcs/cf-IP/main/fast.txt) |
 | 稳定节点（成功率 100%、抖动 ≤50 ms） | [stable.txt](https://raw.githubusercontent.com/rsmfcs/cf-IP/main/stable.txt) |
+| 中国电信实测优选 | [china-ct.txt](https://raw.githubusercontent.com/rsmfcs/cf-IP/main/china-ct.txt) |
+| 中国联通实测优选 | [china-cu.txt](https://raw.githubusercontent.com/rsmfcs/cf-IP/main/china-cu.txt) |
+| 中国移动实测优选 | [china-cm.txt](https://raw.githubusercontent.com/rsmfcs/cf-IP/main/china-cm.txt) |
 
 备用别名：`cf-ipv4-top20.txt`、`cf-ipv4-top50.txt`、`cf-ipv4-top100.txt`、`cf-ipv4-top200.txt`、`cf-ipv4-top400.txt`。
 
