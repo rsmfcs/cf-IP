@@ -153,70 +153,63 @@ def test_hostmonit_ipv6_parser_validates_deduplicates_and_filters(monkeypatch):
     assert items[0]["quality_status"] == "source_candidate_unverified"
 
 
-def test_ipv6_source_output_preserves_previous_files_when_empty(tmp_path, monkeypatch):
+def test_ipv6_outputs_clear_stale_unverified_addresses_when_empty(tmp_path, monkeypatch):
     monkeypatch.setattr(main, "ROOT", tmp_path)
     monkeypatch.setattr(main, "OUTPUT", tmp_path / "output")
-    (tmp_path / "output" / "ipv6").mkdir(parents=True)
-    previous = "[2606:4700:4700::1111]:443#美国\n"
-    (tmp_path / "ipv6.txt").write_text(previous, encoding="utf-8")
+    (tmp_path / "all.txt").write_text(
+        "1.1.1.1:443#美国\n[2606:4700::old]:443#旧IPv6\n",
+        encoding="utf-8",
+    )
+    (tmp_path / "ipv6.txt").write_text("[2606:4700::old]:443#旧IPv6\n", encoding="utf-8")
 
-    main.write_ipv6_source_outputs([], {"candidate_count": 0})
+    main.write_ipv6_source_outputs([], [], {"candidate_count": 0})
 
-    assert (tmp_path / "ipv6.txt").read_text(encoding="utf-8") == previous
+    assert (tmp_path / "ipv6.txt").read_text(encoding="utf-8") == ""
+    assert (tmp_path / "all.txt").read_text(encoding="utf-8") == "1.1.1.1:443#美国\n"
 
 
-def test_ipv6_source_outputs_merge_into_root_all_subscription(tmp_path, monkeypatch):
+def test_ipv6_outputs_publish_only_three_carrier_qualified_ips(tmp_path, monkeypatch):
     monkeypatch.setattr(main, "ROOT", tmp_path)
     monkeypatch.setattr(main, "OUTPUT", tmp_path / "output")
-    (tmp_path / "output" / "ipv4").mkdir(parents=True)
     (tmp_path / "all.txt").write_text(
         "1.1.1.1:443#美国\n[2606:4700::old]:443#旧IPv6\n",
         encoding="utf-8",
     )
     candidates = [
-        {
-            "ip": "2606:4700:4700::1111",
-            "port": 443,
-            "region_zh": "美国",
-            "country_code": "US",
-        }
+        {"ip": "2606:4700:4700::1111", "port": 443, "country_code": "US", "city": "Los Angeles"}
     ]
+    qualified = [{
+        **candidates[0],
+        "china_qualified": True,
+        "china_carrier_qualified": {"CT": True, "CU": True, "CM": True},
+        "china_probe": {"ct_rtt_ms": 80, "cu_rtt_ms": 100, "cm_rtt_ms": 90},
+        "score": 90,
+    }]
+    main.write_ipv6_source_outputs(candidates, qualified, {"candidate_count": 1})
 
-    main.write_ipv6_source_outputs(candidates, {"candidate_count": 1})
+    expected = "[2606:4700:4700::1111]:443#美国-洛杉矶\n"
+    assert (tmp_path / "ipv6.txt").read_text(encoding="utf-8") == expected
+    assert (tmp_path / "china-ct-ipv6.txt").read_text(encoding="utf-8") == expected
+    assert (tmp_path / "china-cu-ipv6.txt").read_text(encoding="utf-8") == expected
+    assert (tmp_path / "china-cm-ipv6.txt").read_text(encoding="utf-8") == expected
+    assert (tmp_path / "all.txt").read_text(encoding="utf-8") == "1.1.1.1:443#美国\n" + expected
 
-    combined = (tmp_path / "all.txt").read_text(encoding="utf-8").splitlines()
-    assert combined == [
-        "1.1.1.1:443#美国",
-        "[2606:4700:4700::1111]:443#美国",
-    ]
 
-    # Every existing client-facing IPv4 subscription list receives the IPv6
-    # source candidate, while keeping its original IPv4 entries.
-    for name in (
-        "fast.txt", "stable.txt",
-        "best-cf-ip-scanned-top20.txt", "best-cf-ip-scanned-top50.txt",
-        "best-cf-ip-scanned-top100.txt", "best-cf-ip-scanned-top200.txt",
-        "best-cf-ip-scanned-top400.txt",
-        "cf-ipv4-top20.txt", "cf-ipv4-top50.txt",
-        "cf-ipv4-top100.txt", "cf-ipv4-top200.txt", "cf-ipv4-top400.txt",
-    ):
-        path = tmp_path / name
-        path.write_text("2.2.2.2:443#美国\n", encoding="utf-8")
+def test_ipv6_outputs_never_publish_partially_qualified_ip(tmp_path, monkeypatch):
+    monkeypatch.setattr(main, "ROOT", tmp_path)
+    monkeypatch.setattr(main, "OUTPUT", tmp_path / "output")
+    (tmp_path / "all.txt").write_text("1.1.1.1:443#美国\n", encoding="utf-8")
+    candidate = {
+        "ip": "2606:4700:4700::2222", "port": 443,
+        "country_code": "US", "city": "Los Angeles",
+        "china_qualified": False,
+        "china_carrier_qualified": {"CT": True, "CU": False, "CM": True},
+        "china_probe": {"ct_rtt_ms": 80, "cu_rtt_ms": None, "cm_rtt_ms": 90},
+    }
 
-    family_dir = tmp_path / "output" / "ipv4"
-    family_dir.mkdir(parents=True, exist_ok=True)
-    (family_dir / "all.txt").write_text("3.3.3.3:443#美国\n", encoding="utf-8")
-    (family_dir / "fast.txt").write_text("3.3.3.3:443#美国\n", encoding="utf-8")
-    (family_dir / "stable.txt").write_text("3.3.3.3:443#美国\n", encoding="utf-8")
+    main.write_ipv6_source_outputs([candidate], [candidate], {"candidate_count": 1})
 
-    main.write_ipv6_source_outputs(candidates, {"candidate_count": 1})
-
-    for name in (
-        "all.txt", "fast.txt", "stable.txt",
-        "best-cf-ip-scanned-top20.txt", "cf-ipv4-top400.txt",
-    ):
-        lines = (tmp_path / name).read_text(encoding="utf-8").splitlines()
-        assert "[2606:4700:4700::1111]:443#美国" in lines
-    for name in ("all.txt", "fast.txt", "stable.txt"):
-        lines = (family_dir / name).read_text(encoding="utf-8").splitlines()
-        assert "[2606:4700:4700::1111]:443#美国" in lines
+    assert (tmp_path / "ipv6.txt").read_text(encoding="utf-8") == ""
+    assert (tmp_path / "china-ct-ipv6.txt").read_text(encoding="utf-8") != ""
+    assert (tmp_path / "china-cu-ipv6.txt").read_text(encoding="utf-8") == ""
+    assert (tmp_path / "all.txt").read_text(encoding="utf-8") == "1.1.1.1:443#美国\n"
