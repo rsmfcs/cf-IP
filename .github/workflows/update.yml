@@ -1,4 +1,4 @@
-name: Update Cloudflare IPs (IPv4 + IPv6 sync)
+name: Update Cloudflare IPs (IPv4 + IPv6 China verified)
 
 on:
   push:
@@ -39,7 +39,7 @@ jobs:
         id: tests
         run: pytest -q
 
-      - name: Run IPv4 scan and IPv6 source sync
+      - name: Run IPv4/IPv6 scans and China carrier verification
         id: scan
         run: python -m src.main
         env:
