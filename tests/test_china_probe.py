@@ -89,7 +89,7 @@ def test_carrier_status_deduplicates_same_probe_location():
 
 
 
-def test_create_measurement_sets_requested_ip_version(monkeypatch):
+def test_create_measurement_uses_ipv6_literal_target(monkeypatch):
     from src import china_probe
 
     captured = {}
@@ -104,9 +104,8 @@ def test_create_measurement_sets_requested_ip_version(monkeypatch):
     china_probe._create_measurement(
         "2606:4700:4700::1111",
         china_probe.ISP_LOCATIONS,
-        ip_version=6,
     )
 
     assert captured["method"] == "POST"
     assert captured["body"]["target"] == "2606:4700:4700::1111"
-    assert captured["body"]["measurementOptions"]["ipVersion"] == 6
+    assert "ipVersion" not in captured["body"]["measurementOptions"]
