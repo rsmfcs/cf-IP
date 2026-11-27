@@ -21,6 +21,14 @@ IPv4 继续扫描 Cloudflare 官方 IPv4 网段并检测 TCP 443；IPv6 从 Host
 - 国家/地区代码通过 GeoIP 查询补充，订阅行显示为 `IP:443#US 🇺🇸`。
 - GeoIP 仅用于显示参考；Cloudflare Anycast 地址的归属地不代表每位用户实际连接到的边缘机房。GeoIP 查询失败时仍会保留节点，地区显示为 `ZZ 🌐`。
 
+## 中国大陆三网优选
+
+- 每轮先用 GitHub Actions 的海外扫描结果建立候选池，再调用 Globalping 中国大陆家宽探针，分别覆盖电信（AS4134）、联通（AS4837）和移动（AS9808）。
+- 国内探针通过 HTTPS 访问固定 IP 的 `/cdn-cgi/trace`，同时检查 Cloudflare 响应和 TCP 建连耗时；不是只测端口是否开放。
+- 每 6 小时轮转实测最多 12 个 IPv4 候选，保留最近 72 小时记录。最终订阅优先排列国内至少一个运营商实测成功的 IP，再按三网成功覆盖数和国内 RTT 排序；尚未测到的候选保留为后备。
+- GeoIP 国家/地区不再作为硬性优先条件，只在海外评分相同时辅助排序。国内探针额度不足或服务不可用时，会回退到原有排序，不中断订阅更新。
+- 可选 GitHub Actions Secret：`GLOBALPING_TOKEN`。未配置时使用 Globalping 公共额度；可选变量 `CHINA_PROBE_BUDGET` 用于调整每轮候选数（默认 12，最大 30）。
+
 ## 订阅地址（Raw）
 
 以下链接可直接复制到支持 URL 订阅的客户端：
