@@ -44,7 +44,10 @@ IPv4 扫描 Cloudflare 官方网段，IPv6 汇总 HostMonit、WeTest、CMLiu 等
 | TOP 200 | [best-cf-ip-scanned-top200.txt](https://raw.githubusercontent.com/rsmfcs/cf-IP/main/best-cf-ip-scanned-top200.txt) |
 | TOP 400 | [best-cf-ip-scanned-top400.txt](https://raw.githubusercontent.com/rsmfcs/cf-IP/main/best-cf-ip-scanned-top400.txt) |
 | IPv4 + IPv6 综合订阅 | [all.txt](https://raw.githubusercontent.com/rsmfcs/cf-IP/main/all.txt) |
-| 国内三网合格 IPv6 独立订阅 | [ipv6.txt](https://raw.githubusercontent.com/rsmfcs/cf-IP/main/ipv6.txt) |\n| 电信 IPv6 | [china-ct-ipv6.txt](https://raw.githubusercontent.com/rsmfcs/cf-IP/main/china-ct-ipv6.txt) |\n| 联通 IPv6 | [china-cu-ipv6.txt](https://raw.githubusercontent.com/rsmfcs/cf-IP/main/china-cu-ipv6.txt) |\n| 移动 IPv6 | [china-cm-ipv6.txt](https://raw.githubusercontent.com/rsmfcs/cf-IP/main/china-cm-ipv6.txt) |
+| 国内三网合格 IPv6 独立订阅 | [ipv6.txt](https://raw.githubusercontent.com/rsmfcs/cf-IP/main/ipv6.txt) |
+| 电信 IPv6 | [china-ct-ipv6.txt](https://raw.githubusercontent.com/rsmfcs/cf-IP/main/china-ct-ipv6.txt) |
+| 联通 IPv6 | [china-cu-ipv6.txt](https://raw.githubusercontent.com/rsmfcs/cf-IP/main/china-cu-ipv6.txt) |
+| 移动 IPv6 | [china-cm-ipv6.txt](https://raw.githubusercontent.com/rsmfcs/cf-IP/main/china-cm-ipv6.txt) |
 | 高速节点（≥25 Mbps） | [fast.txt](https://raw.githubusercontent.com/rsmfcs/cf-IP/main/fast.txt) |
 | 稳定节点（成功率 100%、抖动 ≤50 ms） | [stable.txt](https://raw.githubusercontent.com/rsmfcs/cf-IP/main/stable.txt) |
 | 中国电信实测优选 | [china-ct.txt](https://raw.githubusercontent.com/rsmfcs/cf-IP/main/china-ct.txt) |
