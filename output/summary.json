@@ -1,8 +1,8 @@
 {
   "project": "Cloudflare-IP-Auto",
   "version": "4.0",
-  "generated_at": "2026-11-27T08:05:29+00:00",
-  "schedule": "17 */12 * * * (UTC)",
+  "generated_at": "2026-11-27T09:54:04+00:00",
+  "schedule": "0 10,22 * * * (UTC)",
   "ip_family": "IPv4 + IPv6 domestic carrier verification",
   "ports": [
     443
@@ -14,7 +14,7 @@
       "egress_check": {
         "available": true,
         "target": "1.1.1.1:443",
-        "connect_ms": 5.75
+        "connect_ms": 9.62
       },
       "network_count": 15,
       "candidate_count": 2048,
@@ -22,13 +22,13 @@
       "tcp_tls_http_pass_count": 409,
       "usable_count": 105,
       "speed_tested_count": 50,
-      "china_verified_count": 89,
-      "china_qualified_count": 89,
-      "china_three_carrier_qualified_count": 76,
+      "china_verified_count": 86,
+      "china_qualified_count": 86,
+      "china_three_carrier_qualified_count": 71,
       "china_carrier_counts": {
-        "CT": 91,
-        "CU": 101,
-        "CM": 93
+        "CT": 88,
+        "CU": 100,
+        "CM": 90
       },
       "china_probe_isps": [
         "CT",
@@ -44,7 +44,7 @@
         "max_median_tcp_rtt_ms": 300,
         "three_carrier_is_bonus": true
       },
-      "ranked_count": 89,
+      "ranked_count": 86,
       "region_targets": {
         "HK": 15,
         "US": 15,
@@ -56,9 +56,7 @@
         "CA": 60
       },
       "colo_counts": {
-        "MSP": 65,
-        "DFW": 4,
-        "ORD": 36
+        "IAD": 105
       },
       "geoip_note": "GeoIP is approximate; colo is observed from Cloudflare /cdn-cgi/trace.",
       "top_ip": "162.159.45.44",
@@ -68,18 +66,18 @@
     },
     "ipv6": {
       "family": "ipv6",
-      "status": "no_domestic_qualified_ip",
+      "status": "ok",
       "sources": [
         "HostMonit",
         "WeTest",
         "CMLiu"
       ],
       "candidate_count": 26,
-      "qualified_count": 0,
+      "qualified_count": 2,
       "carrier_qualified_counts": {
-        "CT": 0,
-        "CU": 0,
-        "CM": 0
+        "CT": 12,
+        "CU": 5,
+        "CM": 3
       },
       "domestic_gate": {
         "required_carriers": [
@@ -98,8 +96,8 @@
         "china-cu-cm.txt"
       ],
       "subscription_format": "[IPv6]:443",
-      "three_carrier_qualified_count": 0,
-      "note": "Fresh IPv6 addresses are merged with the matching IPv4 carrier results in the four root dual-stack subscriptions."
+      "three_carrier_qualified_count": 2,
+      "note": "IPv6 is probed before IPv4 to protect its Globalping quota; verified IPv6 results are merged after IPv4 outputs are written."
     }
   }
 }
