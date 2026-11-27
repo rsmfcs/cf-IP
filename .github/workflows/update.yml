@@ -5,7 +5,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: "17 */6 * * *"
+    - cron: "17 */12 * * *"
   workflow_dispatch:
 
 permissions:
@@ -44,7 +44,7 @@ jobs:
         run: python -m src.main
         env:
           PYTHONUNBUFFERED: "1"
-          GLOBALPING_TOKEN: ${{ secrets.GLOBALPING_TOKEN }}
+          GLOBALPING_TOKEN: ${{ secrets.GLOBALPING_API_TOKEN }}
           CHINA_PROBE_BUDGET: "24"
           CHINA_IPV6_PROBE_BUDGET: "12"
 
