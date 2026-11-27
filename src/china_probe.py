@@ -51,7 +51,7 @@ def _request(url: str, *, method: str = "GET", body: dict | None = None,
         return json.loads(response.read().decode("utf-8"))
 
 
-def _create_measurement(ip: str, locations: list | str, ip_version: int = 4) -> dict:
+def _create_measurement(ip: str, locations: list | str) -> dict:
     body = {
         "type": "http",
         "target": ip,
@@ -59,7 +59,6 @@ def _create_measurement(ip: str, locations: list | str, ip_version: int = 4) -> 
         "measurementOptions": {
             "protocol": "HTTPS",
             "port": 443,
-            "ipVersion": ip_version,
             "request": {
                 "host": "www.cloudflare.com",
                 "path": "/cdn-cgi/trace",
@@ -231,10 +230,10 @@ def probe_and_rank(
         for target in targets:
             ip = str(target["ip"])
             try:
-                created = _create_measurement(ip, sticky or ISP_LOCATIONS, ip_version)
+                created = _create_measurement(ip, sticky or ISP_LOCATIONS)
                 if not created.get("id") and sticky and created.get("status") == 422:
                     sticky = None
-                    created = _create_measurement(ip, ISP_LOCATIONS, ip_version)
+                    created = _create_measurement(ip, ISP_LOCATIONS)
                 measurement_id = created.get("id")
                 if not measurement_id:
                     print(f"China probe create failed for {ip}: {created}")
