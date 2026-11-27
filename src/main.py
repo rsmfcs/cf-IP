@@ -893,6 +893,14 @@ def sort_and_score(
     )
 
 
+
+# China mainland carrier probes (Globalping). These measurements, not the
+# GitHub Actions runner's overseas RTT, drive the final subscription order.
+def apply_china_probes(results: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    from .china_probe import probe_and_rank
+
+    return probe_and_rank(results, OUTPUT / "china-probe" / "history.json")
+
 def write_json(path: Path, payload: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temp = path.with_suffix(path.suffix + ".tmp")
