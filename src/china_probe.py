@@ -51,7 +51,7 @@ def _request(url: str, *, method: str = "GET", body: dict | None = None,
         return json.loads(response.read().decode("utf-8"))
 
 
-def _create_measurement(ip: str, locations: list | str) -> dict:
+def _create_measurement(ip: str, locations: list | str, ip_version: int = 4) -> dict:
     body = {
         "type": "http",
         "target": ip,
@@ -59,6 +59,7 @@ def _create_measurement(ip: str, locations: list | str) -> dict:
         "measurementOptions": {
             "protocol": "HTTPS",
             "port": 443,
+            "ipVersion": ip_version,
             "request": {
                 "host": "www.cloudflare.com",
                 "path": "/cdn-cgi/trace",
@@ -142,7 +143,7 @@ def _save_history(path: Path, history: dict) -> None:
 
 
 def _carrier_status(samples: list[dict]) -> dict:
-    """Require at least two distinct mainland probes and a median TCP RTT <= 350 ms."""
+    """Require at least two distinct mainland probes and a median TCP RTT <= 300 ms."""
     latest_by_probe = {}
     for sample in sorted(samples, key=lambda x: str(x.get("at") or ""), reverse=True):
         key = str(sample.get("probe_key") or "legacy-single-probe")
@@ -165,7 +166,9 @@ def _carrier_status(samples: list[dict]) -> dict:
     }
 
 
-def probe_and_rank(results: list[dict[str, Any]], history_path: Path) -> list[dict[str, Any]]:
+def probe_and_rank(
+    results: list[dict[str, Any]], history_path: Path, ip_version: int = 4
+) -> list[dict[str, Any]]:
     """Probe a rotating subset, then rank using recent mainland carrier results."""
     if not results:
         return results
@@ -180,7 +183,9 @@ def probe_and_rank(results: list[dict[str, Any]], history_path: Path) -> list[di
         and _parse_time(row["at"]) >= cutoff
     ]
     # Do not call Globalping when the public quota is exhausted.
-    budget = max(0, min(30, int(os.getenv("CHINA_PROBE_BUDGET", DEFAULT_BUDGET))))
+    budget_name = "CHINA_IPV6_PROBE_BUDGET" if ip_version == 6 else "CHINA_PROBE_BUDGET"
+    default_budget = 12 if ip_version == 6 else DEFAULT_BUDGET
+    budget = max(0, min(30, int(os.getenv(budget_name, default_budget))))
     try:
         limits = _request(f"{API}/limits", timeout=8)
         remaining = int(limits.get("rateLimit", {}).get("measurements", {}).get("create", {}).get("remaining"))
@@ -195,7 +200,7 @@ def probe_and_rank(results: list[dict[str, Any]], history_path: Path) -> list[di
     for item in results:
         ip = str(item.get("ip") or "")
         try:
-            if ipaddress.ip_address(ip).version != 4:
+            if ipaddress.ip_address(ip).version != ip_version:
                 continue
         except ValueError:
             continue
@@ -226,10 +231,10 @@ def probe_and_rank(results: list[dict[str, Any]], history_path: Path) -> list[di
         for target in targets:
             ip = str(target["ip"])
             try:
-                created = _create_measurement(ip, sticky or ISP_LOCATIONS)
+                created = _create_measurement(ip, sticky or ISP_LOCATIONS, ip_version)
                 if not created.get("id") and sticky and created.get("status") == 422:
                     sticky = None
-                    created = _create_measurement(ip, ISP_LOCATIONS)
+                    created = _create_measurement(ip, ISP_LOCATIONS, ip_version)
                 measurement_id = created.get("id")
                 if not measurement_id:
                     print(f"China probe create failed for {ip}: {created}")
