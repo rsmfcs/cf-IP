@@ -1,4 +1,4 @@
-# Cloudflare-IP-Auto V3.6（IPv4 扫描 + IPv6 同步更新）
+# Cloudflare-IP-Auto V3.7（中国三网实测优选 + IPv6 同步更新）
 
 IPv4 继续扫描 Cloudflare 官方 IPv4 网段并检测 TCP 443；IPv6 从 HostMonit 获取候选地址，进行格式校验、去重和地区标注后独立发布。GitHub Actions 每 6 小时自动更新两类数据。
 
