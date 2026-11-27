@@ -873,7 +873,7 @@ def sort_and_score(
     results: list[dict[str, Any]],
     preferred_country_codes: list[str] | None = None,
 ) -> list[dict[str, Any]]:
-    """Rank preferred GeoIP regions first, then rank by measured quality."""
+    """Use overseas quality for candidate order; GeoIP is only a tie-breaker."""
     preferred = {
         str(code).strip().upper()
         for code in (preferred_country_codes or ["HK", "US", "SG", "JP"])
@@ -884,8 +884,8 @@ def sort_and_score(
     return sorted(
         results,
         key=lambda item: (
-            item["region_priority"],
             -item["score"],
+            item["region_priority"],
             item["latency_ms"],
             -item["success_rate"],
             item["ip"],
@@ -899,7 +899,11 @@ def sort_and_score(
 def apply_china_probes(results: list[dict[str, Any]]) -> list[dict[str, Any]]:
     from .china_probe import probe_and_rank
 
-    return probe_and_rank(results, OUTPUT / "china-probe" / "history.json")
+    try:
+        return probe_and_rank(results, OUTPUT / "china-probe" / "history.json")
+    except Exception as exc:
+        print(f"China carrier probing unavailable; keeping overseas ranking: {type(exc).__name__}: {exc}")
+        return results
 
 def write_json(path: Path, payload: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -921,6 +925,7 @@ def write_family_outputs(version: int, results: list[dict[str, Any]], top_n: lis
         "ip", "version", "port", "country_code", "city", "region_zh", "colo",
         "latency_ms", "median_latency_ms", "jitter_ms", "p95_latency_ms",
         "speed_mbps", "speed_tested", "success_rate", "successful_rounds",
+        "china_probe",
         "total_rounds", "score", "tested_at",
     ]
     with (output_dir / "all.csv").open("w", newline="", encoding="utf-8") as handle:
