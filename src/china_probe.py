@@ -27,6 +27,7 @@ KEEP_HOURS = 168  # Only accept domestic evidence from the last 7 days.
 DEFAULT_BUDGET = 24
 MIN_PROBES_PER_ISP = 2
 MAX_CHINA_RTT_MS = 300.0
+REQUIRED_SUBSCRIPTION_CARRIERS = ("CU", "CM")
 PROBES_PER_ISP = 2
 ISP_LOCATIONS = [
     {"country": "CN", "asn": 4134, "tags": ["eyeball-network"], "limit": PROBES_PER_ISP},
@@ -165,6 +166,12 @@ def _carrier_status(samples: list[dict]) -> dict:
     }
 
 
+def is_mobile_unicom_qualified(carrier_qualified: dict[str, bool] | None) -> bool:
+    """Public subscription gate: both China Unicom and China Mobile must pass."""
+    carrier_qualified = carrier_qualified or {}
+    return all(bool(carrier_qualified.get(isp)) for isp in REQUIRED_SUBSCRIPTION_CARRIERS)
+
+
 def probe_and_rank(
     results: list[dict[str, Any]], history_path: Path, ip_version: int = 4
 ) -> list[dict[str, Any]]:
@@ -299,7 +306,15 @@ def probe_and_rank(
         item["china_success_isps"] = success_isps
         item["china_qualified_isps"] = qualified_isps
         item["china_carrier_qualified"] = carrier_qualified
-        item["china_qualified"] = qualified_isps == 3
+        item["china_three_carrier_qualified"] = qualified_isps == 3
+        item["china_mobile_unicom_qualified"] = is_mobile_unicom_qualified(carrier_qualified)
+        # Backward-compatible public gate: at least China Unicom + China Mobile.
+        item["china_qualified"] = item["china_mobile_unicom_qualified"]
+        item["quality_status"] = (
+            "domestic_three_carrier_verified" if item["china_three_carrier_qualified"]
+            else "domestic_mobile_unicom_verified" if item["china_mobile_unicom_qualified"]
+            else "not_subscription_qualified"
+        )
         item["china_ct_rtt_ms"] = metrics["CT"]
         item["china_cu_rtt_ms"] = metrics["CU"]
         item["china_cm_rtt_ms"] = metrics["CM"]
@@ -309,12 +324,14 @@ def probe_and_rank(
         china = item.get("china_probe") or {}
         successes = int(china.get("success_isps") or 0)
         tested = int(china.get("tested_isps") or 0)
-        # Strictly qualified three-carrier IPs rank first. Others are diagnostics only.
-        qualified = bool(item.get("china_qualified"))
+        # Mobile+Unicom-qualified IPs rank first; three-carrier IPs receive a tie-break bonus.
+        qualified = bool(item.get("china_mobile_unicom_qualified", item.get("china_qualified")))
+        three_carrier = bool(item.get("china_three_carrier_qualified"))
         group = 0 if qualified else (1 if successes else (2 if tested else 3))
         median = china.get("median_rtt_ms")
         return (
             group,
+            0 if three_carrier else 1,
             -successes,
             float(median) if median is not None else 999999.0,
             -float(item.get("score") or 0),
