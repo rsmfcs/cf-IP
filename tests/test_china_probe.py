@@ -1,3 +1,9 @@
+import sys
+from pathlib import Path
+
+# Ensure the repository root is importable when pytest uses importlib mode.
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 from src.china_probe import _parse_probe_result
 
 
