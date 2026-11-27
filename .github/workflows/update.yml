@@ -46,6 +46,7 @@ jobs:
           PYTHONUNBUFFERED: "1"
           GLOBALPING_TOKEN: ${{ secrets.GLOBALPING_TOKEN }}
           CHINA_PROBE_BUDGET: "24"
+          CHINA_IPV6_PROBE_BUDGET: "12"
 
       - name: Commit and push results (retry safely)
         id: publish
