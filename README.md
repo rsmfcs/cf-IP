@@ -5,7 +5,7 @@ IPv4 扫描 Cloudflare 官方网段，IPv6 汇总 HostMonit、WeTest、CMLiu 等
 ## 自动更新
 
 - 定时任务：UTC 每天 00:17、06:17、12:17、18:17（每 6 小时一次）。
-- 也可以在仓库 **Actions → Update Cloudflare IPs (IPv4 + IPv6 sync) → Run workflow** 手动运行。
+- 也可以在仓库 **Actions → Update Cloudflare IPs (IPv4 + IPv6 China verified) → Run workflow** 手动运行。
 - 运行结果写入仓库根目录订阅文件及 `output/ipv4/`。
 - 工作流会先运行测试，测试通过后再扫描。
 - GitHub 定时任务只在默认分支运行；请确保工作流文件保留在 `main` 分支。
@@ -61,8 +61,11 @@ IPv4 扫描 Cloudflare 官方网段，IPv6 汇总 HostMonit、WeTest、CMLiu 等
 - `output/summary.json`：最近一次扫描时间、候选数量、可用数量及失败原因。
 - `output/ipv4/all.json` / `all.csv`：完整 IPv4 检测数据。
 - 根目录 `all.txt` 合并三网全部合格的 IPv4 与 IPv6；`fast.txt`、`stable.txt` 和 TOP 系列保留 IPv4 扫描结果。任何未通过国内三网 IPv6 实测的地址都不会进入正式订阅。
-- `output/ipv6/source.json`：HostMonit IPv6 来源信息、更新时间及候选地址。
-- `output/ipv6/source.txt` / `all.txt`：IPv6 独立订阅。
+- `output/ipv6/source.json` / `source.txt`：HostMonit、WeTest、CMLiu 候选源诊断信息，未经验证，不是订阅。
+- `output/ipv6/all.json`：国内探测后的完整 IPv6 候选结果。
+- `output/ipv6/qualified.json` / `all.txt`：电信、联通、移动均通过准入的 IPv6 地址。
+- `output/ipv6/china-ct-ipv6.txt`、`china-cu-ipv6.txt`、`china-cm-ipv6.txt`：各运营商单独合格的 IPv6 地址。
+- `output/china-probe/ipv6-history.json`：IPv6 最近 7 天国内探测历史。
 - `output/ipv4/topN.json` / `topN.txt`：各排名的详细数据。
 - 根目录 `*.txt`：适合客户端直接订阅的节点列表。
 
