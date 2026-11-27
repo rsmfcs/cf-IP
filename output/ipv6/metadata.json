@@ -4,7 +4,7 @@
     "WeTest",
     "CMLiu"
   ],
-  "fetched_at": "2026-11-27T07:50:23+00:00",
+  "fetched_at": "2026-11-27T08:03:57+00:00",
   "source_counts": {
     "HostMonit": 5,
     "WeTest": 15,
@@ -18,7 +18,7 @@
   "hostmonit": {
     "source": "HostMonit",
     "api": "https://api.hostmonit.com/get_optimization_ip",
-    "fetched_at": "2026-11-27T07:50:22+00:00",
+    "fetched_at": "2026-11-27T08:03:56+00:00",
     "source_counts": {
       "CM": 5,
       "CT": 0,
@@ -28,10 +28,10 @@
     "quality_status": "source_candidate_unverified",
     "note": "Collected and validated from HostMonit; not connectivity-tested by this GitHub Actions runner."
   },
-  "qualified_count": 3,
+  "qualified_count": 8,
   "carrier_qualified_counts": {
-    "CT": 4,
-    "CU": 3,
-    "CM": 4
+    "CT": 13,
+    "CU": 9,
+    "CM": 10
   }
 }
