@@ -235,14 +235,21 @@ def probe_and_rank(results: list[dict[str, Any]], history_path: Path) -> list[di
             successful_rtts.extend(successful)
         tested_isps = sum(1 for isp in ("CT", "CU", "CM") if by_isp.get(isp))
         success_isps = sum(1 for isp in ("CT", "CU", "CM") if metrics[isp] is not None)
+        median_rtt = round(statistics.median(successful_rtts), 2) if successful_rtts else None
         item["china_probe"] = {
             "tested_isps": tested_isps,
             "success_isps": success_isps,
             "ct_rtt_ms": metrics["CT"],
             "cu_rtt_ms": metrics["CU"],
             "cm_rtt_ms": metrics["CM"],
-            "median_rtt_ms": round(statistics.median(successful_rtts), 2) if successful_rtts else None,
+            "median_rtt_ms": median_rtt,
         }
+        item["china_tested_isps"] = tested_isps
+        item["china_success_isps"] = success_isps
+        item["china_ct_rtt_ms"] = metrics["CT"]
+        item["china_cu_rtt_ms"] = metrics["CU"]
+        item["china_cm_rtt_ms"] = metrics["CM"]
+        item["china_median_rtt_ms"] = median_rtt
 
     def rank_key(item: dict) -> tuple:
         china = item.get("china_probe") or {}
