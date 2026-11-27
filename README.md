@@ -1,4 +1,4 @@
-# Cloudflare-IP-Auto V3.7（中国三网实测优选 + IPv6 同步更新）
+# Cloudflare-IP-Auto V3.8（中国三网准入验证 + IPv6 同步更新）
 
 IPv4 继续扫描 Cloudflare 官方 IPv4 网段并检测 TCP 443；IPv6 从 HostMonit 获取候选地址，进行格式校验、去重和地区标注后独立发布。GitHub Actions 每 6 小时自动更新两类数据。
 
@@ -21,13 +21,14 @@ IPv4 继续扫描 Cloudflare 官方 IPv4 网段并检测 TCP 443；IPv6 从 Host
 - 国家/地区代码通过 GeoIP 查询补充，订阅行显示为 `IP:443#US 🇺🇸`。
 - GeoIP 仅用于显示参考；Cloudflare Anycast 地址的归属地不代表每位用户实际连接到的边缘机房。GeoIP 查询失败时仍会保留节点，地区显示为 `ZZ 🌐`。
 
-## 中国大陆三网优选
+## 中国大陆三网准入验证
 
-- 每轮先用 GitHub Actions 的海外扫描结果建立候选池，再调用 Globalping 中国大陆家宽探针，分别覆盖电信（AS4134）、联通（AS4837）和移动（AS9808）。
-- 国内探针通过 HTTPS 访问固定 IP 的 `/cdn-cgi/trace`，同时检查 Cloudflare 响应和 TCP 建连耗时；不是只测端口是否开放。
-- 每 6 小时轮转实测最多 12 个 IPv4 候选，保留最近 72 小时记录。最终订阅优先排列国内至少一个运营商实测成功的 IP，再按三网成功覆盖数和国内 RTT 排序；尚未测到的候选保留为后备。
-- GeoIP 国家/地区不再作为硬性优先条件，只在海外评分相同时辅助排序。国内探针额度不足或服务不可用时，会回退到原有排序，不中断订阅更新。
+- 国内可用性是正式 IPv4 订阅的准入条件，不再是排序加分项。海外扫描通过但未完成国内验证的 IP，只保留在 `output/ipv4/all.json` 和 `all.csv` 诊断数据中，不进入 `all.txt`、`fast.txt`、`stable.txt` 或 TOP 订阅。
+- 电信（AS4134）、联通（AS4837）、移动（AS9808）每个运营商最多请求 3 个中国大陆 eyeball-network 探针；每个运营商至少 2 个不同探针 HTTPS 验证成功，且该运营商 TCP 延迟中位数不超过 350 ms，才算该运营商合格。
+- 通用 IPv4 订阅要求三家运营商全部合格；`china-ct.txt`、`china-cu.txt`、`china-cm.txt` 则分别要求对应运营商合格。探针不足、数据过期或测试失败的 IP 一律不进入正式订阅。
+- 每 6 小时轮转最多 12 个候选，优先测试从未测试或最久未测试的 IP；验证记录保留 30 天，以便覆盖整个候选池。Globalping 探针数量属于尽力而为，无法保证每次都能分配到请求数量，因此不满足探针门槛时宁可不发布该 IP。
 - 可选 GitHub Actions Secret：`GLOBALPING_TOKEN`。未配置时使用 Globalping 公共额度；可选变量 `CHINA_PROBE_BUDGET` 用于调整每轮候选数（默认 12，最大 30）。
+- IPv6 目前仍是 HostMonit 来源同步，尚未经过同等级别的中国三网验证；`ipv6.txt` 不应视为已通过国内准入测试。
 
 ## 订阅地址（Raw）
 

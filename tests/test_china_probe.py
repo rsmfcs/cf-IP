@@ -55,3 +55,34 @@ def test_parse_probe_result_maps_mobile_asn():
     parsed = _parse_probe_result(item)
     assert parsed["isp"] == "CM"
     assert parsed["ok"] is True
+
+
+def test_carrier_status_requires_two_successful_probes_and_latency_gate():
+    from src.china_probe import _carrier_status
+
+    one_probe = [{"probe_key": "cn|east|city-a|as4134", "ok": True, "rtt_ms": 80}]
+    assert _carrier_status(one_probe)["qualified"] is False
+
+    two_fast_probes = [
+        {"probe_key": "cn|east|city-a|as4134", "ok": True, "rtt_ms": 180},
+        {"probe_key": "cn|south|city-b|as4134", "ok": True, "rtt_ms": 240},
+    ]
+    status = _carrier_status(two_fast_probes)
+    assert status["qualified"] is True
+    assert status["rtt_ms"] == 210.0
+
+    two_slow_probes = [
+        {"probe_key": "cn|east|city-a|as4134", "ok": True, "rtt_ms": 180},
+        {"probe_key": "cn|south|city-b|as4134", "ok": True, "rtt_ms": 520},
+    ]
+    assert _carrier_status(two_slow_probes)["qualified"] is False
+
+
+def test_carrier_status_deduplicates_same_probe_location():
+    from src.china_probe import _carrier_status
+
+    repeated = [
+        {"probe_key": "cn|east|city-a|as4134", "ok": True, "rtt_ms": 100, "at": "2026-11-27T00:00:00+00:00"},
+        {"probe_key": "cn|east|city-a|as4134", "ok": True, "rtt_ms": 110, "at": "2026-11-27T01:00:00+00:00"},
+    ]
+    assert _carrier_status(repeated)["qualified"] is False

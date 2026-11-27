@@ -921,6 +921,12 @@ def write_family_outputs(version: int, results: list[dict[str, Any]], top_n: lis
     output_dir.mkdir(parents=True, exist_ok=True)
 
     write_json(output_dir / "all.json", results)
+    # Public IPv4 subscriptions are strict domestic-qualified lists only.
+    # The complete overseas scan remains available in all.json/all.csv for diagnostics.
+    subscription_results = (
+        [item for item in results if item.get("china_qualified")]
+        if version == 4 else results
+    )
     csv_fields = [
         "ip", "version", "port", "country_code", "city", "region_zh", "colo",
         "latency_ms", "median_latency_ms", "jitter_ms", "p95_latency_ms",
@@ -935,7 +941,7 @@ def write_family_outputs(version: int, results: list[dict[str, Any]], top_n: lis
         writer.writerows(results)
 
     for count in top_n:
-        top = results[:int(count)]
+        top = subscription_results[:int(count)]
         lines = []
         for item in top:
             speed = "" if item["speed_mbps"] is None else str(item["speed_mbps"])
@@ -959,9 +965,9 @@ def write_family_outputs(version: int, results: list[dict[str, Any]], top_n: lis
 
 
     # Convenience root-level lists for downstream subscription aggregators.
-    fast_items = [item for item in results if item.get("speed_mbps") is not None and item["speed_mbps"] >= 25.0]
-    stable_items = [item for item in results if item.get("success_rate", 0) >= 1.0 and item.get("jitter_ms", 9999) <= 50.0]
-    for name, items in (("all.txt", results), ("fast.txt", fast_items), ("stable.txt", stable_items)):
+    fast_items = [item for item in subscription_results if item.get("speed_mbps") is not None and item["speed_mbps"] >= 25.0]
+    stable_items = [item for item in subscription_results if item.get("success_rate", 0) >= 1.0 and item.get("jitter_ms", 9999) <= 50.0]
+    for name, items in (("all.txt", subscription_results), ("fast.txt", fast_items), ("stable.txt", stable_items)):
         lines = [subscription_line(item) for item in items]
         payload = "\n".join(lines) + "\n"
         (ROOT / name).write_text(payload, encoding="utf-8")
@@ -974,16 +980,20 @@ def write_family_outputs(version: int, results: list[dict[str, Any]], top_n: lis
         ("cu", "china_cu_rtt_ms"),
         ("cm", "china_cm_rtt_ms"),
     ):
-        carrier_items = [item for item in results if item.get(field) is not None]
+        isp_code = isp.upper()
+        carrier_items = [
+            item for item in results
+            if (item.get("china_carrier_qualified") or {}).get(isp_code)
+        ]
         carrier_items.sort(key=lambda item: (float(item[field]), -float(item.get("score") or 0)))
         payload = "\n".join(subscription_line(item) for item in carrier_items)
         payload += "\n" if payload else ""
         (ROOT / f"china-{isp}.txt").write_text(payload, encoding="utf-8")
         (output_dir / f"china-{isp}.txt").write_text(payload, encoding="utf-8")
     write_json(OUTPUT / "summary.json", {
-        "project": "Cloudflare-IP-Auto", "version": "3.5", "generated_at": utc_now(),
+        "project": "Cloudflare-IP-Auto", "version": "3.8", "generated_at": utc_now(),
         "ip_family": "IPv4 only", "port": 443,
-        "ranked_count": len(results), "all_count": len(results),
+        "ranked_count": len(subscription_results), "all_count": len(results),
         "fast_count": len(fast_items), "fast_min_mbps": 25.0,
         "stable_count": len(stable_items), "stable_rule": "success_rate=100% and jitter<=50ms",
     })
@@ -1086,7 +1096,11 @@ def run_ipv4(config: dict[str, Any]) -> dict[str, Any]:
     enrich_colo_info(results, config)
     ranked = sort_and_score(results, scan.get("preferred_country_codes", ["HK", "US", "SG", "JP"]))
     ranked = apply_china_probes(ranked)
-    china_verified = sum(1 for item in ranked if (item.get("china_probe") or {}).get("success_isps", 0) > 0)
+    china_verified = sum(1 for item in ranked if item.get("china_qualified"))
+    china_carrier_counts = {
+        isp: sum(1 for item in ranked if (item.get("china_carrier_qualified") or {}).get(isp))
+        for isp in ("CT", "CU", "CM")
+    }
     region_counts: dict[str, int] = {}
     colo_counts: dict[str, int] = {}
     for item in ranked:
@@ -1109,13 +1123,16 @@ def run_ipv4(config: dict[str, Any]) -> dict[str, Any]:
         "usable_count": len(results),
         "speed_tested_count": sum(1 for item in results if item["speed_tested"]),
         "china_verified_count": china_verified,
+        "china_qualified_count": china_verified,
+        "china_carrier_counts": china_carrier_counts,
         "china_probe_isps": ["CT", "CU", "CM"],
-        "ranked_count": len(ranked),
+        "domestic_gate": {"min_successful_probes_per_isp": 2, "max_median_tcp_rtt_ms": 350},
+        "ranked_count": china_verified,
         "region_targets": region_targets,
         "region_counts": region_counts,
         "colo_counts": colo_counts,
         "geoip_note": "GeoIP is approximate; colo is observed from Cloudflare /cdn-cgi/trace.",
-        "top_ip": ranked[0]["ip"] if ranked else None,
+        "top_ip": next((item["ip"] for item in ranked if item.get("china_qualified")), None),
         "failure_reasons": failure_reasons,
         "output_dir": "output/ipv4/",
         "subscription_format": "IPv4:443",
@@ -1127,7 +1144,7 @@ def main() -> None:
     OUTPUT.mkdir(parents=True, exist_ok=True)
     summary: dict[str, Any] = {
         "project": "Cloudflare-IP-Auto",
-        "version": "3.7",
+        "version": "3.8",
         "generated_at": utc_now(),
         "schedule": "17 */6 * * * (UTC)",
         "ip_family": "IPv4 scan + IPv6 source sync",

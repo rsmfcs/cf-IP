@@ -23,16 +23,16 @@ ISPS = {
     9808: "CM", 24400: "CM", 24445: "CM", 56040: "CM", 56041: "CM",
     56042: "CM", 56044: "CM", 56046: "CM", 56047: "CM", 56048: "CM",
 }
-ISP_LOCATIONS = [
-    {"country": "CN", "asn": 4134, "tags": ["eyeball-network"], "limit": PROBES_PER_ISP},
-    {"country": "CN", "asn": 4837, "tags": ["eyeball-network"], "limit": PROBES_PER_ISP},
-    {"country": "CN", "asn": 9808, "tags": ["eyeball-network"], "limit": PROBES_PER_ISP},
-]
 KEEP_HOURS = 720  # Keep 30 days so the rotating verifier can cover the full candidate pool.
 DEFAULT_BUDGET = 12
 MIN_PROBES_PER_ISP = 2
 MAX_CHINA_RTT_MS = 350.0
 PROBES_PER_ISP = 3
+ISP_LOCATIONS = [
+    {"country": "CN", "asn": 4134, "tags": ["eyeball-network"], "limit": PROBES_PER_ISP},
+    {"country": "CN", "asn": 4837, "tags": ["eyeball-network"], "limit": PROBES_PER_ISP},
+    {"country": "CN", "asn": 9808, "tags": ["eyeball-network"], "limit": PROBES_PER_ISP},
+]
 USER_AGENT = "cf-IP-china-probe (+https://github.com/rsmfcs/cf-IP)"
 
 
@@ -141,6 +141,30 @@ def _save_history(path: Path, history: dict) -> None:
     temp.replace(path)
 
 
+def _carrier_status(samples: list[dict]) -> dict:
+    """Require at least two distinct mainland probes and a median TCP RTT <= 350 ms."""
+    latest_by_probe = {}
+    for sample in sorted(samples, key=lambda x: str(x.get("at") or ""), reverse=True):
+        key = str(sample.get("probe_key") or "legacy-single-probe")
+        latest_by_probe.setdefault(key, sample)
+    selected = list(latest_by_probe.values())[:PROBES_PER_ISP]
+    successful = [
+        float(x["rtt_ms"]) for x in selected
+        if x.get("ok") and x.get("rtt_ms") is not None
+    ]
+    median_rtt = round(statistics.median(successful), 2) if successful else None
+    return {
+        "rtt_ms": median_rtt,
+        "probe_count": len(selected),
+        "success_probe_count": len(successful),
+        "qualified": (
+            len(successful) >= MIN_PROBES_PER_ISP
+            and median_rtt is not None
+            and median_rtt <= MAX_CHINA_RTT_MS
+        ),
+    }
+
+
 def probe_and_rank(results: list[dict[str, Any]], history_path: Path) -> list[dict[str, Any]]:
     """Probe a rotating subset, then rank using recent mainland carrier results."""
     if not results:
@@ -210,7 +234,7 @@ def probe_and_rank(results: list[dict[str, Any]], history_path: Path) -> list[di
                 if not measurement_id:
                     print(f"China probe create failed for {ip}: {created}")
                     continue
-                if sticky is None and int(created.get("probesCount") or 0) >= 3:
+                if sticky is None and int(created.get("probesCount") or 0) >= (PROBES_PER_ISP * 3):
                     sticky = str(measurement_id)
                 measured = _wait_measurement(str(measurement_id))
                 if not measured:
@@ -248,25 +272,11 @@ def probe_and_rank(results: list[dict[str, Any]], history_path: Path) -> list[di
         carrier_qualified = {}
         successful_rtts = []
         for isp in ("CT", "CU", "CM"):
-            samples = sorted(by_isp.get(isp, []), key=lambda x: str(x.get("at") or ""), reverse=True)
-            # Globalping does not expose stable probe IDs; use a location/network fingerprint.
-            latest_by_probe = {}
-            for sample in samples:
-                key = str(sample.get("probe_key") or "legacy-single-probe")
-                latest_by_probe.setdefault(key, sample)
-            selected = list(latest_by_probe.values())[:PROBES_PER_ISP]
-            successful = [
-                float(x["rtt_ms"]) for x in selected
-                if x.get("ok") and x.get("rtt_ms") is not None
-            ]
-            median_rtt = round(statistics.median(successful), 2) if successful else None
-            metrics[isp] = median_rtt
-            carrier_qualified[isp] = (
-                len(successful) >= MIN_PROBES_PER_ISP
-                and median_rtt is not None
-                and median_rtt <= MAX_CHINA_RTT_MS
-            )
-            successful_rtts.extend(successful)
+            status = _carrier_status(by_isp.get(isp, []))
+            metrics[isp] = status["rtt_ms"]
+            carrier_qualified[isp] = status["qualified"]
+            if status["rtt_ms"] is not None:
+                successful_rtts.append(status["rtt_ms"])
         tested_isps = sum(1 for isp in ("CT", "CU", "CM") if by_isp.get(isp))
         success_isps = sum(1 for isp in ("CT", "CU", "CM") if metrics[isp] is not None)
         qualified_isps = sum(1 for isp in ("CT", "CU", "CM") if carrier_qualified[isp])
