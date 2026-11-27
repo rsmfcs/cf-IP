@@ -86,3 +86,27 @@ def test_carrier_status_deduplicates_same_probe_location():
         {"probe_key": "cn|east|city-a|as4134", "ok": True, "rtt_ms": 110, "at": "2026-11-27T01:00:00+00:00"},
     ]
     assert _carrier_status(repeated)["qualified"] is False
+
+
+
+def test_create_measurement_sets_requested_ip_version(monkeypatch):
+    from src import china_probe
+
+    captured = {}
+
+    def fake_request(url, method="GET", body=None, timeout=12.0):
+        captured["url"] = url
+        captured["method"] = method
+        captured["body"] = body
+        return {"id": "measurement-id", "probesCount": 9}
+
+    monkeypatch.setattr(china_probe, "_request", fake_request)
+    china_probe._create_measurement(
+        "2606:4700:4700::1111",
+        china_probe.ISP_LOCATIONS,
+        ip_version=6,
+    )
+
+    assert captured["method"] == "POST"
+    assert captured["body"]["target"] == "2606:4700:4700::1111"
+    assert captured["body"]["measurementOptions"]["ipVersion"] == 6
