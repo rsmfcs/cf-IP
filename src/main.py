@@ -322,10 +322,10 @@ def write_ipv6_source_outputs(
     write_json(output_dir / "qualified.json", qualified)
 
     source_lines = [subscription_line(item) for item in candidates]
-    source_payload = "\\n".join(source_lines) + ("\\n" if source_lines else "")
+    source_payload = "\n".join(source_lines) + ("\n" if source_lines else "")
     (output_dir / "source.txt").write_text(source_payload, encoding="utf-8")
     qualified_lines = [subscription_line(item) for item in qualified]
-    qualified_payload = "\\n".join(qualified_lines) + ("\\n" if qualified_lines else "")
+    qualified_payload = "\n".join(qualified_lines) + ("\n" if qualified_lines else "")
     (output_dir / "all.txt").write_text(qualified_payload, encoding="utf-8")
 
     for isp in ("CT", "CU", "CM"):
@@ -333,17 +333,17 @@ def write_ipv6_source_outputs(
         rtt_field = {"CT": "ct_rtt_ms", "CU": "cu_rtt_ms", "CM": "cm_rtt_ms"}[isp]
         carrier_items.sort(key=lambda item: (float((item.get("china_probe") or {}).get(rtt_field) or 999999), -float(item.get("score") or 0)))
         lines = [subscription_line(item) for item in carrier_items]
-        payload = "\\n".join(lines) + ("\\n" if lines else "")
+        payload = "\n".join(lines) + ("\n" if lines else "")
         (output_dir / f"china-{isp.lower()}-ipv6.txt").write_text(payload, encoding="utf-8")
         root_path = ROOT / f"china-{isp.lower()}.txt"
         ipv4_lines = root_path.read_text(encoding="utf-8").splitlines() if root_path.exists() else []
         combined = ipv4_lines + lines
-        root_path.write_text("\\n".join(combined) + ("\\n" if combined else ""), encoding="utf-8")
+        root_path.write_text("\n".join(combined) + ("\n" if combined else ""), encoding="utf-8")
 
     dual_path = ROOT / "china-cu-cm.txt"
     dual_ipv4 = dual_path.read_text(encoding="utf-8").splitlines() if dual_path.exists() else []
     dual = dual_ipv4 + qualified_lines
-    dual_payload = "\\n".join(dual) + ("\\n" if dual else "")
+    dual_payload = "\n".join(dual) + ("\n" if dual else "")
     dual_path.write_text(dual_payload, encoding="utf-8")
     (ROOT / "all.txt").write_text(dual_payload, encoding="utf-8")
 
@@ -939,21 +939,21 @@ def write_family_outputs(version: int, results: list[dict[str, Any]], top_n: lis
     stable_items = [item for item in subscription_results if item.get("success_rate", 0) >= 1.0 and item.get("jitter_ms", 9999) <= 50.0]
     for name, items in (("all.txt", subscription_results), ("fast.txt", fast_items), ("stable.txt", stable_items)):
         lines = [subscription_line(item) for item in items]
-        payload = "\\n".join(lines) + ("\\n" if lines else "")
+        payload = "\n".join(lines) + ("\n" if lines else "")
         (ROOT / name).write_text(payload, encoding="utf-8")
         (output_dir / name).write_text(payload, encoding="utf-8")
     for isp, field in (("ct", "china_ct_rtt_ms"), ("cu", "china_cu_rtt_ms"), ("cm", "china_cm_rtt_ms")):
         code = isp.upper()
         items = [item for item in results if (item.get("china_carrier_qualified") or {}).get(code)]
         items.sort(key=lambda item: (float(item.get(field) or 999999), -float(item.get("score") or 0)))
-        payload = "\\n".join(subscription_line(item) for item in items)
-        payload += "\\n" if payload else ""
+        payload = "\n".join(subscription_line(item) for item in items)
+        payload += "\n" if payload else ""
         (ROOT / f"china-{isp}.txt").write_text(payload, encoding="utf-8")
         (output_dir / f"china-{isp}.txt").write_text(payload, encoding="utf-8")
     dual_items = [item for item in results if (item.get("china_carrier_qualified") or {}).get("CU") and (item.get("china_carrier_qualified") or {}).get("CM")]
     dual_items.sort(key=lambda item: (max(float(item.get("china_cu_rtt_ms") or 999999), float(item.get("china_cm_rtt_ms") or 999999)), -float(item.get("score") or 0)))
-    dual_payload = "\\n".join(subscription_line(item) for item in dual_items)
-    dual_payload += "\\n" if dual_payload else ""
+    dual_payload = "\n".join(subscription_line(item) for item in dual_items)
+    dual_payload += "\n" if dual_payload else ""
     (ROOT / "china-cu-cm.txt").write_text(dual_payload, encoding="utf-8")
     (output_dir / "china-cu-cm.txt").write_text(dual_payload, encoding="utf-8")
     write_json(OUTPUT / "summary.json", {

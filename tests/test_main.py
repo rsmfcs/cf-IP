@@ -75,7 +75,7 @@ def test_empty_scan_clears_previous_subscriptions(tmp_path, monkeypatch):
 
     main.write_family_outputs(4, [], [20])
 
-    assert (tmp_path / "best-cf-ip-scanned-top20.txt").read_text(encoding="utf-8") == ""
+    assert (tmp_path / "china-cu-cm.txt").read_text(encoding="utf-8") == ""
     assert (tmp_path / "output" / "ipv4" / "all.json").read_text(encoding="utf-8") == '[{"ip": "1.1.1.1"}]'
 
 
@@ -209,7 +209,7 @@ def test_ipv6_outputs_never_publish_partially_qualified_ip(tmp_path, monkeypatch
 
     main.write_ipv6_source_outputs([candidate], [candidate], {"candidate_count": 1})
 
-    assert (tmp_path / "ipv6.txt").read_text(encoding="utf-8") == ""
+    assert (tmp_path / "output" / "ipv6" / "all.txt").read_text(encoding="utf-8") == ""
     assert (tmp_path / "output" / "ipv6" / "china-ct-ipv6.txt").read_text(encoding="utf-8") != ""
     assert (tmp_path / "output" / "ipv6" / "china-cu-ipv6.txt").read_text(encoding="utf-8") == ""
     assert (tmp_path / "all.txt").read_text(encoding="utf-8") == "1.1.1.1:443#美国\n"
