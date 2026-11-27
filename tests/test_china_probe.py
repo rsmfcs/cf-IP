@@ -98,7 +98,7 @@ def test_create_measurement_uses_ipv6_literal_target(monkeypatch):
         captured["url"] = url
         captured["method"] = method
         captured["body"] = body
-        return {"id": "measurement-id", "probesCount": 9}
+        return {"id": "measurement-id", "probesCount": 6}
 
     monkeypatch.setattr(china_probe, "_request", fake_request)
     china_probe._create_measurement(
@@ -109,3 +109,10 @@ def test_create_measurement_uses_ipv6_literal_target(monkeypatch):
     assert captured["method"] == "POST"
     assert captured["body"]["target"] == "2606:4700:4700::1111"
     assert "ipVersion" not in captured["body"]["measurementOptions"]
+
+
+def test_probe_budget_uses_two_probes_per_carrier():
+    from src.china_probe import PROBES_PER_ISP, ISP_LOCATIONS
+
+    assert PROBES_PER_ISP == 2
+    assert [location["limit"] for location in ISP_LOCATIONS] == [2, 2, 2]
