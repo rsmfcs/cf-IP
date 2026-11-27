@@ -44,6 +44,8 @@ jobs:
         run: python -m src.main
         env:
           PYTHONUNBUFFERED: "1"
+          GLOBALPING_TOKEN: ${{ secrets.GLOBALPING_TOKEN }}
+          CHINA_PROBE_BUDGET: "12"
 
       - name: Commit and push results (retry safely)
         id: publish
