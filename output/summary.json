@@ -1,7 +1,7 @@
 {
   "project": "Cloudflare-IP-Auto",
   "version": "3.8",
-  "generated_at": "2026-11-27T01:08:46+00:00",
+  "generated_at": "2026-11-27T01:30:32+00:00",
   "schedule": "17 */6 * * * (UTC)",
   "ip_family": "IPv4 scan + IPv6 source sync",
   "ports": [
@@ -14,7 +14,7 @@
       "egress_check": {
         "available": true,
         "target": "1.1.1.1:443",
-        "connect_ms": 5.94
+        "connect_ms": 3.12
       },
       "network_count": 15,
       "candidate_count": 2048,
@@ -22,12 +22,12 @@
       "tcp_tls_http_pass_count": 409,
       "usable_count": 105,
       "speed_tested_count": 50,
-      "china_verified_count": 20,
-      "china_qualified_count": 20,
+      "china_verified_count": 39,
+      "china_qualified_count": 39,
       "china_carrier_counts": {
-        "CT": 20,
-        "CU": 24,
-        "CM": 24
+        "CT": 39,
+        "CU": 45,
+        "CM": 45
       },
       "china_probe_isps": [
         "CT",
@@ -38,7 +38,7 @@
         "min_successful_probes_per_isp": 2,
         "max_median_tcp_rtt_ms": 300
       },
-      "ranked_count": 20,
+      "ranked_count": 39,
       "region_targets": {
         "HK": 15,
         "US": 15,
@@ -50,9 +50,9 @@
         "CA": 60
       },
       "colo_counts": {
-        "SEA": 6,
-        "PDX": 66,
-        "DEN": 33
+        "MSP": 2,
+        "ORD": 101,
+        "CMH": 2
       },
       "geoip_note": "GeoIP is approximate; colo is observed from Cloudflare /cdn-cgi/trace.",
       "top_ip": "108.162.198.30",
