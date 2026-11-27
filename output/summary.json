@@ -1,7 +1,7 @@
 {
   "project": "Cloudflare-IP-Auto",
   "version": "4.0",
-  "generated_at": "2026-11-27T09:54:04+00:00",
+  "generated_at": "2026-11-27T19:24:39+00:00",
   "schedule": "0 10,22 * * * (UTC)",
   "ip_family": "IPv4 + IPv6 domestic carrier verification",
   "ports": [
@@ -14,7 +14,7 @@
       "egress_check": {
         "available": true,
         "target": "1.1.1.1:443",
-        "connect_ms": 9.62
+        "connect_ms": 3.08
       },
       "network_count": 15,
       "candidate_count": 2048,
@@ -22,13 +22,13 @@
       "tcp_tls_http_pass_count": 409,
       "usable_count": 105,
       "speed_tested_count": 50,
-      "china_verified_count": 86,
-      "china_qualified_count": 86,
-      "china_three_carrier_qualified_count": 71,
+      "china_verified_count": 90,
+      "china_qualified_count": 90,
+      "china_three_carrier_qualified_count": 76,
       "china_carrier_counts": {
         "CT": 88,
         "CU": 100,
-        "CM": 90
+        "CM": 94
       },
       "china_probe_isps": [
         "CT",
@@ -44,7 +44,7 @@
         "max_median_tcp_rtt_ms": 300,
         "three_carrier_is_bonus": true
       },
-      "ranked_count": 86,
+      "ranked_count": 90,
       "region_targets": {
         "HK": 15,
         "US": 15,
@@ -56,7 +56,8 @@
         "CA": 60
       },
       "colo_counts": {
-        "IAD": 105
+        "ORD": 103,
+        "MSP": 2
       },
       "geoip_note": "GeoIP is approximate; colo is observed from Cloudflare /cdn-cgi/trace.",
       "top_ip": "162.159.45.44",
@@ -72,11 +73,11 @@
         "WeTest",
         "CMLiu"
       ],
-      "candidate_count": 26,
-      "qualified_count": 2,
+      "candidate_count": 25,
+      "qualified_count": 3,
       "carrier_qualified_counts": {
         "CT": 12,
-        "CU": 5,
+        "CU": 12,
         "CM": 3
       },
       "domestic_gate": {
@@ -96,7 +97,7 @@
         "china-cu-cm.txt"
       ],
       "subscription_format": "[IPv6]:443",
-      "three_carrier_qualified_count": 2,
+      "three_carrier_qualified_count": 3,
       "note": "IPv6 is probed before IPv4 to protect its Globalping quota; verified IPv6 results are merged after IPv4 outputs are written."
     }
   }

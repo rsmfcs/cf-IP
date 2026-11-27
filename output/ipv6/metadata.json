@@ -4,7 +4,7 @@
     "WeTest",
     "CMLiu"
   ],
-  "fetched_at": "2026-11-27T09:54:07+00:00",
+  "fetched_at": "2026-11-27T19:24:42+00:00",
   "source_counts": {
     "HostMonit": 5,
     "WeTest": 15,
@@ -12,13 +12,13 @@
   },
   "source_errors": {},
   "official_prefix_validation": "https://www.cloudflare.com/ips-v6",
-  "candidate_count": 26,
+  "candidate_count": 25,
   "quality_status": "domestic_mobile_unicom_verified",
   "note": "Community sources are candidate discovery only; publication requires fresh domestic IPv6 HTTPS verification.",
   "hostmonit": {
     "source": "HostMonit",
     "api": "https://api.hostmonit.com/get_optimization_ip",
-    "fetched_at": "2026-11-27T09:54:06+00:00",
+    "fetched_at": "2026-11-27T19:24:41+00:00",
     "source_counts": {
       "CM": 5,
       "CT": 0,
@@ -28,10 +28,10 @@
     "quality_status": "source_candidate_unverified",
     "note": "Collected and validated from HostMonit; not connectivity-tested by this GitHub Actions runner."
   },
-  "qualified_count": 2,
+  "qualified_count": 3,
   "carrier_qualified_counts": {
     "CT": 12,
-    "CU": 5,
+    "CU": 12,
     "CM": 3
   }
 }
