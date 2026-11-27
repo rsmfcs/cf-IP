@@ -24,12 +24,15 @@ ISPS = {
     56042: "CM", 56044: "CM", 56046: "CM", 56047: "CM", 56048: "CM",
 }
 ISP_LOCATIONS = [
-    {"country": "CN", "asn": 4134, "tags": ["eyeball-network"], "limit": 1},
-    {"country": "CN", "asn": 4837, "tags": ["eyeball-network"], "limit": 1},
-    {"country": "CN", "asn": 9808, "tags": ["eyeball-network"], "limit": 1},
+    {"country": "CN", "asn": 4134, "tags": ["eyeball-network"], "limit": PROBES_PER_ISP},
+    {"country": "CN", "asn": 4837, "tags": ["eyeball-network"], "limit": PROBES_PER_ISP},
+    {"country": "CN", "asn": 9808, "tags": ["eyeball-network"], "limit": PROBES_PER_ISP},
 ]
-KEEP_HOURS = 72
+KEEP_HOURS = 720  # Keep 30 days so the rotating verifier can cover the full candidate pool.
 DEFAULT_BUDGET = 12
+MIN_PROBES_PER_ISP = 2
+MAX_CHINA_RTT_MS = 350.0
+PROBES_PER_ISP = 3
 USER_AGENT = "cf-IP-china-probe (+https://github.com/rsmfcs/cf-IP)"
 
 
@@ -116,6 +119,8 @@ def _parse_probe_result(item: dict) -> dict | None:
         "total_ms": round(float(total_ms), 2) if ok and total_ms is not None else None,
         "colo": colo if ok else "",
         "asn": asn,
+        "probe_key": "|".join(str(probe.get(key) or "").strip().lower() for key in
+                              ("country", "region", "city", "state", "latitude", "longitude")) + f"|{asn}",
     }
 
 
@@ -155,7 +160,8 @@ def probe_and_rank(results: list[dict[str, Any]], history_path: Path) -> list[di
     try:
         limits = _request(f"{API}/limits", timeout=8)
         remaining = int(limits.get("rateLimit", {}).get("measurements", {}).get("create", {}).get("remaining"))
-        budget = min(budget, max(0, (remaining - 15) // 3))
+        # One IP measurement requests up to three probes on each of three carriers.
+        budget = min(budget, max(0, (remaining - 15) // (PROBES_PER_ISP * 3)))
         print(f"Globalping remaining credits={remaining}; China probe budget={budget}")
     except (OSError, ValueError, TypeError, HTTPError, URLError):
         print(f"Globalping quota unavailable; using configured probe budget={budget}")
@@ -172,12 +178,25 @@ def probe_and_rank(results: list[dict[str, Any]], history_path: Path) -> list[di
         if ip not in seen:
             seen.add(ip)
             pool.append(item)
-    # Rotate through the first 200 overseas-qualified candidates so a slow
-    # overseas route cannot permanently hide a fast China route.
-    window = pool[: min(200, len(pool))]
+    # Verify the full candidate pool. Prefer never-tested IPs, then the oldest
+    # previous test, so overseas ranking cannot permanently hide China-friendly IPs.
+    window = pool
     if budget and window:
-        cursor = int(history.get("cursor") or 0) % len(window)
-        targets = (window[cursor:] + window[:cursor])[:budget]
+        last_tested = {}
+        for row in records:
+            ip = str(row.get("ip") or "")
+            tested_at = _parse_time(row.get("at", ""))
+            if ip and tested_at and (ip not in last_tested or tested_at > last_tested[ip]):
+                last_tested[ip] = tested_at
+        oldest = datetime.min.replace(tzinfo=timezone.utc)
+        targets = sorted(
+            window,
+            key=lambda item: (
+                last_tested.get(str(item.get("ip") or ""), oldest),
+                -float(item.get("score") or 0),
+            ),
+        )[:budget]
+        cursor = int(history.get("cursor") or 0)
         sticky: str | None = None
         fresh = []
         for target in targets:
@@ -209,7 +228,7 @@ def probe_and_rank(results: list[dict[str, Any]], history_path: Path) -> list[di
                 if isinstance(exc, HTTPError) and exc.code == 429:
                     break
         records = (fresh + records)[:6000]
-        history["cursor"] = (cursor + len(targets)) % len(window)
+        history["cursor"] = cursor + len(targets)
         history["updated_at"] = now.isoformat(timespec="seconds")
         history["records"] = records
         _save_history(history_path, history)
@@ -226,26 +245,47 @@ def probe_and_rank(results: list[dict[str, Any]], history_path: Path) -> list[di
         for row in rows:
             by_isp.setdefault(str(row.get("isp")), []).append(row)
         metrics = {}
+        carrier_qualified = {}
         successful_rtts = []
         for isp in ("CT", "CU", "CM"):
-            samples = by_isp.get(isp, [])
-            latest = samples[:3]
-            successful = [float(x["rtt_ms"]) for x in latest if x.get("ok") and x.get("rtt_ms") is not None]
-            metrics[isp] = round(statistics.median(successful), 2) if successful else None
+            samples = sorted(by_isp.get(isp, []), key=lambda x: str(x.get("at") or ""), reverse=True)
+            # Globalping does not expose stable probe IDs; use a location/network fingerprint.
+            latest_by_probe = {}
+            for sample in samples:
+                key = str(sample.get("probe_key") or "legacy-single-probe")
+                latest_by_probe.setdefault(key, sample)
+            selected = list(latest_by_probe.values())[:PROBES_PER_ISP]
+            successful = [
+                float(x["rtt_ms"]) for x in selected
+                if x.get("ok") and x.get("rtt_ms") is not None
+            ]
+            median_rtt = round(statistics.median(successful), 2) if successful else None
+            metrics[isp] = median_rtt
+            carrier_qualified[isp] = (
+                len(successful) >= MIN_PROBES_PER_ISP
+                and median_rtt is not None
+                and median_rtt <= MAX_CHINA_RTT_MS
+            )
             successful_rtts.extend(successful)
         tested_isps = sum(1 for isp in ("CT", "CU", "CM") if by_isp.get(isp))
         success_isps = sum(1 for isp in ("CT", "CU", "CM") if metrics[isp] is not None)
+        qualified_isps = sum(1 for isp in ("CT", "CU", "CM") if carrier_qualified[isp])
         median_rtt = round(statistics.median(successful_rtts), 2) if successful_rtts else None
         item["china_probe"] = {
             "tested_isps": tested_isps,
             "success_isps": success_isps,
+            "qualified_isps": qualified_isps,
             "ct_rtt_ms": metrics["CT"],
             "cu_rtt_ms": metrics["CU"],
             "cm_rtt_ms": metrics["CM"],
             "median_rtt_ms": median_rtt,
+            "carrier_qualified": carrier_qualified,
         }
         item["china_tested_isps"] = tested_isps
         item["china_success_isps"] = success_isps
+        item["china_qualified_isps"] = qualified_isps
+        item["china_carrier_qualified"] = carrier_qualified
+        item["china_qualified"] = qualified_isps == 3
         item["china_ct_rtt_ms"] = metrics["CT"]
         item["china_cu_rtt_ms"] = metrics["CU"]
         item["china_cm_rtt_ms"] = metrics["CM"]
@@ -255,9 +295,9 @@ def probe_and_rank(results: list[dict[str, Any]], history_path: Path) -> list[di
         china = item.get("china_probe") or {}
         successes = int(china.get("success_isps") or 0)
         tested = int(china.get("tested_isps") or 0)
-        # China-verified IPs first; among them favor broad carrier reach and low RTT.
-        # Untested candidates remain available as a fallback; failed probes go last.
-        group = 0 if successes else (2 if tested else 1)
+        # Strictly qualified three-carrier IPs rank first. Others are diagnostics only.
+        qualified = bool(item.get("china_qualified"))
+        group = 0 if qualified else (1 if successes else (2 if tested else 3))
         median = china.get("median_rtt_ms")
         return (
             group,
