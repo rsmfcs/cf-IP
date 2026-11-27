@@ -164,7 +164,7 @@ def test_ipv6_outputs_clear_stale_unverified_addresses_when_empty(tmp_path, monk
 
     main.write_ipv6_source_outputs([], [], {"candidate_count": 0})
 
-    assert (tmp_path / "ipv6.txt").read_text(encoding="utf-8") == ""
+    assert (tmp_path / "output" / "ipv6" / "all.txt").read_text(encoding="utf-8") == ""
     assert (tmp_path / "all.txt").read_text(encoding="utf-8") == "1.1.1.1:443#美国\n"
 
 
@@ -188,10 +188,10 @@ def test_ipv6_outputs_publish_only_three_carrier_qualified_ips(tmp_path, monkeyp
     main.write_ipv6_source_outputs(candidates, qualified, {"candidate_count": 1})
 
     expected = "[2606:4700:4700::1111]:443#美国-洛杉矶\n"
-    assert (tmp_path / "ipv6.txt").read_text(encoding="utf-8") == expected
-    assert (tmp_path / "china-ct-ipv6.txt").read_text(encoding="utf-8") == expected
-    assert (tmp_path / "china-cu-ipv6.txt").read_text(encoding="utf-8") == expected
-    assert (tmp_path / "china-cm-ipv6.txt").read_text(encoding="utf-8") == expected
+    assert (tmp_path / "output" / "ipv6" / "all.txt").read_text(encoding="utf-8") == expected
+    assert (tmp_path / "output" / "ipv6" / "china-ct-ipv6.txt").read_text(encoding="utf-8") == expected
+    assert (tmp_path / "output" / "ipv6" / "china-cu-ipv6.txt").read_text(encoding="utf-8") == expected
+    assert (tmp_path / "output" / "ipv6" / "china-cm-ipv6.txt").read_text(encoding="utf-8") == expected
     assert (tmp_path / "all.txt").read_text(encoding="utf-8") == "1.1.1.1:443#美国\n" + expected
 
 
@@ -210,6 +210,29 @@ def test_ipv6_outputs_never_publish_partially_qualified_ip(tmp_path, monkeypatch
     main.write_ipv6_source_outputs([candidate], [candidate], {"candidate_count": 1})
 
     assert (tmp_path / "ipv6.txt").read_text(encoding="utf-8") == ""
-    assert (tmp_path / "china-ct-ipv6.txt").read_text(encoding="utf-8") != ""
-    assert (tmp_path / "china-cu-ipv6.txt").read_text(encoding="utf-8") == ""
+    assert (tmp_path / "output" / "ipv6" / "china-ct-ipv6.txt").read_text(encoding="utf-8") != ""
+    assert (tmp_path / "output" / "ipv6" / "china-cu-ipv6.txt").read_text(encoding="utf-8") == ""
     assert (tmp_path / "all.txt").read_text(encoding="utf-8") == "1.1.1.1:443#美国\n"
+
+
+def test_ipv4_outputs_create_individual_and_dual_carrier_files(tmp_path, monkeypatch):
+    monkeypatch.setattr(main, "ROOT", tmp_path)
+    monkeypatch.setattr(main, "OUTPUT", tmp_path / "output")
+    base = {
+        "port": 443, "country_code": "US", "city": "Los Angeles",
+        "speed_mbps": 50, "success_rate": 1.0, "jitter_ms": 5,
+        "score": 90, "china_ct_rtt_ms": 80, "china_cu_rtt_ms": 90,
+        "china_cm_rtt_ms": 100, "china_mobile_unicom_qualified": True,
+        "china_qualified": True,
+    }
+    items = [
+        {**base, "ip": "1.1.1.1", "china_carrier_qualified": {"CT": True, "CU": True, "CM": True}},
+        {**base, "ip": "1.0.0.1", "china_carrier_qualified": {"CT": False, "CU": True, "CM": False}},
+        {**base, "ip": "8.8.8.8", "china_carrier_qualified": {"CT": True, "CU": False, "CM": True}},
+    ]
+    main.write_family_outputs(4, items, [20, 50])
+    assert len((tmp_path / "china-ct.txt").read_text(encoding="utf-8").splitlines()) == 2
+    dual = (tmp_path / "china-cu-cm.txt").read_text(encoding="utf-8")
+    assert "1.1.1.1:443" in dual
+    assert "1.0.0.1:443" not in dual
+    assert not (tmp_path / "best-cf-ip-scanned-top20.txt").exists()

@@ -313,75 +313,48 @@ def write_ipv6_source_outputs(
     ranked: list[dict[str, Any]],
     metadata: dict[str, Any],
 ) -> None:
-    """Publish only freshly verified IPv6 addresses; keep raw sources diagnostic-only."""
+    """Merge freshly verified IPv6 results into each carrier dual-stack subscription."""
     output_dir = OUTPUT / "ipv6"
     output_dir.mkdir(parents=True, exist_ok=True)
-    qualified = [
-        {**item, "quality_status": (
-            "domestic_three_carrier_verified" if item.get("china_three_carrier_qualified")
-            else "domestic_mobile_unicom_verified"
-        )}
-        for item in ranked if item.get("china_mobile_unicom_qualified", item.get("china_qualified"))
-    ]
+    qualified = [item for item in ranked if item.get("china_mobile_unicom_qualified", item.get("china_qualified"))]
     write_json(output_dir / "source.json", {"metadata": metadata, "items": candidates})
     write_json(output_dir / "all.json", ranked)
     write_json(output_dir / "qualified.json", qualified)
 
     source_lines = [subscription_line(item) for item in candidates]
-    source_payload = "\n".join(source_lines) + ("\n" if source_lines else "")
+    source_payload = "\\n".join(source_lines) + ("\\n" if source_lines else "")
     (output_dir / "source.txt").write_text(source_payload, encoding="utf-8")
-
     qualified_lines = [subscription_line(item) for item in qualified]
-    qualified_payload = "\n".join(qualified_lines) + ("\n" if qualified_lines else "")
+    qualified_payload = "\\n".join(qualified_lines) + ("\\n" if qualified_lines else "")
     (output_dir / "all.txt").write_text(qualified_payload, encoding="utf-8")
-    (ROOT / "ipv6.txt").write_text(qualified_payload, encoding="utf-8")
 
     for isp in ("CT", "CU", "CM"):
-        carrier_items = [
-            item for item in ranked
-            if (item.get("china_carrier_qualified") or {}).get(isp)
-        ]
-        carrier_items.sort(key=lambda item: (
-            float((item.get("china_probe") or {}).get(
-                {"CT": "ct_rtt_ms", "CU": "cu_rtt_ms", "CM": "cm_rtt_ms"}[isp]
-            ) or 999999),
-            -float(item.get("score") or 0),
-        ))
+        carrier_items = [item for item in ranked if (item.get("china_carrier_qualified") or {}).get(isp)]
+        rtt_field = {"CT": "ct_rtt_ms", "CU": "cu_rtt_ms", "CM": "cm_rtt_ms"}[isp]
+        carrier_items.sort(key=lambda item: (float((item.get("china_probe") or {}).get(rtt_field) or 999999), -float(item.get("score") or 0)))
         lines = [subscription_line(item) for item in carrier_items]
-        payload = "\n".join(lines) + ("\n" if lines else "")
-        name = f"china-{isp.lower()}-ipv6.txt"
-        (ROOT / name).write_text(payload, encoding="utf-8")
-        (output_dir / name).write_text(payload, encoding="utf-8")
+        payload = "\\n".join(lines) + ("\\n" if lines else "")
+        (output_dir / f"china-{isp.lower()}-ipv6.txt").write_text(payload, encoding="utf-8")
+        root_path = ROOT / f"china-{isp.lower()}.txt"
+        ipv4_lines = root_path.read_text(encoding="utf-8").splitlines() if root_path.exists() else []
+        combined = ipv4_lines + lines
+        root_path.write_text("\\n".join(combined) + ("\\n" if combined else ""), encoding="utf-8")
 
-    # all.txt is the combined public subscription. Remove every old IPv6 line,
-    # then append addresses passing both China Unicom and China Mobile gates.
-    combined_path = ROOT / "all.txt"
-    existing_ipv4 = []
-    if combined_path.exists():
-        for line in combined_path.read_text(encoding="utf-8").splitlines():
-            raw = line.split("#", 1)[0].strip()
-            endpoint = raw.rsplit(":", 1)[0] if raw.startswith("[") else raw.split(":", 1)[0]
-            try:
-                if ipaddress.ip_address(endpoint.strip("[]")).version == 4:
-                    existing_ipv4.append(line.strip())
-            except ValueError:
-                continue
-    combined = existing_ipv4 + qualified_lines
-    combined_payload = "\n".join(combined) + ("\n" if combined else "")
-    combined_path.write_text(combined_payload, encoding="utf-8")
+    dual_path = ROOT / "china-cu-cm.txt"
+    dual_ipv4 = dual_path.read_text(encoding="utf-8").splitlines() if dual_path.exists() else []
+    dual = dual_ipv4 + qualified_lines
+    dual_payload = "\\n".join(dual) + ("\\n" if dual else "")
+    dual_path.write_text(dual_payload, encoding="utf-8")
+    (ROOT / "all.txt").write_text(dual_payload, encoding="utf-8")
 
     metadata = {
         **metadata,
         "candidate_count": len(candidates),
         "qualified_count": len(qualified),
-        "carrier_qualified_counts": {
-            isp: sum(1 for item in ranked if (item.get("china_carrier_qualified") or {}).get(isp))
-            for isp in ("CT", "CU", "CM")
-        },
+        "carrier_qualified_counts": {isp: sum(1 for item in ranked if (item.get("china_carrier_qualified") or {}).get(isp)) for isp in ("CT", "CU", "CM")},
         "quality_status": "domestic_mobile_unicom_verified" if qualified else "no_domestic_qualified_ipv6",
     }
     write_json(output_dir / "metadata.json", metadata)
-
 
 def load_config() -> dict[str, Any]:
     with CONFIG_PATH.open("r", encoding="utf-8") as handle:
@@ -429,8 +402,6 @@ def validate_config(config: dict[str, Any]) -> None:
     for port in scan["ports"]:
         if not 1 <= int(port) <= 65535:
             raise ValueError(f"invalid TCP port: {port}")
-    if not scan.get("top_n"):
-        raise ValueError("config.scan.top_n must not be empty")
     targets = scan.get("region_target_counts", {"HK": 15, "US": 15, "SG": 10, "JP": 10})
     if not isinstance(targets, dict) or not targets:
         raise ValueError("config.scan.region_target_counts must be a non-empty mapping")
@@ -940,102 +911,60 @@ def write_json(path: Path, payload: Any) -> None:
 def write_family_outputs(version: int, results: list[dict[str, Any]], top_n: list[int]) -> None:
     family = "ipv4" if version == 4 else "ipv6"
     output_dir = OUTPUT / family
+    carrier_files = ("china-ct.txt", "china-cu.txt", "china-cm.txt", "china-cu-cm.txt")
     if not results:
         print(f"IPv{version}: no usable IPs")
         if version == 4:
-            # A successful empty scan must not leave old, unverified IPs published.
-            for name in ("all.txt", "fast.txt", "stable.txt", "china-ct.txt", "china-cu.txt", "china-cm.txt"):
+            for name in ("all.txt", "fast.txt", "stable.txt", *carrier_files):
                 for base in (ROOT, OUTPUT / "ipv4"):
                     base.mkdir(parents=True, exist_ok=True)
                     (base / name).write_text("", encoding="utf-8")
-            for count in top_n:
-                for base in (ROOT, OUTPUT / "ipv4"):
-                    base.mkdir(parents=True, exist_ok=True)
-                    for name in (f"best-cf-ip-scanned-top{count}.txt", f"cf-ipv4-top{count}.txt", f"top{count}.txt"):
-                        (base / name).write_text("", encoding="utf-8")
-                    write_json(base / f"top{count}.json", [])
         return
     output_dir.mkdir(parents=True, exist_ok=True)
-
     write_json(output_dir / "all.json", results)
-    # Public IPv4 subscriptions require both China Unicom and China Mobile.
-    # Three-carrier-qualified entries remain identifiable in the diagnostic JSON/CSV.
-    subscription_results = (
-        [item for item in results if item.get("china_qualified")]
-        if version == 4 else results
-    )
+    subscription_results = [item for item in results if item.get("china_mobile_unicom_qualified", item.get("china_qualified"))] if version == 4 else results
     csv_fields = [
         "ip", "version", "port", "country_code", "city", "region_zh", "colo",
         "latency_ms", "median_latency_ms", "jitter_ms", "p95_latency_ms",
         "speed_mbps", "speed_tested", "success_rate", "successful_rounds",
         "china_tested_isps", "china_success_isps", "china_qualified_isps",
         "china_qualified", "china_three_carrier_qualified", "china_mobile_unicom_qualified", "quality_status", "china_ct_rtt_ms",
-        "china_cu_rtt_ms", "china_cm_rtt_ms", "china_median_rtt_ms",
-        "total_rounds", "score", "tested_at",
+        "china_cu_rtt_ms", "china_cm_rtt_ms", "china_median_rtt_ms", "total_rounds", "score", "tested_at",
     ]
     with (output_dir / "all.csv").open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=csv_fields, extrasaction="ignore")
         writer.writeheader()
         writer.writerows(results)
-
-    for count in top_n:
-        top = subscription_results[:int(count)]
-        lines = []
-        for item in top:
-            speed = "" if item["speed_mbps"] is None else str(item["speed_mbps"])
-            lines.append(
-                f'{item["ip"]},{item["port"]},{item["latency_ms"]},'
-                f'{speed},{round(item["success_rate"] * 100, 2)},'
-                f'{item["jitter_ms"]},{item["score"]}'
-            )
-        txt = "\n".join(lines) + ("\n" if lines else "")
-        (output_dir / f"top{count}.txt").write_text(txt, encoding="utf-8")
-        write_json(output_dir / f"top{count}.json", top)
-
-    # Root-level plain subscription lists: one IPv4 endpoint per line.
-    # Both naming conventions are published for convenient client integration.
-    for count in top_n:
-        top = subscription_results[:int(count)]
-        endpoints = "\n".join(subscription_line(item) for item in top)
-        payload = endpoints + "\n" if endpoints else ""
-        (ROOT / f"best-cf-ip-scanned-top{count}.txt").write_text(payload, encoding="utf-8")
-        (ROOT / f"cf-ipv4-top{count}.txt").write_text(payload, encoding="utf-8")
-
-
-    # Convenience root-level lists for downstream subscription aggregators.
     fast_items = [item for item in subscription_results if item.get("speed_mbps") is not None and item["speed_mbps"] >= 25.0]
     stable_items = [item for item in subscription_results if item.get("success_rate", 0) >= 1.0 and item.get("jitter_ms", 9999) <= 50.0]
     for name, items in (("all.txt", subscription_results), ("fast.txt", fast_items), ("stable.txt", stable_items)):
         lines = [subscription_line(item) for item in items]
-        payload = "\n".join(lines) + ("\n" if lines else "")
+        payload = "\\n".join(lines) + ("\\n" if lines else "")
         (ROOT / name).write_text(payload, encoding="utf-8")
         (output_dir / name).write_text(payload, encoding="utf-8")
-
-    # Carrier-specific China probe subscriptions; empty lists are still published
-    # as empty files so clients never mistake overseas-only candidates as verified.
-    for isp, field in (
-        ("ct", "china_ct_rtt_ms"),
-        ("cu", "china_cu_rtt_ms"),
-        ("cm", "china_cm_rtt_ms"),
-    ):
-        isp_code = isp.upper()
-        carrier_items = [
-            item for item in results
-            if (item.get("china_carrier_qualified") or {}).get(isp_code)
-        ]
-        carrier_items.sort(key=lambda item: (float(item[field]), -float(item.get("score") or 0)))
-        payload = "\n".join(subscription_line(item) for item in carrier_items)
-        payload += "\n" if payload else ""
+    for isp, field in (("ct", "china_ct_rtt_ms"), ("cu", "china_cu_rtt_ms"), ("cm", "china_cm_rtt_ms")):
+        code = isp.upper()
+        items = [item for item in results if (item.get("china_carrier_qualified") or {}).get(code)]
+        items.sort(key=lambda item: (float(item.get(field) or 999999), -float(item.get("score") or 0)))
+        payload = "\\n".join(subscription_line(item) for item in items)
+        payload += "\\n" if payload else ""
         (ROOT / f"china-{isp}.txt").write_text(payload, encoding="utf-8")
         (output_dir / f"china-{isp}.txt").write_text(payload, encoding="utf-8")
+    dual_items = [item for item in results if (item.get("china_carrier_qualified") or {}).get("CU") and (item.get("china_carrier_qualified") or {}).get("CM")]
+    dual_items.sort(key=lambda item: (max(float(item.get("china_cu_rtt_ms") or 999999), float(item.get("china_cm_rtt_ms") or 999999)), -float(item.get("score") or 0)))
+    dual_payload = "\\n".join(subscription_line(item) for item in dual_items)
+    dual_payload += "\\n" if dual_payload else ""
+    (ROOT / "china-cu-cm.txt").write_text(dual_payload, encoding="utf-8")
+    (output_dir / "china-cu-cm.txt").write_text(dual_payload, encoding="utf-8")
     write_json(OUTPUT / "summary.json", {
-        "project": "Cloudflare-IP-Auto", "version": "3.9", "generated_at": utc_now(),
-        "ip_family": "IPv4 only", "port": 443,
+        "project": "Cloudflare-IP-Auto", "version": "4.0", "generated_at": utc_now(),
+        "ip_family": "IPv4 + IPv6 carrier subscriptions", "port": 443,
         "ranked_count": len(subscription_results), "all_count": len(results),
         "fast_count": len(fast_items), "fast_min_mbps": 25.0,
         "stable_count": len(stable_items), "stable_rule": "success_rate=100% and jitter<=50ms",
+        "carrier_qualified_counts": {isp: sum(1 for item in results if (item.get("china_carrier_qualified") or {}).get(isp)) for isp in ("CT", "CU", "CM")},
+        "mobile_unicom_qualified_count": len(dual_items),
     })
-
 
 def check_egress(version: int, timeout: float = 3.0) -> dict[str, Any]:
     ip, port = EGRESS_TEST_IPS[version]
@@ -1188,7 +1117,7 @@ def main() -> None:
     OUTPUT.mkdir(parents=True, exist_ok=True)
     summary: dict[str, Any] = {
         "project": "Cloudflare-IP-Auto",
-        "version": "3.9",
+        "version": "4.0",
         "generated_at": utc_now(),
         "schedule": "17 */12 * * * (UTC)",
         "ip_family": "IPv4 + IPv6 domestic carrier verification",
@@ -1244,10 +1173,10 @@ def main() -> None:
                 "three_carrier_is_bonus": True,
             },
             "output_dir": "output/ipv6/",
-            "subscription_file": "ipv6.txt",
+            "subscription_files": ["china-ct.txt", "china-cu.txt", "china-cm.txt", "china-cu-cm.txt"],
             "subscription_format": "[IPv6]:443",
             "three_carrier_qualified_count": sum(1 for item in ipv6_ranked if item.get("china_three_carrier_qualified")),
-            "note": "Only fresh IPv6 addresses passing both China Unicom and China Mobile gates are published in ipv6.txt; Telecom qualification is retained as an additional quality label.",
+            "note": "Fresh IPv6 addresses are merged with the matching IPv4 carrier results in the four root dual-stack subscriptions.",
         }
     except Exception as exc:
         message = f"{type(exc).__name__}: {exc}"
